@@ -8,17 +8,19 @@ import 'package:egnimos/theme/colorsTheme.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+//Header1 : this method returns the appbar
 AppBar header1(
   BuildContext context, {
   @required String title,
   @required String selectedButtonKey,
 }) {
   return AppBar(
+    automaticallyImplyLeading: true,
     backgroundColor: Colors.transparent,
     elevation: 2.0,
     title: GestureDetector(
       onTap: () {
-        Navigator.of(context).pushNamed(
+        Navigator.of(context).pushReplacementNamed(
           HomePage.routeName,
         );
       },
@@ -43,7 +45,7 @@ AppBar header1(
               : ColorsTheme.darkBlueColor,
         ),
         onPressed: () async {
-          await Navigator.of(context).pushNamed(AboutPage.routeName);
+          await Navigator.of(context).pushReplacementNamed(AboutPage.routeName);
         },
       ),
       //update
@@ -57,7 +59,7 @@ AppBar header1(
               : ColorsTheme.darkBlueColor,
         ),
         onPressed: () async {
-          await Navigator.of(context).pushNamed(NewsPage.routeName);
+          await Navigator.of(context).pushReplacementNamed(NewsPage.routeName);
         },
       ),
       //dev
@@ -71,7 +73,7 @@ AppBar header1(
               : ColorsTheme.darkBlueColor,
         ),
         onPressed: () async {
-          await Navigator.of(context).pushNamed(DevPage.routeName);
+          await Navigator.of(context).pushReplacementNamed(DevPage.routeName);
         },
       ),
       //what next
@@ -85,9 +87,33 @@ AppBar header1(
               : ColorsTheme.darkBlueColor,
         ),
         onPressed: () async {
-          await Navigator.of(context).pushNamed(NextPage.routeName);
+          await Navigator.of(context).pushReplacementNamed(NextPage.routeName);
         },
       ),
     ],
+  );
+}
+
+//Header2 : this header returns the appbar
+AppBar header2(BuildContext context) {
+  return AppBar(
+    automaticallyImplyLeading: true,
+    backgroundColor: Colors.transparent,
+    elevation: 2.0,
+    title: GestureDetector(
+      onTap: () {
+        Navigator.of(context).pushReplacementNamed(
+          HomePage.routeName,
+        );
+      },
+      child: Text(
+        "egnimos",
+        style: Theme.of(context).textTheme.bodyText2.copyWith(
+              fontSize: SizeConfig.textMultiplier * 3.5,
+              fontWeight: FontWeight.w700,
+              color: ColorsTheme.primaryColor,
+            ),
+      ),
+    ),
   );
 }
