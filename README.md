@@ -1,16 +1,17 @@
 # egnimos
 
-A new Flutter project.
+egnimos is a platform which brings developers, creators, designers and "everyone who want to innovate" together, egnimos provides the services in development and design, egnimos create the inovative products which helps users, we want to help the users to grow and make their life in a good way, we care about you, that's why we create these innovative products to help you, egnimos welcome every suggestion and feedbacks from you and we need them, by these suggestion and feedbacks we can improve our products and services even more, and that's why the suggestions and feedbacks are important to the egnimos, we are open for discussion also, 
 
-## Getting Started
+we need developers who want to innovate and help others, with egnimos, as rightnow, things are changing and we are advancing towards new era with new technologies and with the changing era, the innovation is becoming even more important, "as life changes, new problem comes with some new innovation"
 
-This project is a starting point for a Flutter application.
+> every problem has its own innovation
 
-A few resources to get you started if this is your first Flutter project:
+we have to push ourself to create the new innovations
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+and that's why we need you
+egnimos is happy to welcome you
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+regards egnimos
+
+
+# what is egnimos
