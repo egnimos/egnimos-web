@@ -11,9 +11,7 @@ class HomeHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: ((context, constraints) {
-        return Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.all(20.0),
+        return SizedBox(
           width: double.infinity,
           height: constraints.maxWidth >= K.kTableteWidth ? 600.0 : 400.0,
           child: Column(
@@ -32,11 +30,15 @@ class HomeHeader extends StatelessWidget {
                       ),
                     ),
                   ),
+                  // const SizedBox(
+                  //   width: .0,
+                  // ),
                   Flexible(
                     child: DefaultTextStyle(
                       softWrap: false,
-                      maxLines: 2,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
+                      textWidthBasis: TextWidthBasis.longestLine,
                       style: GoogleFonts.rubik().copyWith(
                         fontSize: (constraints.maxWidth / 100) * 4.5,
                         fontWeight: FontWeight.bold,
@@ -73,7 +75,7 @@ class HomeHeader extends StatelessWidget {
               Flexible(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 40.0,
+                    horizontal: 50.0,
                     vertical: 10.0,
                   ),
                   child: Text(

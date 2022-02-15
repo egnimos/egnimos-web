@@ -1,4 +1,5 @@
 import 'package:egnimos/src/config/k.dart';
+import 'package:egnimos/src/pages/home.dart';
 import 'package:egnimos/src/theme/color_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -87,19 +88,39 @@ class FooterRow extends StatelessWidget {
               ),
             ),
           ),
-          const Flexible(
+          Flexible(
             child: Padding(
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 vertical: 8.0,
                 horizontal: 16.0,
               ),
               child: FooterList(
                 heading: "Quick Links",
                 widgets: [
-                  FooterText(text: "Home"),
-                  FooterText(text: "About"),
-                  FooterText(text: "Blog"),
-                  FooterText(text: "Contact"),
+                  FooterText(
+                    text: "Home",
+                    onClick: () {
+                      Navigator.of(context).pushNamed(Home.routeName);
+                    },
+                  ),
+                  FooterText(
+                    text: "About",
+                    onClick: () {
+                      // Navigator.of(context).pushNamed(Home.routeName);
+                    },
+                  ),
+                  FooterText(
+                    text: "Blog",
+                    onClick: () {
+                      Navigator.of(context).pushNamed(Home.routeName);
+                    },
+                  ),
+                  FooterText(
+                    text: "Contact",
+                    onClick: () {
+                      // Navigator.of(context).pushNamed(Home.routeName);
+                    },
+                  ),
                 ],
               ),
             ),
@@ -197,42 +218,45 @@ class _FooterTextState extends State<FooterText> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          // text
-          MouseRegion(
-            onEnter: (value) {
-              setState(() {
-                height = 60.0;
-              });
-            },
-            onExit: (value) {
-              setState(() {
-                height = 0.0;
-              });
-            },
-            child: Text(
-              widget.text,
-              maxLines: 1,
-              softWrap: false,
-              style: GoogleFonts.raleway().copyWith(
-                fontSize: 16.0,
-                fontWeight: FontWeight.w700,
-                color: Colors.grey.shade300,
-                // decoration: decoration,
+    return GestureDetector(
+      onTap: widget.onClick,
+      child: Container(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            // text
+            MouseRegion(
+              onEnter: (value) {
+                setState(() {
+                  height = 60.0;
+                });
+              },
+              onExit: (value) {
+                setState(() {
+                  height = 0.0;
+                });
+              },
+              child: Text(
+                widget.text,
+                maxLines: 1,
+                softWrap: false,
+                style: GoogleFonts.raleway().copyWith(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.grey.shade300,
+                  // decoration: decoration,
+                ),
               ),
             ),
-          ),
 
-          //under line
-          Container(
-            color: Colors.grey.shade100,
-            width: height,
-            height: 2.6,
-          ),
-        ],
+            //under line
+            Container(
+              color: Colors.grey.shade100,
+              width: height,
+              height: 2.6,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:egnimos/src/widgets/nav.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatelessWidget {
+  static const routeName = "/home";
   const Home({Key? key}) : super(key: key);
 
   @override

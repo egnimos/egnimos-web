@@ -1,7 +1,9 @@
 import 'package:egnimos/src/config/k.dart';
+import 'package:egnimos/src/pages/blog.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../pages/home.dart';
 import '../theme/color_theme.dart';
 import '../utility/enum.dart';
 
@@ -133,7 +135,9 @@ class NavButtons extends StatelessWidget {
                 label: "Home",
                 option: NavOptions.home,
                 selectedOption: selectedOption,
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).pushNamed(Home.routeName);
+                },
               ),
               SizedBox(
                 width: (constraints.maxWidth / 100) * 1.5,
@@ -151,7 +155,9 @@ class NavButtons extends StatelessWidget {
                 label: "Blog",
                 option: NavOptions.blog,
                 selectedOption: selectedOption,
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).pushNamed(Blog.routeName);
+                },
               ),
               SizedBox(
                 width: (constraints.maxWidth / 100) * 1.5,

@@ -3,3 +3,11 @@ enum NavOptions {
   about,
   blog,
 }
+
+enum Cat {
+  all,
+  mustRead,
+  design,
+  programming,
+  unknown
+}

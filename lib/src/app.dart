@@ -1,3 +1,4 @@
+import 'package:egnimos/src/pages/blog.dart';
 import 'package:egnimos/src/theme/color_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -10,12 +11,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'egnimos',
-      theme: ThemeData.light().copyWith(
-        primaryColor: ColorTheme.primaryColor,
-      ),
-      debugShowCheckedModeBanner: false,
-      home: const Home(),
-    );
+        title: 'egnimos',
+        theme: ThemeData.light().copyWith(
+          primaryColor: ColorTheme.primaryColor,
+        ),
+        debugShowCheckedModeBanner: false,
+        home: const Home(),
+        routes: {
+          Blog.routeName: (ctx) => const Blog(),
+          Home.routeName: (ctx) => const Home(),
+        });
   }
 }
