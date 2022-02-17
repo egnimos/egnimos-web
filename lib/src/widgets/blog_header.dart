@@ -22,11 +22,13 @@ class BlogHeader extends StatelessWidget {
               child: Text(
                 "egnimos blog",
                 style: GoogleFonts.rubik().copyWith(
-                        fontSize: (constraints.maxWidth / 100) * 4.5,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.0,
-                        color: ColorTheme.bgColor,
-                      ),
+                  fontSize: constraints.maxWidth > K.kTableteWidth
+                      ? (constraints.maxWidth / 100) * 4.5
+                      : 26.0,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.0,
+                  color: ColorTheme.bgColor,
+                ),
               ),
             ),
             const SizedBox(

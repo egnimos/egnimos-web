@@ -31,8 +31,7 @@ class _MenuSwitchButtonState extends State<MenuSwitchButton> {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      alignment:
-          widget.isDrawerButton ? Alignment.centerLeft : Alignment.center,
+      alignment: Alignment.center,
       children: [
         //highlight
         if (widget.isDrawerButton && (widget.option == widget.selectedOption))
@@ -125,7 +124,7 @@ class NavButtons extends StatelessWidget {
           ? [
               IconButton(
                 onPressed: () {
-                  Scaffold.of(context).openEndDrawer();
+                  Scaffold.of(context).openDrawer();
                 },
                 icon: const Icon(Icons.menu),
               ),

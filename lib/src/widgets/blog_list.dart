@@ -1,18 +1,25 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:egnimos/src/models/blog.dart';
 import 'package:egnimos/src/models/category.dart';
+import 'package:egnimos/src/providers/blog_provider.dart';
 import 'package:egnimos/src/widgets/blog_post_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
+import '../config/k.dart';
 import '../theme/color_theme.dart';
 import '../utility/enum.dart';
 
 class BlogList extends StatelessWidget {
   final String heading;
+  final bool isLoading;
   final List<Category> categories;
-  final void Function() onClick;
+  final void Function(Cat catType) onClick;
 
   const BlogList({
     required this.onClick,
+    required this.isLoading,
     required this.categories,
     required this.heading,
     Key? key,
@@ -36,7 +43,9 @@ class BlogList extends StatelessWidget {
                 child: Text(
                   heading,
                   style: GoogleFonts.rubik().copyWith(
-                    fontSize: (constraints.maxWidth / 100) * 2.6,
+                    fontSize: constraints.maxWidth > K.kTableteWidth
+                        ? (constraints.maxWidth / 100) * 2.6
+                        : 22.0,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.0,
                     color: ColorTheme.bgColor,
@@ -58,19 +67,59 @@ class BlogList extends StatelessWidget {
 
               BlogCategoryList(
                 categories: categories,
-                onClick: onClick,
+                constraints: constraints,
+                onClick: (val) => onClick,
               ),
               const SizedBox(
                 height: 20.0,
               ),
 
               //Blogs
-              Wrap(
-                children: List<int>.generate(10, (int index) => index * index,
-                        growable: false)
-                    .map((e) => const BlogPostCard())
-                    .toList(),
-              ),
+              if (isLoading)
+                const Align(
+                  child: CircularProgressIndicator(),
+                )
+              else
+                Consumer<BlogProvider>(
+                  builder: (context, bp, __) => bp.blogs.isEmpty
+                      ? Container(
+                          width: double.infinity,
+                          height: 250.0,
+                          alignment: Alignment.center,
+                          child: Column(
+                            children: [
+                              Expanded(
+                                child: Lottie.asset(
+                                  "assets/json/not-found.json",
+                                  reverse: true,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20.0,
+                              ),
+                              Text(
+                                "no blog post available",
+                                style: Theme.of(context).textTheme.headline5,
+                              ),
+                            ],
+                          ),
+                        )
+                      : Wrap(
+                          children: bp.blogs
+                              .map((bo) => BlogPostCard(blog: bo))
+                              .toList(),
+                        ),
+                ),
+
+              //error
+              // if (snapshot.hasError) {
+              //   return Align(
+              //     child: Padding(
+              //       padding: const EdgeInsets.all(8.0),
+              //       child: Text(snapshot.error.toString()),
+              //     ),
+              //   );
+              // }
 
               const SizedBox(
                 height: 100.0,
@@ -108,10 +157,12 @@ class BlogList extends StatelessWidget {
 
 class BlogCategoryList extends StatefulWidget {
   final List<Category> categories;
-  final void Function() onClick;
+  final BoxConstraints constraints;
+  final void Function(Cat catType) onClick;
 
   const BlogCategoryList({
     required this.categories,
+    required this.constraints,
     required this.onClick,
     Key? key,
   }) : super(key: key);
@@ -130,13 +181,14 @@ class _BlogCategoryListState extends State<BlogCategoryList> {
         children: widget.categories
             .map(
               (cat) => BlogType(
+                constraints: widget.constraints,
                 cat: cat,
                 selectedCat: _selectedCat,
                 onSelect: (val) {
                   setState(() {
                     _selectedCat = val;
                   });
-                  widget.onClick();
+                  widget.onClick(val);
                 },
               ),
             )
@@ -149,11 +201,13 @@ class _BlogCategoryListState extends State<BlogCategoryList> {
 class BlogType extends StatefulWidget {
   final Category cat;
   final Cat selectedCat;
+  final BoxConstraints constraints;
   final void Function(Cat cat) onSelect;
 
   const BlogType({
     required this.cat,
     required this.selectedCat,
+    required this.constraints,
     required this.onSelect,
     Key? key,
   }) : super(key: key);
@@ -199,7 +253,9 @@ class _BlogTypeState extends State<BlogType> {
                 Text(
                   widget.cat.label,
                   style: GoogleFonts.rubik().copyWith(
-                    fontSize: 20.0,
+                    fontSize: widget.constraints.maxWidth > K.kTableteWidth
+                        ? (widget.constraints.maxWidth / 100) * 1.4
+                        : 16.0,
                     fontWeight: FontWeight.bold,
                   ),
                 )
