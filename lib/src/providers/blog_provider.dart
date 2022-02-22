@@ -20,18 +20,28 @@ class BlogProvider with ChangeNotifier {
     try {
       List<Blog> results = [];
       QuerySnapshot<Map<String, dynamic>> response;
-      response = await firestoreInstance
-          .collection(publishedArticleCollection)
-          .where(
-            "category.cat_enum",
-            isEqualTo: Convert.enumTostring(Cat.values, catType, () => null),
-          ).orderBy("created_at", descending: true)
-          .get();
+      switch (catType) {
+        case Cat.all:
+          response = await firestoreInstance
+              .collection(publishedArticleCollection)
+              .orderBy("created_at", descending: true)
+              .get();
+          break;
+        default:
+          response = await firestoreInstance
+              .collection(publishedArticleCollection)
+              .where(
+                "category.cat_enum",
+                isEqualTo:
+                    Convert.enumTostring(Cat.values, catType, () => null),
+              )
+              .orderBy("created_at", descending: true)
+              .get();
+      }
       for (var blog in response.docs) {
         final data = blog.data();
         results.add(Blog.fromJson(data));
       }
-
       _blogs = results;
       notifyListeners();
     } catch (error) {
@@ -43,13 +53,24 @@ class BlogProvider with ChangeNotifier {
     try {
       List<Blog> results = [];
       QuerySnapshot<Map<String, dynamic>> response;
-      response = await firestoreInstance
-          .collection(publishedArticleCollection)
-          .where(
-            "category.cat_enum",
-            isEqualTo: Convert.enumTostring(Cat.values, catType, () => null),
-          ).orderBy("created_at", descending: true)
-          .get();
+      switch (catType) {
+        case Cat.all:
+          response = await firestoreInstance
+              .collection(publishedArticleCollection)
+              .orderBy("created_at", descending: true)
+              .get();
+          break;
+        default:
+          response = await firestoreInstance
+              .collection(publishedArticleCollection)
+              .where(
+                "category.cat_enum",
+                isEqualTo:
+                    Convert.enumTostring(Cat.values, catType, () => null),
+              )
+              .orderBy("created_at", descending: true)
+              .get();
+      }
       for (var blog in response.docs) {
         final data = blog.data();
         results.add(Blog.fromJson(data));

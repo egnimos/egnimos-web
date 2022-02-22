@@ -1,9 +1,5 @@
-// import 'package:egnimos/src/config/responsive.dart';
-import 'package:egnimos/src/widgets/egnimos_nav.dart';
+import '/src/widgets/egnimos_nav.dart';
 import 'package:flutter/material.dart';
-
-// import '../config/k.dart';
-// import '../theme/color_theme.dart';
 import '../config/k.dart';
 import '../utility/enum.dart';
 import 'buttons.dart';

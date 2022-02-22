@@ -39,9 +39,10 @@ class BlogList extends StatelessWidget {
             physics: const ClampingScrollPhysics(),
             children: [
               //heading
-              Flexible(
-                child: Text(
+              Text(
                   heading,
+                  maxLines: 1,
+                  softWrap: false,
                   style: GoogleFonts.rubik().copyWith(
                     fontSize: constraints.maxWidth > K.kTableteWidth
                         ? (constraints.maxWidth / 100) * 2.6
@@ -51,7 +52,7 @@ class BlogList extends StatelessWidget {
                     color: ColorTheme.bgColor,
                   ),
                 ),
-              ),
+             
 
               const SizedBox(
                 height: 20.0,
@@ -185,6 +186,7 @@ class _BlogCategoryListState extends State<BlogCategoryList> {
                 cat: cat,
                 selectedCat: _selectedCat,
                 onSelect: (val) {
+                  print("cat type: $val");
                   setState(() {
                     _selectedCat = val;
                   });
@@ -231,7 +233,7 @@ class _BlogTypeState extends State<BlogType> {
           height = 0.0;
         });
       },
-      child: GestureDetector(
+      child: InkWell(
         onTap: () => widget.onSelect(widget.cat.catEnum),
         child: IntrinsicWidth(
           child: Container(
