@@ -140,7 +140,7 @@ class FooterIcon extends StatelessWidget {
       height: 100.0,
       width: 100.0,
       child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-        Flexible(child: Image.asset("assets/images/egnimos_bw.png")),
+        Flexible(child: Image.asset("assets/images/png/Group_392-4.png")),
         Flexible(
           child: Padding(
             padding: const EdgeInsets.only(
