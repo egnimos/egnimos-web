@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:egnimos/src/pages/about.dart';
 import 'package:egnimos/src/pages/blog.dart';
 import 'package:egnimos/src/providers/blog_provider.dart';
 import 'package:egnimos/src/theme/color_theme.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
           routes: {
             Blog.routeName: (ctx) => const Blog(),
             Home.routeName: (ctx) => const Home(),
+            AboutPage.routeName: (ctx) => const AboutPage(),
           }),
     );
   }

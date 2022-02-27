@@ -1,4 +1,5 @@
 import 'package:egnimos/src/config/k.dart';
+import 'package:egnimos/src/pages/about.dart';
 import 'package:egnimos/src/pages/blog.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -145,7 +146,9 @@ class NavButtons extends StatelessWidget {
                 label: "About",
                 option: NavOptions.about,
                 selectedOption: selectedOption,
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).pushNamed(AboutPage.routeName);
+                },
               ),
               SizedBox(
                 width: (constraints.maxWidth / 100) * 1.5,

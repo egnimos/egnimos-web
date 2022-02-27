@@ -1,6 +1,7 @@
 import 'package:egnimos/src/pages/blog.dart';
 import 'package:flutter/material.dart';
 
+import '../pages/about.dart';
 import '../pages/home.dart';
 import '../theme/color_theme.dart';
 import '../utility/enum.dart';
@@ -68,7 +69,9 @@ class Menu extends StatelessWidget {
                     isDrawerButton: true,
                     option: NavOptions.about,
                     selectedOption: selectedOption,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pushNamed(AboutPage.routeName);
+                    },
                   ),
                   const SizedBox(
                     height: 20.0,
