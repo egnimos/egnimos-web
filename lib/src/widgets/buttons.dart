@@ -1,9 +1,12 @@
 import 'package:egnimos/src/config/k.dart';
 import 'package:egnimos/src/pages/about.dart';
+import 'package:egnimos/src/pages/auth_pages/auth_page.dart';
 import 'package:egnimos/src/pages/blog.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../app.dart';
+import '../pages/auth_pages/auth_page.dart';
 import '../pages/home.dart';
 import '../theme/color_theme.dart';
 import '../utility/enum.dart';
@@ -168,6 +171,26 @@ class NavButtons extends StatelessWidget {
               SizedBox(
                 width: (constraints.maxWidth / 100) * 1.5,
               ),
+              if (firebaseAuth.currentUser == null)
+                MenuSwitchButton(
+                  label: "Login",
+                  option: NavOptions.loginregister,
+                  selectedOption: selectedOption,
+                  onTap: () {
+                    //navigate to the login page
+                    Navigator.of(context).pushNamed(AuthPage.routeName);
+                  },
+                )
+              else
+                MenuSwitchButton(
+                  label: "Profile",
+                  option: NavOptions.profile,
+                  selectedOption: selectedOption,
+                  onTap: () {
+                    //navigate to the login page
+                    Navigator.of(context).pushNamed(AuthPage.routeName);
+                  },
+                )
             ],
     );
   }
@@ -239,6 +262,71 @@ class _ContactButtonState extends State<ContactButton>
               child: child,
             );
           }),
+    );
+  }
+}
+
+class SocialAuthButton extends StatelessWidget {
+  final BoxConstraints constraints;
+  final IconData icon;
+  final String label;
+  final Color labelColor;
+  final Color iconColor;
+  final Color bgColor;
+  const SocialAuthButton({
+    required this.constraints,
+    required this.icon,
+    required this.label,
+    required this.labelColor,
+    required this.iconColor,
+    required this.bgColor,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      margin: const EdgeInsets.symmetric(
+        vertical: 5.0,
+        horizontal: 10.0,
+      ),
+      elevation: 4.0,
+      child: Container(
+        height: 54.0,
+        width: constraints.maxWidth > K.kMobileWidth ? 300.0 : 200.0,
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            //icon
+            Icon(
+              icon,
+              color: iconColor,
+              size: 28.0,
+            ),
+            const SizedBox(
+              width: 10.0,
+            ),
+            //icon name
+            Text(
+              label,
+              style: GoogleFonts.rubik().copyWith(
+                fontSize: 18.0,
+                letterSpacing: 0.5,
+                fontWeight: FontWeight.w500,
+                color: labelColor,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

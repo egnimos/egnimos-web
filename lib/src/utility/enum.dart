@@ -2,6 +2,8 @@ enum NavOptions {
   home,
   about,
   blog,
+  loginregister,
+  profile,
 }
 
 enum LegalType {
@@ -14,6 +16,23 @@ enum LegalType {
 enum BlogDisplayType {
   blogPost,
   updates
+}
+
+enum AuthType {
+  login,
+  register,
+}
+
+enum Gender {
+  male,
+  female,
+  others,
+  // unknown,
+}
+
+enum AgeAccountType {
+  child,
+  adult,
 }
 
 enum Cat {

@@ -2,6 +2,7 @@ import 'package:egnimos/src/pages/blog.dart';
 import 'package:flutter/material.dart';
 
 import '../pages/about.dart';
+import '../pages/auth_pages/auth_page.dart';
 import '../pages/home.dart';
 import '../theme/color_theme.dart';
 import '../utility/enum.dart';
@@ -23,7 +24,7 @@ class Menu extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          //header
+          //header when it is login show the profile info
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16.0),
@@ -87,6 +88,16 @@ class Menu extends StatelessWidget {
                   ),
                   const SizedBox(
                     height: 20.0,
+                  ),
+                  MenuSwitchButton(
+                    label: "Login",
+                    isDrawerButton: true,
+                    option: NavOptions.loginregister,
+                    selectedOption: selectedOption,
+                    onTap: () {
+                      //navigate to the auth screen
+                      Navigator.of(context).pushNamed(AuthPage.routeName);
+                    },
                   ),
                 ],
               ),
