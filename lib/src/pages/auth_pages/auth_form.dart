@@ -9,11 +9,18 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import '../../config/k.dart';
+import '../../models/user.dart';
 import '../../utility/enum.dart';
 
 class AuthForm extends StatefulWidget {
   final BoxConstraints constraints;
+  // final GlobalKey<FormState> formKey;
+  final void Function(User userInf) updatedUser;
+  final void Function(XFile file) getFile;
   const AuthForm({
+    // required this.formKey,
+    required this.getFile,
+    required this.updatedUser,
     required this.constraints,
     Key? key,
   }) : super(key: key);
@@ -23,12 +30,24 @@ class AuthForm extends StatefulWidget {
 }
 
 class _AuthFormState extends State<AuthForm> {
-  final _formKey = GlobalKey<FormState>();
   XFile? file;
   final PickerService _pickerService = PickerService();
+  final nameController = TextEditingController();
   Gender selectedGender = Gender.male;
   String dob = "";
   String age = "";
+  User userInfo = User(
+    id: "",
+    name: "",
+    email: "",
+    uri: "",
+    uriName: "",
+    gender: Gender.male,
+    dob: "",
+    ageAccountType: AgeAccountType.adult,
+    createdAt: "",
+    updatedAt: "",
+  );
 
   Row addRadioButton(
     Gender gender,
@@ -47,6 +66,19 @@ class _AuthFormState extends State<AuthForm> {
             setState(() {
               selectedGender = val!;
             });
+            userInfo = User(
+              id: userInfo.id,
+              name: userInfo.name,
+              email: userInfo.email,
+              uri: userInfo.uri,
+              uriName: userInfo.uriName,
+              gender: val!,
+              dob: userInfo.dob,
+              ageAccountType: userInfo.ageAccountType,
+              createdAt: userInfo.createdAt,
+              updatedAt: userInfo.updatedAt,
+            );
+            widget.updatedUser(userInfo);
           },
         ),
         Text(
@@ -87,264 +119,267 @@ class _AuthFormState extends State<AuthForm> {
         final currYear =
             DateFormat().addPattern(DateFormat.YEAR).format(DateTime.now());
         age = (int.parse(currYear) - int.parse(year)).toString();
+        userInfo = User(
+          id: userInfo.id,
+          name: userInfo.name,
+          email: userInfo.email,
+          gender: userInfo.gender,
+          uri: userInfo.uri,
+          uriName: userInfo.uriName,
+          dob: picked.toString(),
+          ageAccountType: (int.parse(currYear) - int.parse(year)) > 16
+              ? AgeAccountType.adult
+              : AgeAccountType.child,
+          createdAt: userInfo.createdAt,
+          updatedAt: userInfo.updatedAt,
+        );
+        widget.updatedUser(userInfo);
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: widget.constraints.maxWidth < K.kTableteWidth
-              ? CrossAxisAlignment.center
-              : CrossAxisAlignment.start,
-          children: [
-            //image
-            GestureDetector(
-              onTap: () async {
-                try {
-                  //pick image
-                  final imgFile = await _pickerService.pick(
-                    context,
-                    fileType: FileType.image,
-                  );
-                  if (imgFile != null) {
-                    setState(() {
-                      file = XFile.fromData(imgFile.bytes!);
-                    });
-                  }
-                } catch (e) {
-                  print(e.toString());
-                }
-              },
-              child: Container(
-                constraints: BoxConstraints.tight(
-                  const Size.square(100.0),
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100.0),
-                  image: file != null
-                      ? DecorationImage(
-                          image: CachedNetworkImageProvider(file!.path),
-                          fit: BoxFit.cover,
-                        )
-                      : const DecorationImage(
-                          image: CachedNetworkImageProvider(
-                              "https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_960_720.png"),
-                          fit: BoxFit.cover,
-                        ),
-                ),
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100.0),
-                    color: ColorTheme.primaryColor.withOpacity(0.4),
-                  ),
-                  child: const Icon(
-                    FontAwesomeIcons.camera,
-                    color: Colors.white,
-                    size: 22.0,
-                  ),
-                ),
+    return Column(
+      crossAxisAlignment: widget.constraints.maxWidth < K.kTableteWidth
+          ? CrossAxisAlignment.center
+          : CrossAxisAlignment.start,
+      children: [
+        //image
+        GestureDetector(
+          onTap: () async {
+            try {
+              //pick image
+              final imgFile = await _pickerService.pick(
+                context,
+                fileType: FileType.image,
+              );
+              if (imgFile != null) {
+                setState(() {
+                  file = XFile.fromData(imgFile.bytes!);
+                });
+                widget.getFile(file!);
+              }
+            } catch (e) {
+              print(e.toString());
+            }
+          },
+          child: Container(
+            constraints: BoxConstraints.tight(
+              const Size.square(100.0),
+            ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100.0),
+              image: file != null
+                  ? DecorationImage(
+                      image: CachedNetworkImageProvider(file!.path),
+                      fit: BoxFit.cover,
+                    )
+                  : const DecorationImage(
+                      image: CachedNetworkImageProvider(
+                          "https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_960_720.png"),
+                      fit: BoxFit.cover,
+                    ),
+            ),
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100.0),
+                color: ColorTheme.primaryColor.withOpacity(0.4),
+              ),
+              child: const Icon(
+                FontAwesomeIcons.camera,
+                color: Colors.white,
+                size: 22.0,
               ),
             ),
+          ),
+        ),
 
-            //name
-            const SizedBox(
-              height: 30.0,
-            ),
-            SizedBox(
-              width: (widget.constraints.maxWidth / 100) * 30.0,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Icon(
-                    FontAwesomeIcons.person,
-                    color: Colors.grey.shade800,
-                  ),
-                  const SizedBox(width: 5),
-                  Text(
-                    "Name",
-                    style: GoogleFonts.rubik(
-                      fontSize: 20.0,
-                      letterSpacing: 0.5,
-                      // fontWeight: FontWeight.w500,
-                      color: Colors.grey.shade800,
-                    ),
-                  ),
-                ],
+        //name
+        const SizedBox(
+          height: 30.0,
+        ),
+        SizedBox(
+          width: (widget.constraints.maxWidth / 100) * 30.0,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(
+                FontAwesomeIcons.person,
+                color: Colors.grey.shade800,
               ),
-            ),
-
-            const SizedBox(
-              height: 20.0,
-            ),
-
-            SizedBox(
-              width: (widget.constraints.maxWidth / 100) * 30.0,
-              child: TextFormField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16.0),
-                    borderSide: const BorderSide(
-                      color: ColorTheme.primaryColor,
-                      width: 2,
-                    ),
-                  ),
-                  // enabledBorder: OutlineInputBorder(
-                  //   borderRadius: BorderRadius.circular(16.0),
-                  //   borderSide: const BorderSide(
-                  //     color: ColorTheme.primaryColor,
-                  //     width: 2.5,
-                  //   ),
-                  // ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16.0),
-                    borderSide: const BorderSide(
-                      color: ColorTheme.primaryColor,
-                      width: 2.0,
-                    ),
-                  ),
-                  // errorBorder: OutlineInputBorder(
-                  //   borderRadius: BorderRadius.circular(16.0),
-                  //   borderSide: const BorderSide(
-                  //     color: Colors.redAccent,
-                  //     width: 2.0,
-                  //   ),
-                  // ),
-                  // focusedErrorBorder: OutlineInputBorder(
-                  //   borderRadius: BorderRadius.circular(16.0),
-                  //   borderSide: const BorderSide(
-                  //     color: Colors.redAccent,
-                  //     width: 2.0,
-                  //   ),
-                  // ),
-                  // disabledBorder: OutlineInputBorder(
-                  //   borderRadius: BorderRadius.circular(16.0),
-                  //   borderSide: BorderSide(
-                  //     color: Colors.grey.shade400,
-                  //     width: 2.0,
-                  //   ),
-                  // ),
-                  focusColor: ColorTheme.primaryColor,
-                  hoverColor: ColorTheme.primaryColor,
-                  fillColor: ColorTheme.primaryColor,
+              const SizedBox(width: 5),
+              Text(
+                "Name",
+                style: GoogleFonts.rubik(
+                  fontSize: 20.0,
+                  letterSpacing: 0.5,
+                  // fontWeight: FontWeight.w500,
+                  color: Colors.grey.shade800,
                 ),
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(
+          height: 20.0,
+        ),
+
+        SizedBox(
+          width: (widget.constraints.maxWidth / 100) * 30.0,
+          child: TextField(
+            controller: nameController,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16.0),
+                borderSide: const BorderSide(
+                  color: ColorTheme.primaryColor,
+                  width: 2,
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16.0),
+                borderSide: const BorderSide(
+                  color: ColorTheme.primaryColor,
+                  width: 2.0,
+                ),
+              ),
+              focusColor: ColorTheme.primaryColor,
+              hoverColor: ColorTheme.primaryColor,
+              fillColor: ColorTheme.primaryColor,
+            ),
+            style: GoogleFonts.rubik(
+              fontSize: 15.0,
+              fontWeight: FontWeight.w400,
+            ),
+            onChanged: (val) {
+              userInfo = User(
+                id: userInfo.id,
+                name: val,
+                email: userInfo.email,
+                gender: userInfo.gender,
+                uri: userInfo.uri,
+                uriName: userInfo.uriName,
+                dob: userInfo.dob,
+                ageAccountType: userInfo.ageAccountType,
+                createdAt: userInfo.createdAt,
+                updatedAt: userInfo.updatedAt,
+              );
+              widget.updatedUser(userInfo);
+              print(userInfo.toJson());
+            },
+          ),
+        ),
+
+        //gender
+        const SizedBox(
+          height: 40.0,
+        ),
+        SizedBox(
+          width: (widget.constraints.maxWidth / 100) * 30.0,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(
+                FontAwesomeIcons.genderless,
+                color: Colors.grey.shade800,
+              ),
+              const SizedBox(width: 5),
+              Text(
+                "Gender",
+                style: GoogleFonts.rubik(
+                  fontSize: 20.0,
+                  letterSpacing: 0.5,
+                  // fontWeight: FontWeight.w500,
+                  color: Colors.grey.shade800,
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(
+          height: 20.0,
+        ),
+        //GENDER
+        Transform.translate(
+          offset: widget.constraints.maxWidth < K.kTableteWidth
+              ? const Offset(-14.0, 0.0)
+              : const Offset(-4.0, 0.0),
+          child: FittedBox(
+            alignment: Alignment.centerLeft,
+            child: Wrap(
+              children: Gender.values
+                  .map(
+                    (gender) => addRadioButton(gender, gender.name),
+                  )
+                  .toList(),
+            ),
+          ),
+        ),
+
+        //date of birth & age
+        const SizedBox(
+          height: 40.0,
+        ),
+        SizedBox(
+          width: (widget.constraints.maxWidth / 100) * 30.0,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(
+                FontAwesomeIcons.calendar,
+                color: Colors.grey.shade800,
+              ),
+              const SizedBox(width: 5),
+              Text(
+                "Date Of Birth : $age",
+                style: GoogleFonts.rubik(
+                  fontSize: 20.0,
+                  letterSpacing: 0.5,
+                  // fontWeight: FontWeight.w500,
+                  color: Colors.grey.shade800,
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(
+          height: 20.0,
+        ),
+
+        //DOB
+        GestureDetector(
+          onTap: () => _selectDate(context),
+          child: Container(
+              height: 50.0,
+              width: (widget.constraints.maxWidth / 100) * 25.0,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.grey.shade500,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(16.0),
+              ),
+              padding: const EdgeInsets.all(
+                10.0,
+              ),
+              alignment: Alignment.centerLeft,
+              child: Text(
+                dob,
                 style: GoogleFonts.rubik(
                   fontSize: 15.0,
                   fontWeight: FontWeight.w400,
                 ),
-              ),
-            ),
-
-            //gender
-            const SizedBox(
-              height: 40.0,
-            ),
-            SizedBox(
-              width: (widget.constraints.maxWidth / 100) * 30.0,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Icon(
-                    FontAwesomeIcons.genderless,
-                    color: Colors.grey.shade800,
-                  ),
-                  const SizedBox(width: 5),
-                  Text(
-                    "Gender",
-                    style: GoogleFonts.rubik(
-                      fontSize: 20.0,
-                      letterSpacing: 0.5,
-                      // fontWeight: FontWeight.w500,
-                      color: Colors.grey.shade800,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(
-              height: 20.0,
-            ),
-            //GENDER
-            Transform.translate(
-              offset: widget.constraints.maxWidth < K.kTableteWidth
-                  ? const Offset(-14.0, 0.0)
-                  : const Offset(-4.0, 0.0),
-              child: FittedBox(
-                alignment: Alignment.centerLeft,
-                child: Wrap(
-                  children: Gender.values
-                      .map(
-                        (gender) => addRadioButton(gender, gender.name),
-                      )
-                      .toList(),
-                ),
-              ),
-            ),
-
-            //date of birth & age
-            const SizedBox(
-              height: 40.0,
-            ),
-            SizedBox(
-              width: (widget.constraints.maxWidth / 100) * 30.0,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Icon(
-                    FontAwesomeIcons.calendar,
-                    color: Colors.grey.shade800,
-                  ),
-                  const SizedBox(width: 5),
-                  Text(
-                    "Date Of Birth : $age",
-                    style: GoogleFonts.rubik(
-                      fontSize: 20.0,
-                      letterSpacing: 0.5,
-                      // fontWeight: FontWeight.w500,
-                      color: Colors.grey.shade800,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(
-              height: 20.0,
-            ),
-
-            //DOB
-            GestureDetector(
-              onTap: () => _selectDate(context),
-              child: Container(
-                  height: 50.0,
-                  width: (widget.constraints.maxWidth / 100) * 25.0,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.grey.shade500,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(16.0),
-                  ),
-                  padding: const EdgeInsets.all(
-                    10.0,
-                  ),
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    dob,
-                    style: GoogleFonts.rubik(
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  )),
-            ),
-          ],
-        ));
+              )),
+        ),
+      ],
+    );
   }
 }

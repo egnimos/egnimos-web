@@ -35,6 +35,17 @@ enum AgeAccountType {
   adult,
 }
 
+enum PickerType {
+  pdf,
+  image,
+  video,
+  audio,
+  tracker,
+  location,
+  unknown,
+}
+
+
 enum Cat {
   all,
   mustRead,

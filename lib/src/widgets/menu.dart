@@ -1,9 +1,12 @@
 import 'package:egnimos/src/pages/blog.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../app.dart';
 import '../pages/about.dart';
 import '../pages/auth_pages/auth_page.dart';
 import '../pages/home.dart';
+import '../providers/auth_provider.dart';
 import '../theme/color_theme.dart';
 import '../utility/enum.dart';
 import 'buttons.dart';
@@ -89,16 +92,32 @@ class Menu extends StatelessWidget {
                   const SizedBox(
                     height: 20.0,
                   ),
-                  MenuSwitchButton(
-                    label: "Login",
-                    isDrawerButton: true,
-                    option: NavOptions.loginregister,
-                    selectedOption: selectedOption,
-                    onTap: () {
-                      //navigate to the auth screen
-                      Navigator.of(context).pushNamed(AuthPage.routeName);
-                    },
-                  ),
+                  //auth button
+                  Consumer<AuthProvider>(builder: (context, ap, child) {
+                    if (firebaseAuth.currentUser == null) {
+                      return MenuSwitchButton(
+                        label: "Login",
+                        isDrawerButton: true,
+                        option: NavOptions.loginregister,
+                        selectedOption: selectedOption,
+                        onTap: () {
+                          //navigate to the auth screen
+                          Navigator.of(context).pushNamed(AuthPage.routeName);
+                        },
+                      );
+                    } else {
+                      return MenuSwitchButton(
+                        label: "Profile",
+                        isDrawerButton: true,
+                        option: NavOptions.profile,
+                        selectedOption: selectedOption,
+                        onTap: () {
+                          //navigate to the auth screen
+                          Navigator.of(context).pushNamed(AuthPage.routeName);
+                        },
+                      );
+                    }
+                  }),
                 ],
               ),
             ),

@@ -6,6 +6,8 @@ class User {
   final String email;
   final Gender gender;
   final String dob;
+  final String uri;
+  final String uriName;
   final AgeAccountType ageAccountType;
   final String createdAt;
   final String updatedAt;
@@ -16,6 +18,8 @@ class User {
     required this.email,
     required this.gender,
     required this.dob,
+    required this.uri,
+    required this.uriName,
     required this.ageAccountType,
     required this.createdAt,
     required this.updatedAt,
@@ -26,21 +30,31 @@ class User {
         id: data["id"],
         name: data["name"],
         email: data["email"],
-        gender: data["gender"],
+        uriName: data["uri_name"],
+        gender: Gender.values.firstWhere(
+          (element) => element.name == data["gender"],
+          orElse: () => Gender.male,
+        ),
         dob: data["dob"],
-        ageAccountType: data["age_account_type"],
+        uri: data["uri"],
+        ageAccountType: AgeAccountType.values.firstWhere(
+          (element) => element.name == data["age_account_type"],
+          orElse: () => AgeAccountType.adult,
+        ),
         createdAt: data["created_at"],
         updatedAt: data["updated_at"],
       );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "email": email,
-    "gender": gender,
-    "dob": dob,
-    "age_account_type": ageAccountType,
-    "created_at": createdAt,
-    "updated_at": updatedAt,
-  };
+        "id": id,
+        "name": name,
+        "email": email,
+        "gender": gender.name,
+        "dob": dob,
+        "uri": uri,
+        "uri_name": uriName,
+        "age_account_type": ageAccountType.name,
+        "created_at": createdAt,
+        "updated_at": updatedAt,
+      };
 }

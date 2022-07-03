@@ -2,9 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:egnimos/src/pages/about.dart';
 import 'package:egnimos/src/pages/blog.dart';
 import 'package:egnimos/src/pages/profile_page.dart';
+import 'package:egnimos/src/providers/auth_provider.dart';
 import 'package:egnimos/src/providers/blog_provider.dart';
 import 'package:egnimos/src/theme/color_theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +16,7 @@ import 'pages/home.dart';
 
 final FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+final FirebaseStorage storage = FirebaseStorage.instance;
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -23,6 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => AuthProvider()),
         ChangeNotifierProvider(create: (context) => BlogProvider()),
       ],
       child: LayoutBuilder(builder: (context, constraints) {

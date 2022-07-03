@@ -1,8 +1,13 @@
+import 'package:cross_file/cross_file.dart';
+import 'package:egnimos/src/models/user.dart';
 import 'package:egnimos/src/pages/auth_pages/auth_form.dart';
+import 'package:egnimos/src/pages/home.dart';
+import 'package:egnimos/src/providers/auth_provider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import '../../config/k.dart';
 import '../../theme/color_theme.dart';
@@ -22,6 +27,8 @@ class AuthBox extends StatefulWidget {
 
 class _AuthBoxState extends State<AuthBox> {
   AuthType _authType = AuthType.login;
+  User? userInfo;
+  XFile? imgFile;
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +72,12 @@ class _AuthBoxState extends State<AuthBox> {
             //user info
             if (_authType == AuthType.register)
               AuthForm(
+                getFile: (file) {
+                  imgFile = file;
+                },
+                updatedUser: (user) {
+                  userInfo = user;
+                },
                 constraints: widget.constraints,
               ),
 
@@ -76,6 +89,20 @@ class _AuthBoxState extends State<AuthBox> {
             Flexible(
               child: SocialAuthButton(
                 constraints: widget.constraints,
+                onTap: () async {
+                  try {
+                    await Provider.of<AuthProvider>(context, listen: false)
+                        .signInWithGithub(userInfo, imgFile, _authType);
+                    Navigator.of(context).pushReplacementNamed(Home.routeName);
+                  } catch (error) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: Colors.grey.shade800,
+                        content: Text(error.toString()),
+                      ),
+                    );
+                  }
+                },
                 icon: FontAwesomeIcons.github,
                 iconColor: Colors.white,
                 labelColor: Colors.white,
@@ -87,6 +114,20 @@ class _AuthBoxState extends State<AuthBox> {
             Flexible(
               child: SocialAuthButton(
                 constraints: widget.constraints,
+                onTap: () async {
+                  try {
+                    await Provider.of<AuthProvider>(context, listen: false)
+                        .signInWithGoogle(userInfo, imgFile, _authType);
+                    Navigator.of(context).pushReplacementNamed(Home.routeName);
+                  } catch (error) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: Colors.grey.shade800,
+                        content: Text(error.toString()),
+                      ),
+                    );
+                  }
+                },
                 icon: FontAwesomeIcons.google,
                 iconColor: Colors.grey.shade800,
                 labelColor: Colors.grey.shade800,
