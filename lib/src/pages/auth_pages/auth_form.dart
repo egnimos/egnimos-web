@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cross_file/cross_file.dart';
+import 'package:egnimos/src/providers/upload_provider.dart';
 import 'package:egnimos/src/services/picker_service.dart';
 import 'package:egnimos/src/theme/color_theme.dart';
 import 'package:file_picker/file_picker.dart';
@@ -16,7 +17,7 @@ class AuthForm extends StatefulWidget {
   final BoxConstraints constraints;
   // final GlobalKey<FormState> formKey;
   final void Function(User userInf) updatedUser;
-  final void Function(XFile file) getFile;
+  final void Function(XFile file, MimeModel mimeModel) getFile;
   const AuthForm({
     // required this.formKey,
     required this.getFile,
@@ -45,8 +46,13 @@ class _AuthFormState extends State<AuthForm> {
     gender: Gender.male,
     dob: "",
     ageAccountType: AgeAccountType.adult,
-    createdAt: "",
-    updatedAt: "",
+    createdAt: DateTime.now().toString(),
+    updatedAt: DateTime.now().toString(),
+  );
+  MimeModel mimeModel = MimeModel(
+    uploadType: "",
+    fileExt: "",
+    type: PickerType.unknown,
   );
 
   Row addRadioButton(
@@ -154,11 +160,19 @@ class _AuthFormState extends State<AuthForm> {
                 context,
                 fileType: FileType.image,
               );
+              print(imgFile?.extension ?? "no-extension");
+              print(imgFile?.size ?? 0);
+              // print(imgFile.)
               if (imgFile != null) {
                 setState(() {
                   file = XFile.fromData(imgFile.bytes!);
                 });
-                widget.getFile(file!);
+                mimeModel = MimeModel(
+                  uploadType: PickerType.image.name,
+                  fileExt: imgFile.extension ?? "",
+                  type: PickerType.image,
+                );
+                widget.getFile(file!, mimeModel);
               }
             } catch (e) {
               print(e.toString());

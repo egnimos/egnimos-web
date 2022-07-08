@@ -45,6 +45,11 @@ enum PickerType {
   unknown,
 }
 
+enum ProfileOptions {
+  edit,
+  blogs,
+}
+
 
 enum Cat {
   all,

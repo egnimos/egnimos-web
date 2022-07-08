@@ -1,8 +1,10 @@
 import 'package:egnimos/src/pages/blog.dart';
+import 'package:egnimos/src/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../app.dart';
+import '../models/user.dart';
+import '/main.dart';
 import '../pages/about.dart';
 import '../pages/auth_pages/auth_page.dart';
 import '../pages/home.dart';
@@ -59,8 +61,8 @@ class Menu extends StatelessWidget {
                   MenuSwitchButton(
                     label: "Home",
                     isDrawerButton: true,
-                    option: NavOptions.home,
-                    selectedOption: selectedOption,
+                    option: NavOptions.home.name,
+                    selectedOption: selectedOption.name,
                     onTap: () {
                       Navigator.of(context).pushNamed(Home.routeName);
                     },
@@ -71,8 +73,8 @@ class Menu extends StatelessWidget {
                   MenuSwitchButton(
                     label: "About",
                     isDrawerButton: true,
-                    option: NavOptions.about,
-                    selectedOption: selectedOption,
+                    option: NavOptions.about.name,
+                    selectedOption: selectedOption.name,
                     onTap: () {
                       Navigator.of(context).pushNamed(AboutPage.routeName);
                     },
@@ -83,8 +85,8 @@ class Menu extends StatelessWidget {
                   MenuSwitchButton(
                     label: "Blog",
                     isDrawerButton: true,
-                    option: NavOptions.blog,
-                    selectedOption: selectedOption,
+                    option: NavOptions.blog.name,
+                    selectedOption: selectedOption.name,
                     onTap: () {
                       Navigator.of(context).pushNamed(Blog.routeName);
                     },
@@ -93,31 +95,38 @@ class Menu extends StatelessWidget {
                     height: 20.0,
                   ),
                   //auth button
-                  Consumer<AuthProvider>(builder: (context, ap, child) {
-                    if (firebaseAuth.currentUser == null) {
-                      return MenuSwitchButton(
-                        label: "Login",
-                        isDrawerButton: true,
-                        option: NavOptions.loginregister,
-                        selectedOption: selectedOption,
-                        onTap: () {
-                          //navigate to the auth screen
-                          Navigator.of(context).pushNamed(AuthPage.routeName);
-                        },
-                      );
-                    } else {
-                      return MenuSwitchButton(
-                        label: "Profile",
-                        isDrawerButton: true,
-                        option: NavOptions.profile,
-                        selectedOption: selectedOption,
-                        onTap: () {
-                          //navigate to the auth screen
-                          Navigator.of(context).pushNamed(AuthPage.routeName);
-                        },
-                      );
-                    }
-                  }),
+                  StreamBuilder(
+                      stream: firebaseAuth.authStateChanges(),
+                      builder: (context, snapshot) {
+                        WebAppAuthState().checkAuthState().then((value) {
+                          // print(value);
+                        });
+                        if (snapshot.data == null) {
+                          return MenuSwitchButton(
+                            label: "Login",
+                            isDrawerButton: true,
+                            option: NavOptions.loginregister.name,
+                            selectedOption: selectedOption.name,
+                            onTap: () {
+                              //navigate to the auth screen
+                              Navigator.of(context)
+                                  .pushNamed(AuthPage.routeName);
+                            },
+                          );
+                        } else {
+                          return MenuSwitchButton(
+                            label: "Profile",
+                            isDrawerButton: true,
+                            option: NavOptions.profile.name,
+                            selectedOption: selectedOption.name,
+                            onTap: () {
+                              //navigate to the auth screen
+                              Navigator.of(context)
+                                  .pushNamed(ProfilePage.routeName);
+                            },
+                          );
+                        }
+                      }),
                 ],
               ),
             ),

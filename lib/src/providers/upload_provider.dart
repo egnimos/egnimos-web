@@ -1,12 +1,10 @@
-import 'dart:io';
-
 import 'package:cross_file/cross_file.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mime/mime.dart';
 import 'package:uuid/uuid.dart';
 
-import '../app.dart';
+import '/main.dart';
 import '../utility/enum.dart';
 
 class MimeModel {
@@ -73,8 +71,9 @@ class UploadProvider with ChangeNotifier {
   MimeModel generateFileType(XFile file) {
     try {
       final mime = lookupMimeType(file.path);
-      uploadType = mime?.split("/").first ?? "files";
-      fileExt = mime?.split("/").last ?? "";
+      // uploadType = mime?.split("/").first ?? "files";
+      // fileExt = mime?.split("/").last ?? "";
+      print(file.mimeType);
       final fileMimieType = mime?.split("/").first == "application"
           ? mime?.split("/").last
           : mime?.split("/").first;

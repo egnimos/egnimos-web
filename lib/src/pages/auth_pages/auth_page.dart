@@ -1,12 +1,8 @@
 import 'package:egnimos/src/config/k.dart';
 import 'package:egnimos/src/pages/home.dart';
 import 'package:egnimos/src/theme/color_theme.dart';
-import 'package:egnimos/src/utility/enum.dart';
 import 'package:egnimos/src/widgets/egnimos_nav.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'auth_box.dart';
 
@@ -26,8 +22,8 @@ class AuthPage extends StatelessWidget {
           children: [
             //web app name & icon
             GestureDetector(
-              onTap: () {
-                Navigator.of(context).pushReplacementNamed(Home.routeName);
+              onTap: () async {
+                await Navigator.of(context).pushReplacementNamed(Home.routeName);
               },
               child: EgnimosNav(
                 height: 90.0,

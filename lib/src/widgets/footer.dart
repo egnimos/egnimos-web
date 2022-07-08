@@ -132,7 +132,15 @@ class FooterRow extends StatelessWidget {
 }
 
 class FooterIcon extends StatelessWidget {
-  const FooterIcon({Key? key}) : super(key: key);
+  final double footerFontSize;
+  final double iconWidth;
+  final double iconHeight;
+  const FooterIcon({
+    this.iconHeight = 60.0,
+    this.iconWidth = 60.0,
+    this.footerFontSize = 24.0,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +148,14 @@ class FooterIcon extends StatelessWidget {
       height: 100.0,
       width: 100.0,
       child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-        Flexible(child: Image.asset("assets/images/png/Group_392-4.png")),
+        Flexible(
+          child: Image.asset(
+            "assets/images/png/Group_392-4.png",
+            width: iconWidth,
+            height: iconHeight,
+            fit: BoxFit.contain,
+          ),
+        ),
         Flexible(
           child: Padding(
             padding: const EdgeInsets.only(
@@ -149,8 +164,10 @@ class FooterIcon extends StatelessWidget {
             ),
             child: Text(
               "EGNIMOS",
+              maxLines: 1,
+              overflow: TextOverflow.clip,
               style: GoogleFonts.raleway().copyWith(
-                fontSize: 24.0,
+                fontSize: footerFontSize,
                 fontWeight: FontWeight.bold,
                 color: Colors.grey.shade300,
               ),

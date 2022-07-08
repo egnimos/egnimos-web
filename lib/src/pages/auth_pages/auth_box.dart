@@ -10,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../config/k.dart';
+import '../../providers/upload_provider.dart';
 import '../../theme/color_theme.dart';
 import '../../utility/enum.dart';
 import '../../widgets/buttons.dart';
@@ -29,6 +30,11 @@ class _AuthBoxState extends State<AuthBox> {
   AuthType _authType = AuthType.login;
   User? userInfo;
   XFile? imgFile;
+  MimeModel mimeModel = MimeModel(
+    uploadType: "",
+    fileExt: "",
+    type: PickerType.unknown,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -72,8 +78,9 @@ class _AuthBoxState extends State<AuthBox> {
             //user info
             if (_authType == AuthType.register)
               AuthForm(
-                getFile: (file) {
+                getFile: (file, mime) {
                   imgFile = file;
+                  mimeModel = mime;
                 },
                 updatedUser: (user) {
                   userInfo = user;
@@ -92,7 +99,7 @@ class _AuthBoxState extends State<AuthBox> {
                 onTap: () async {
                   try {
                     await Provider.of<AuthProvider>(context, listen: false)
-                        .signInWithGithub(userInfo, imgFile, _authType);
+                        .signInWithGithub(userInfo, imgFile, _authType, mimeModel);
                     Navigator.of(context).pushReplacementNamed(Home.routeName);
                   } catch (error) {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -117,7 +124,7 @@ class _AuthBoxState extends State<AuthBox> {
                 onTap: () async {
                   try {
                     await Provider.of<AuthProvider>(context, listen: false)
-                        .signInWithGoogle(userInfo, imgFile, _authType);
+                        .signInWithGoogle(userInfo, imgFile, _authType, mimeModel);
                     Navigator.of(context).pushReplacementNamed(Home.routeName);
                   } catch (error) {
                     ScaffoldMessenger.of(context).showSnackBar(

@@ -83,7 +83,7 @@ class HomeHeader extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: GoogleFonts.raleway().copyWith(
                       fontSize: constraints.maxWidth > K.kMobileWidth
-                          ? (constraints.maxWidth / 100) * 2.6
+                          ? (constraints.maxWidth / 100) * 2.3
                           : 16.0,
                     ),
                   ),

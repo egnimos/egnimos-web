@@ -3,7 +3,7 @@ import 'package:egnimos/src/models/blog.dart';
 import 'package:egnimos/src/utility/enum.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../app.dart';
+import '/main.dart';
 import '../utility/convert.dart';
 
 class BlogProvider with ChangeNotifier {

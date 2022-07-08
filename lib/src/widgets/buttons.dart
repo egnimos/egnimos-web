@@ -2,11 +2,13 @@ import 'package:egnimos/src/config/k.dart';
 import 'package:egnimos/src/pages/about.dart';
 import 'package:egnimos/src/pages/auth_pages/auth_page.dart';
 import 'package:egnimos/src/pages/blog.dart';
+import 'package:egnimos/src/pages/profile_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../app.dart';
+import '/main.dart';
 import '../pages/auth_pages/auth_page.dart';
 import '../pages/home.dart';
 import '../providers/auth_provider.dart';
@@ -14,9 +16,9 @@ import '../theme/color_theme.dart';
 import '../utility/enum.dart';
 
 class MenuSwitchButton extends StatefulWidget {
-  final NavOptions option;
+  final String option;
   final String label;
-  final NavOptions selectedOption;
+  final String selectedOption;
   final bool isDrawerButton;
   final void Function() onTap;
   const MenuSwitchButton({
@@ -138,8 +140,8 @@ class NavButtons extends StatelessWidget {
           : <Widget>[
               MenuSwitchButton(
                 label: "Home",
-                option: NavOptions.home,
-                selectedOption: selectedOption,
+                option: NavOptions.home.name,
+                selectedOption: selectedOption.name,
                 onTap: () {
                   Navigator.of(context).pushNamed(Home.routeName);
                 },
@@ -149,8 +151,8 @@ class NavButtons extends StatelessWidget {
               ),
               MenuSwitchButton(
                 label: "About",
-                option: NavOptions.about,
-                selectedOption: selectedOption,
+                option: NavOptions.about.name,
+                selectedOption: selectedOption.name,
                 onTap: () {
                   Navigator.of(context).pushNamed(AboutPage.routeName);
                 },
@@ -160,8 +162,8 @@ class NavButtons extends StatelessWidget {
               ),
               MenuSwitchButton(
                 label: "Blog",
-                option: NavOptions.blog,
-                selectedOption: selectedOption,
+                option: NavOptions.blog.name,
+                selectedOption: selectedOption.name,
                 onTap: () {
                   Navigator.of(context).pushNamed(Blog.routeName);
                 },
@@ -174,29 +176,35 @@ class NavButtons extends StatelessWidget {
                 width: (constraints.maxWidth / 100) * 1.5,
               ),
               //auth button
-              Consumer<AuthProvider>(builder: (context, ap, child) {
-                if (firebaseAuth.currentUser == null) {
-                  return MenuSwitchButton(
-                    label: "Login",
-                    option: NavOptions.loginregister,
-                    selectedOption: selectedOption,
-                    onTap: () {
-                      //navigate to the login page
-                      Navigator.of(context).pushNamed(AuthPage.routeName);
-                    },
-                  );
-                } else {
-                  return MenuSwitchButton(
-                    label: "Profile",
-                    option: NavOptions.profile,
-                    selectedOption: selectedOption,
-                    onTap: () {
-                      //navigate to the login page
-                      Navigator.of(context).pushNamed(AuthPage.routeName);
-                    },
-                  );
-                }
-              })
+              StreamBuilder<User?>(
+                  stream: firebaseAuth.authStateChanges(),
+                  builder: (context, snapshot) {
+                    WebAppAuthState().checkAuthState().then((value) {
+                      // print(value);
+                    });
+                    if (snapshot.data == null) {
+                      return MenuSwitchButton(
+                        label: "Login",
+                        option: NavOptions.loginregister.name,
+                        selectedOption: selectedOption.name,
+                        onTap: () {
+                          //navigate to the login page
+                          Navigator.of(context).pushNamed(AuthPage.routeName);
+                        },
+                      );
+                    } else {
+                      return MenuSwitchButton(
+                        label: "Profile",
+                        option: NavOptions.profile.name,
+                        selectedOption: selectedOption.name,
+                        onTap: () {
+                          //navigate to the login page
+                          Navigator.of(context)
+                              .pushNamed(ProfilePage.routeName);
+                        },
+                      );
+                    }
+                  })
             ],
     );
   }
@@ -336,6 +344,71 @@ class SocialAuthButton extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class ProfileMenuButton extends StatelessWidget {
+  final String index;
+  final String selectedIndex;
+  final String value;
+  final VoidCallback onTap;
+  final IconData icon;
+
+  const ProfileMenuButton({
+    required this.index,
+    required this.icon,
+    required this.onTap,
+    required this.value,
+    required this.selectedIndex,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: selectedIndex == index
+          ? () {
+              Navigator.pop(context);
+            }
+          : onTap,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          color: selectedIndex == index ? Colors.white24 : Colors.transparent,
+          border: Border(
+            right: BorderSide(
+              color: selectedIndex == index
+                  ? ColorTheme.primaryColor
+                  : Colors.transparent,
+              width: 5.5,
+            ),
+          ),
+        ),
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Icon(
+                icon,
+                color: Colors.white,
+              ),
+            ),
+            Flexible(
+              child: Text(
+                value,
+                style: GoogleFonts.rubik().copyWith(
+                  fontSize: 20.0,
+                  letterSpacing: 1.1,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
