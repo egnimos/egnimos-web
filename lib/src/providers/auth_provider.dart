@@ -181,4 +181,49 @@ class AuthProvider with ChangeNotifier {
       rethrow;
     }
   }
+
+  //update
+  Future<void> updateUserInfo(
+      User userInfo, XFile? file, String fileName, MimeModel mime) async {
+    try {
+      //upload the file
+      UploadOutput? uri;
+      //upload user image
+      if (file != null) {
+        // MimeModel(
+        //   uploadType: PickerType.image.name,
+        //   fileExt: "png",
+        //   type: PickerType.image,
+        // );
+        final mimeInf = mime;
+        uri = await _up!.uploadFile(
+          file,
+          mimeInf.uploadType,
+          mimeInf.fileExt,
+          fileN: fileName,
+        );
+      }
+      //else register or save the user
+      final uInf = User(
+        id: userInfo.id,
+        name: userInfo.name,
+        email: userInfo.email,
+        uri: uri?.generatedUri ?? userInfo.uri,
+        uriName: uri?.fileName ?? userInfo.uriName,
+        gender: userInfo.gender,
+        dob: userInfo.dob,
+        ageAccountType: userInfo.ageAccountType,
+        createdAt: userInfo.createdAt,
+        updatedAt: userInfo.updatedAt,
+      );
+      await firestoreInstance
+          .collection(Collections.users)
+          .doc(uInf.id)
+          .update(uInf.toJson());
+      _user = uInf;
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

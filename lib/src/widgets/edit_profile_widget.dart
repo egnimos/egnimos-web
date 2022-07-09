@@ -1,9 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cross_file/cross_file.dart';
+import 'package:egnimos/src/providers/auth_provider.dart';
+import 'package:egnimos/src/widgets/indicator_widget.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import '../config/k.dart';
 import '../models/user.dart';
@@ -47,6 +50,33 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
     fileExt: "",
     type: PickerType.unknown,
   );
+  String initialFileName = "";
+  String initialFileUrl = "";
+  bool _isInit = true;
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      final user = Provider.of<AuthProvider>(context, listen: false).user;
+      //assign
+      userInfo = User(
+        id: user!.id,
+        name: user.name,
+        email: user.email,
+        uri: user.uri,
+        uriName: user.uriName,
+        gender: user.gender,
+        dob: user.dob,
+        ageAccountType: user.ageAccountType,
+        createdAt: user.createdAt,
+        updatedAt: DateTime.now().toString(),
+      );
+      initialFileName = user.uriName;
+      initialFileUrl = user.uri;
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
 
   Row addRadioButton(
     Gender gender,
@@ -317,7 +347,13 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                 ),
                 primary: ColorTheme.bgColor2,
               ),
-              onPressed: () {},
+              onPressed: () async {
+                IndicatorWidget.loadingBannerAlert(
+                    context, "Please wait..... ");
+                await Provider.of<AuthProvider>(context, listen: false)
+                    .updateUserInfo(userInfo, file, initialFileName, mimeModel);
+                ScaffoldMessenger.of(context).clearMaterialBanners();
+              },
               child: Text(
                 "Submit",
                 style: GoogleFonts.rubik(
