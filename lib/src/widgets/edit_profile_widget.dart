@@ -73,6 +73,11 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
       );
       initialFileName = user.uriName;
       initialFileUrl = user.uri;
+      selectedGender = user.gender;
+      nameController.text = user.name;
+      if (mounted) {
+        setState(() {});
+      }
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -113,7 +118,8 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
         Text(
           title,
           style: GoogleFonts.rubik(
-            fontSize: 18.5,
+            fontSize:
+                (widget.constraints.maxWidth > K.kTableteWidth) ? 18.5 : 15.5,
             fontWeight: FontWeight.w400,
             color: Colors.grey.shade600,
           ),
@@ -126,8 +132,8 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(
-        left: 20.0,
-        right: 20.0,
+        left: 30.0,
+        right: 30.0,
       ),
       height: widget.constraints.maxHeight,
       width: widget.constraints.maxWidth,
@@ -139,7 +145,9 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
           ),
           //image
           Align(
-            alignment: Alignment.centerLeft,
+            alignment: (widget.constraints.maxWidth > K.kTableteWidth)
+                ? Alignment.centerLeft
+                : Alignment.center,
             child: GestureDetector(
               onTap: () async {
                 try {
@@ -176,9 +184,12 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                           image: CachedNetworkImageProvider(file!.path),
                           fit: BoxFit.cover,
                         )
-                      : const DecorationImage(
+                      : DecorationImage(
                           image: CachedNetworkImageProvider(
-                              "https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_960_720.png"),
+                            initialFileUrl.isEmpty
+                                ? "https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_960_720.png"
+                                : initialFileUrl,
+                          ),
                           fit: BoxFit.cover,
                         ),
                 ),
@@ -202,27 +213,34 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
           const SizedBox(
             height: 50.0,
           ),
-          SizedBox(
-            width: (widget.constraints.maxWidth / 100) * 30.0,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Icon(
-                  FontAwesomeIcons.person,
-                  color: Colors.grey.shade800,
-                ),
-                const SizedBox(width: 5),
-                Text(
-                  "Name",
-                  style: GoogleFonts.rubik(
-                    fontSize: 20.0,
-                    letterSpacing: 0.5,
-                    // fontWeight: FontWeight.w500,
+          Align(
+            alignment: (widget.constraints.maxWidth > K.kTableteWidth)
+                ? Alignment.centerLeft
+                : Alignment.center,
+            child: SizedBox(
+              width: (widget.constraints.maxWidth > K.kTableteWidth)
+                  ? (widget.constraints.maxWidth / 100) * 35.0
+                  : (widget.constraints.maxWidth / 100) * 75.0,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Icon(
+                    FontAwesomeIcons.person,
                     color: Colors.grey.shade800,
                   ),
-                ),
-              ],
+                  const SizedBox(width: 5),
+                  Text(
+                    "Name",
+                    style: GoogleFonts.rubik(
+                      fontSize: 20.0,
+                      letterSpacing: 0.5,
+                      // fontWeight: FontWeight.w500,
+                      color: Colors.grey.shade800,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
 
@@ -231,9 +249,13 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
           ),
 
           Align(
-            alignment: Alignment.centerLeft,
+            alignment: (widget.constraints.maxWidth > K.kTableteWidth)
+                ? Alignment.centerLeft
+                : Alignment.center,
             child: SizedBox(
-              width: (widget.constraints.maxWidth / 100) * 30.0,
+              width: (widget.constraints.maxWidth > K.kTableteWidth)
+                  ? (widget.constraints.maxWidth / 100) * 35.0
+                  : (widget.constraints.maxWidth / 100) * 75.0,
               child: TextField(
                 controller: nameController,
                 decoration: InputDecoration(
@@ -283,27 +305,34 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
             height: 50.0,
           ),
 
-          SizedBox(
-            width: (widget.constraints.maxWidth / 100) * 30.0,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Icon(
-                  FontAwesomeIcons.genderless,
-                  color: Colors.grey.shade800,
-                ),
-                const SizedBox(width: 5),
-                Text(
-                  "Gender",
-                  style: GoogleFonts.rubik(
-                    fontSize: 20.0,
-                    letterSpacing: 0.5,
-                    // fontWeight: FontWeight.w500,
+          Align(
+            alignment: (widget.constraints.maxWidth > K.kTableteWidth)
+                ? Alignment.centerLeft
+                : Alignment.center,
+            child: SizedBox(
+              width: (widget.constraints.maxWidth > K.kTableteWidth)
+                  ? (widget.constraints.maxWidth / 100) * 35.0
+                  : (widget.constraints.maxWidth / 100) * 75.0,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Icon(
+                    FontAwesomeIcons.genderless,
                     color: Colors.grey.shade800,
                   ),
-                ),
-              ],
+                  const SizedBox(width: 5),
+                  Text(
+                    "Gender",
+                    style: GoogleFonts.rubik(
+                      fontSize: 20.0,
+                      letterSpacing: 0.5,
+                      // fontWeight: FontWeight.w500,
+                      color: Colors.grey.shade800,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
 
@@ -312,7 +341,9 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
           ),
           //GENDER
           Align(
-            alignment: Alignment.centerLeft,
+            alignment: (widget.constraints.maxWidth > K.kTableteWidth)
+                ? Alignment.centerLeft
+                : Alignment.center,
             child: Transform.translate(
               offset: widget.constraints.maxWidth < K.kTableteWidth
                   ? const Offset(-14.0, 0.0)
@@ -335,7 +366,9 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
           ),
 
           Align(
-            alignment: Alignment.centerLeft,
+            alignment: (widget.constraints.maxWidth > K.kTableteWidth)
+                ? Alignment.centerLeft
+                : Alignment.center,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(

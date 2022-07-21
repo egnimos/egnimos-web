@@ -3,6 +3,7 @@ import 'package:egnimos/src/providers/auth_provider.dart';
 import 'package:egnimos/src/theme/color_theme.dart';
 import 'package:egnimos/src/utility/enum.dart';
 import 'package:egnimos/src/widgets/edit_profile_widget.dart';
+import 'package:egnimos/src/widgets/indicator_widget.dart';
 import 'package:egnimos/src/widgets/profile_nav_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -67,25 +68,36 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
           )
-        : Scaffold(
-            body: LayoutBuilder(builder: (context, constraints) {
-              return SizedBox(
+        : LayoutBuilder(builder: (context, constraints) {
+            return Scaffold(
+              drawer: NavigationRailWide(
+                selectedOption: _selectedOptions,
+                isDrawer: true,
+                constraints: constraints,
+                onTap: (option) {
+                  setState(() {
+                    _selectedOptions = option;
+                  });
+                },
+              ),
+              body: SizedBox(
                 width: constraints.maxWidth,
                 height: constraints.maxHeight,
                 child: Row(
                   children: [
                     //navigation
-                    Expanded(
-                      child: NavigationRailWide(
-                        selectedOption: _selectedOptions,
-                        constraints: constraints,
-                        onTap: (option) {
-                          setState(() {
-                            _selectedOptions = option;
-                          });
-                        },
+                    if (constraints.maxWidth > K.kTableteWidth)
+                      Expanded(
+                        child: NavigationRailWide(
+                          selectedOption: _selectedOptions,
+                          constraints: constraints,
+                          onTap: (option) {
+                            setState(() {
+                              _selectedOptions = option;
+                            });
+                          },
+                        ),
                       ),
-                    ),
 
                     //profile info
                     Expanded(
@@ -115,25 +127,29 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ],
                 ),
-              );
-            }),
-            floatingActionButton: FloatingActionButton(
-              backgroundColor: ColorTheme.bgColor14,
-              child: const Icon(
-                Icons.create,
-                color: Colors.white,
               ),
-              onPressed: () {},
-            ),
-          );
+              floatingActionButton: FloatingActionButton(
+                backgroundColor: ColorTheme.bgColor14,
+                child: const Icon(
+                  Icons.create,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  IndicatorWidget.showCreateBlogModal(context);
+                },
+              ),
+            );
+          });
   }
 }
 
 class NavigationRailWide extends StatelessWidget {
-  final BoxConstraints constraints;
+  final BoxConstraints? constraints;
   final ProfileOptions selectedOption;
+  final bool isDrawer;
   final void Function(ProfileOptions option) onTap;
   const NavigationRailWide({
+    this.isDrawer = false,
     required this.onTap,
     required this.selectedOption,
     required this.constraints,
@@ -147,8 +163,10 @@ class NavigationRailWide extends StatelessWidget {
         horizontal: 20.0,
         vertical: 20.0,
       ),
-      width: constraints.maxWidth,
-      height: constraints.maxHeight,
+      width: isDrawer ? 300.0 : constraints!.maxWidth,
+      height: isDrawer
+          ? MediaQuery.of(context).size.height
+          : constraints!.maxHeight,
       decoration: const BoxDecoration(
         color: ColorTheme.bgColor2,
         borderRadius: BorderRadius.only(
@@ -167,11 +185,11 @@ class NavigationRailWide extends StatelessWidget {
           child: Text(
             "Profile",
             style: GoogleFonts.rubik(
-              fontSize: constraints.maxWidth > K.kDesktopWidth
+              fontSize: constraints!.maxWidth > K.kDesktopWidth
                   ? 42.0
-                  : constraints.maxWidth > K.kTableteWidth
+                  : constraints!.maxWidth > K.kTableteWidth
                       ? 36.0
-                      : constraints.maxWidth > K.kMobileWidth
+                      : constraints!.maxWidth > K.kMobileWidth
                           ? 24.0
                           : 22.0,
               fontWeight: FontWeight.w400,

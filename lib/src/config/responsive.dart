@@ -12,6 +12,8 @@ class Responsive {
   static double widthMultiplier = 0.0;
 
   static void init(BoxConstraints constraints) {
+    screenWidth = constraints.maxWidth;
+    screenHeight = constraints.maxHeight;
     _blockSizeHorizontal = screenWidth / 100;
     _blockSizeVertical = screenHeight / 100;
 

@@ -48,6 +48,29 @@ dependencies:
   provider: ^6.0.2
   url_launcher: ^6.0.20
   shared_preferences: ^2.0.15
+  flutter_dropzone: ^3.0.5
+  dotted_border: ^2.0.0+2
+  
+  super_editor:
+    git:
+      url: https://github.com/superlistapp/super_editor.git
+      path: super_editor
+  # super_editor_markdown:
+  #   git:
+  #     url: https://github.com/superlistapp/super_editor.git
+  #     path: super_editor_markdown
+  super_text_layout: ^0.1.0
+
+dependency_overrides:
+  # Override to local mono-repo path so devs can test this repo
+  # against changes that they're making to other mono-repo packages
+  super_editor:
+    path: package/super_editor/super_editor
+  super_editor_markdown:
+    path: package/super_editor/super_editor_markdown
+  super_text_layout:
+    path: package/super_editor/super_text_layout
+
 
 dev_dependencies:
   flutter_lints: ^1.0.0

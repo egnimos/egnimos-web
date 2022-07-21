@@ -1,6 +1,7 @@
 import 'package:egnimos/src/pages/about.dart';
 import 'package:egnimos/src/pages/blog.dart';
 import 'package:egnimos/src/pages/profile_page.dart';
+import 'package:egnimos/src/pages/write_blog_pages/blog_page.dart';
 import 'package:egnimos/src/providers/auth_provider.dart';
 import 'package:egnimos/src/providers/blog_provider.dart';
 import 'package:egnimos/src/theme/color_theme.dart';
@@ -75,6 +76,7 @@ class _MyAppState extends State<MyApp> {
               ProfilePage.routeName: (ctx) => const ProfilePage(),
               AboutPage.routeName: (ctx) => const AboutPage(),
               AuthPage.routeName: (ctx) => const AuthPage(),
+              BlogPage.routeName: (ctx) => const BlogPage(),
             });
       }),
     );

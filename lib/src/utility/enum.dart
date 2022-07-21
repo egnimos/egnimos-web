@@ -6,17 +6,9 @@ enum NavOptions {
   profile,
 }
 
-enum LegalType {
-  terms,
-  privacy,
-  cookies,
-  unknown
-}
+enum LegalType { terms, privacy, cookies, unknown }
 
-enum BlogDisplayType {
-  blogPost,
-  updates
-}
+enum BlogDisplayType { blogPost, updates }
 
 enum AuthType {
   login,
@@ -50,6 +42,11 @@ enum ProfileOptions {
   blogs,
 }
 
+enum WriteOptions {
+  blog,
+  book,
+  unknown,
+}
 
 enum Cat {
   all,
@@ -86,4 +83,17 @@ enum Cat {
   networking,
   cloud,
   unknown
+}
+
+enum TextType {
+  header1,
+  header2,
+  header3,
+  header4,
+  header5,
+  header6,
+  paragraph,
+  blockquote,
+  orderedListItem,
+  unorderedListItem,
 }

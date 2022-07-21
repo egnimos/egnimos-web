@@ -26,10 +26,25 @@ class ProfileNavWidget extends StatelessWidget {
       height: 200.0,
       child: Row(
         children: [
+          //menu
+          if (constraints.maxWidth < K.kTableteWidth)
+            IconButton(
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+              icon: const Icon(Icons.menu),
+            ),
+          if (constraints.maxWidth < K.kTableteWidth)
+            const SizedBox(
+              width: 20.0,
+            ),
+
           //image
           Container(
             constraints: BoxConstraints.tight(
-              const Size.square(100.0),
+              (constraints.maxWidth < K.kTableteWidth)
+                  ? const Size.square(70.0)
+                  : const Size.square(100.0),
             ),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100.0),
@@ -47,9 +62,11 @@ class ProfileNavWidget extends StatelessWidget {
           const SizedBox(width: 14.0),
 
           //name & joined at date
-          UserInfoWidget(
-            constraints: constraints,
-            userInf: userInf,
+          Flexible(
+            child: UserInfoWidget(
+              constraints: constraints,
+              userInf: userInf,
+            ),
           ),
           //space
 
@@ -76,36 +93,42 @@ class UserInfoWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         //name
-        Text(
-          userInf.name,
-          style: GoogleFonts.rubik(
-            fontSize: constraints.maxWidth > K.kDesktopWidth
-                ? 35.0
-                : constraints.maxWidth > K.kTableteWidth
-                    ? 30.0
-                    : constraints.maxWidth > K.kMobileWidth
-                        ? 24.0
-                        : 22.0,
-            fontWeight: FontWeight.w400,
-            color: ColorTheme.primaryTextColor,
+        Flexible(
+          child: Text(
+            userInf.name,
+            style: GoogleFonts.rubik(
+              fontSize: constraints.maxWidth > K.kDesktopWidth
+                  ? 35.0
+                  : constraints.maxWidth > K.kTableteWidth
+                      ? 28.0
+                      : constraints.maxWidth > K.kMobileWidth
+                          ? 20.0
+                          : 20.0,
+              fontWeight: FontWeight.w400,
+              color: ColorTheme.primaryTextColor,
+            ),
           ),
         ),
         //joining date
-        Text(
-          "joined in: " +
-              DateFormat.yMEd().format(userInf.createdAt.isEmpty
-                  ? DateTime.now()
-                  : DateTime.parse(userInf.createdAt)),
-          style: GoogleFonts.rubik(
-            fontSize: constraints.maxWidth > K.kDesktopWidth
-                ? 20.0
-                : constraints.maxWidth > K.kTableteWidth
-                    ? 18.0
-                    : constraints.maxWidth > K.kMobileWidth
-                        ? 16.0
-                        : 14.0,
-            // fontWeight: FontWeight.w400,
-            color: Colors.grey.shade600,
+        Flexible(
+          child: Text(
+            "joined in: " +
+                DateFormat.yMEd().format(userInf.createdAt.isEmpty
+                    ? DateTime.now()
+                    : DateTime.parse(userInf.createdAt)),
+            style: GoogleFonts.rubik(
+              fontSize: constraints.maxWidth > K.kDesktopWidth
+                  ? 20.0
+                  : constraints.maxWidth < K.kDesktopWidth &&
+                          constraints.maxWidth > K.kTableteWidth
+                      ? 16.0
+                      : constraints.maxWidth < K.kTableteWidth &&
+                              constraints.maxWidth > K.kMobileWidth
+                          ? 14.0
+                          : 14.0,
+              // fontWeight: FontWeight.w400,
+              color: Colors.grey.shade600,
+            ),
           ),
         ),
       ],

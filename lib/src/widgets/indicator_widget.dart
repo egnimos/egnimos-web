@@ -1,3 +1,5 @@
+import 'package:egnimos/src/utility/enum.dart';
+import 'package:egnimos/src/widgets/create_pop_up_modal_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -35,6 +37,18 @@ class IndicatorWidget {
           message,
           style: GoogleFonts.ubuntu(fontSize: 15.0),
         ),
+      ),
+    );
+  }
+
+  IndicatorWidget.showCreateBlogModal(BuildContext context, {Widget? child}) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+        child: child ?? const CreatePopUpModalWidget(), 
       ),
     );
   }
