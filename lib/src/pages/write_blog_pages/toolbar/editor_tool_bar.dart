@@ -1,10 +1,16 @@
 import 'dart:math';
 
+import 'package:egnimos/src/pages/write_blog_pages/custom_attribution/font_size_attribution.dart';
+import 'package:egnimos/src/pages/write_blog_pages/editor_style_sheet.dart';
+import 'package:egnimos/src/pages/write_blog_pages/styles/font_size_style.dart';
+import 'package:egnimos/src/theme/color_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:super_editor/super_editor.dart';
 
-import '../../utility/enum.dart';
+import '../../../utility/enum.dart';
 
 /// Small toolbar that is intended to display near some selected
 /// text and offer a few text formatting controls.
@@ -50,14 +56,25 @@ class EditorToolbar extends StatefulWidget {
 
 class _EditorToolbarState extends State<EditorToolbar> {
   bool _showUrlField = false;
+  // bool _showFontSizeField = false;
   late final FocusNode _urlFocusNode;
+  final FocusNode _fontSizeFocusNode = FocusNode();
   late final TextEditingController _urlController;
+  late final TextEditingController _fontSizeController =
+      TextEditingController(text: "18.0");
+  num intialFontSize = 18.0;
 
   @override
   void initState() {
     super.initState();
+    final fontSize =
+        getFontSizeInfoOfSelectedNode(widget.composer, widget.editor)
+            .toString();
+    print("FONT SIZE:: $fontSize");
     _urlFocusNode = FocusNode();
     _urlController = TextEditingController();
+    _fontSizeController.value = TextEditingValue(text: fontSize);
+    // setState(() {});
   }
 
   @override
@@ -92,7 +109,8 @@ class _EditorToolbarState extends State<EditorToolbar> {
     final selectedNode =
         widget.editor.document.getNodeById(selection.extent.nodeId);
     if (selectedNode is ParagraphNode) {
-      final type = selectedNode.metadata['blockType'];
+      final type = selectedNode.metadata['blockType'] as NamedAttribution;
+      // print(type.name);
 
       if (type == header1Attribution) {
         return TextType.header1;
@@ -100,6 +118,12 @@ class _EditorToolbarState extends State<EditorToolbar> {
         return TextType.header2;
       } else if (type == header3Attribution) {
         return TextType.header3;
+      } else if (type == header4Attribution) {
+        return TextType.header4;
+      } else if (type == header5Attribution) {
+        return TextType.header5;
+      } else if (type == header6Attribution) {
+        return TextType.header6;
       } else if (type == blockquoteAttribution) {
         return TextType.blockquote;
       } else {
@@ -123,6 +147,7 @@ class _EditorToolbarState extends State<EditorToolbar> {
         widget.editor.document.getNodeById(selection.extent.nodeId);
     if (selectedNode is ParagraphNode) {
       final align = selectedNode.metadata['textAlign'] as String?;
+      // print("SELECTED NODE ALLIGNMENT :: $align");
       switch (align) {
         case 'left':
           return TextAlign.left;
@@ -199,20 +224,14 @@ class _EditorToolbarState extends State<EditorToolbar> {
         ),
       );
     } else {
+      // print(newType.name);
       // Apply a new block type to an existing paragraph node.
       final existingNode = widget.editor.document
           .getNodeById(widget.composer.selection!.extent.nodeId)!;
-      (existingNode as ParagraphNode).metadata['blockType'] =
-          _getBlockTypeAttribution(newType);
-
-      // Merely changing the blockType of the ParagraphNode does not trigger any of the document listeners.
-      //
-      // As such, we have to manually tell the node that something changed - otherwise, the block type of this
-      // ParagraphNode would change only if something else in the document changed. This is a bit hacky.
-      //
-      // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
-      existingNode.notifyListeners();
+      (existingNode as ParagraphNode)
+          .putMetadataValue('blockType', _getBlockTypeAttribution(newType));
     }
+    // widget.closeToolbar();
   }
 
   /// Returns true if the given [_TextType] represents an
@@ -241,6 +260,7 @@ class _EditorToolbarState extends State<EditorToolbar> {
       case TextType.blockquote:
         return blockquoteAttribution;
       case TextType.paragraph:
+        return paragraphAttribution;
       default:
         return null;
     }
@@ -286,17 +306,49 @@ class _EditorToolbarState extends State<EditorToolbar> {
     );
   }
 
-  ///
-  // void _changeStyle() {
-  //   widget.editor.executeCommand(
-  //     AddTextAttributionsCommand(
-  //       documentSelection: widget.composer.selection!,
-  //       attributions: {
-  //         Attribution()
-  //       },
-  //     ),
+  void _removeFontSizeAttribution(num initialValue) {
+    widget.editor.executeCommand(
+      RemoveTextAttributionsCommand(
+        documentSelection: widget.composer.selection!,
+        attributions: {FontSizeAttribution(fontSize: initialValue)},
+      ),
+    );
+  }
+
+  void _setFontSize(num value) {
+    widget.editor.executeCommand(
+      AddTextAttributionsCommand(
+        documentSelection: widget.composer.selection!,
+        attributions: {
+          FontSizeAttribution(
+            fontSize: value,
+          )
+        },
+      ),
+    );
+  }
+
+  // final selection = widget.composer.selection;
+  //   final baseOffset =
+  //       (selection!.base.nodePosition as TextNodePosition).offset;
+  //   final extentOffset =
+  //       (selection.extent.nodePosition as TextNodePosition).offset;
+  //   //get the start & end offset value
+  //   final selectionStart = min(baseOffset, extentOffset);
+  //   final selectionEnd = min(baseOffset, extentOffset);
+  //   //get the selection range
+  //   final selectionRange =
+  //       SpanRange(start: selectionStart, end: selectionEnd - 1);
+  //   final textNode = widget.editor.document
+  //       .getNodeById(selection.extent.nodeId)! as TextNode;
+  //   final text = textNode.text;
+  //   final trimmedRange = _trimTextRangeWhitespace(text, selectionRange);
+
+  //   //add the attribute
+  //   text.addAttribution(
+  //     FontSizeAttribution(fontSize: value),
+  //     trimmedRange,
   //   );
-  // }
 
   /// Returns true if the current text selection includes part
   /// or all of a single link, returns false if zero links are
@@ -423,7 +475,7 @@ class _EditorToolbarState extends State<EditorToolbar> {
       _showUrlField = false;
       _urlFocusNode.unfocus(
           disposition: UnfocusDisposition.previouslyFocusedChild);
-      widget.closeToolbar();
+      // widget.closeToolbar();
     });
   }
 
@@ -472,27 +524,12 @@ class _EditorToolbarState extends State<EditorToolbar> {
             .getNodeById(widget.composer.selection!.extent.nodeId)!
         as ParagraphNode;
 
-    selectedNode.metadata['textAlign'] = newAlignmentValue;
-    // Merely changing the blockType of the ParagraphNode does not trigger any of the document listeners.
-    //
-    // As such, we have to manually tell the node that something changed - otherwise, the block type of this
-    // ParagraphNode would change only if something else in the document changed. This is a bit hacky.
-    //
-    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
-    selectedNode.notifyListeners();
-  }
+    // selectedNode.metadata['textAlign'] = newAlignmentValue;
+    selectedNode.putMetadataValue('textAlign', newAlignmentValue);
+    // print("SET ALIGNMENT :: $newAlignmentValue");
 
-  void image() {
-    widget.editor.document.nodes.add(
-      ImageNode(
-        id: DocumentEditor.createNodeId(),
-        imageUrl:
-            "https://miro.medium.com/max/1200/1*GLS12MFNCzofmNDt-i4Alw.gif",
-      ),
-    );
-
-    // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
-    widget.editor.document.notifyListeners();
+    //close the toolbar
+    // widget.closeToolbar();
   }
 
   /// Returns the localized name for the given [_TextType], e.g.,
@@ -569,122 +606,226 @@ class _EditorToolbarState extends State<EditorToolbar> {
   }
 
   Widget _buildToolbar() {
+    // print("FONT SIZE TOOLBAR VALUE :: " + _fontSizeController.text);
     return Material(
       shape: const StadiumBorder(),
       elevation: 5,
       clipBehavior: Clip.hardEdge,
-      child: SizedBox(
-        height: 40,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Only allow the user to select a new type of text node if
-            // the currently selected node can be converted.
-            if (_isConvertibleNode()) ...[
-              Tooltip(
-                message: 'Text block type',
-                child: DropdownButton<TextType>(
-                  value: _getCurrentTextType(),
-                  items: TextType.values
-                      .map(
-                        (textType) => DropdownMenuItem<TextType>(
-                          value: textType,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 16.0),
-                            child: Text(_getTextTypeName(textType)),
-                          ),
-                        ),
-                      )
-                      .toList(),
-                  icon: const Icon(Icons.arrow_drop_down),
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 12,
-                  ),
-                  underline: const SizedBox(),
-                  elevation: 0,
-                  onChanged: _convertTextToNewType,
-                ),
-              ),
-              _buildVerticalDivider(),
-            ],
-            Center(
-              child: IconButton(
-                onPressed: _toggleBold,
-                icon: const Icon(Icons.format_bold),
-                splashRadius: 16,
-                tooltip: 'Bold',
-              ),
-            ),
-            Center(
-              child: IconButton(
-                onPressed: _toggleItalics,
-                icon: const Icon(Icons.format_italic),
-                splashRadius: 16,
-                tooltip: 'Italics',
-              ),
-            ),
-            Center(
-              child: IconButton(
-                onPressed: _toggleStrikethrough,
-                icon: const Icon(Icons.strikethrough_s),
-                splashRadius: 16,
-                tooltip: 'Strikethrough',
-              ),
-            ),
-            Center(
-              child: IconButton(
-                onPressed: _toggleUnderlinethrough,
-                icon: const Icon(Icons.format_underline_rounded),
-                splashRadius: 16,
-                tooltip: 'Underlinethrough',
-              ),
-            ),
-            Center(
-              child: IconButton(
-                onPressed: _areMultipleLinksSelected() ? null : _onLinkPressed,
-                icon: const Icon(Icons.link),
-                color: _isSingleLinkSelected()
-                    ? const Color(0xFF007AFF)
-                    : IconTheme.of(context).color,
-                splashRadius: 16,
-                tooltip: 'Link',
-              ),
-            ),
-            // Only display alignment controls if the currently selected text
-            // node respects alignment. List items, for example, do not.
-            if (_isTextAlignable()) ...[
-              _buildVerticalDivider(),
-              Tooltip(
-                message: 'Text Alignment',
-                child: DropdownButton<TextAlign>(
-                  value: _getCurrentTextAlignment(),
-                  items: [
-                    TextAlign.left,
-                    TextAlign.center,
-                    TextAlign.right,
-                    TextAlign.justify
-                  ]
-                      .map((textAlign) => DropdownMenuItem<TextAlign>(
-                            value: textAlign,
+      child: MouseRegion(
+        onEnter: (_) {},
+        onExit: (_) {},
+        cursor: SystemMouseCursors.click,
+        child: SizedBox(
+          height: 40,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Only allow the user to select a new type of text node if
+              // the currently selected node can be converted.
+              if (_isConvertibleNode()) ...[
+                Tooltip(
+                  message: 'Text block type',
+                  child: DropdownButton<TextType>(
+                    value: _getCurrentTextType(),
+                    items: TextType.values
+                        .map(
+                          (textType) => DropdownMenuItem<TextType>(
+                            value: textType,
                             child: Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
-                              child: Icon(_buildTextAlignIcon(textAlign)),
+                              padding: const EdgeInsets.only(left: 16.0),
+                              child: Text(_getTextTypeName(textType)),
                             ),
-                          ))
-                      .toList(),
-                  icon: const Icon(Icons.arrow_drop_down),
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 12,
+                          ),
+                        )
+                        .toList(),
+                    icon: const Icon(Icons.arrow_drop_down),
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                    ),
+                    underline: const SizedBox(),
+                    elevation: 0,
+                    onChanged: _convertTextToNewType,
                   ),
-                  underline: const SizedBox(),
-                  elevation: 0,
-                  onChanged: _changeAlignment,
+                ),
+                _buildVerticalDivider(),
+              ],
+
+              //BOLD TOGGLE
+              Center(
+                child: IconButton(
+                  onPressed: _toggleBold,
+                  icon: const Icon(Icons.format_bold),
+                  splashRadius: 16,
+                  tooltip: 'Bold',
                 ),
               ),
+
+              //ITALICS TOGGLE
+              Center(
+                child: IconButton(
+                  onPressed: _toggleItalics,
+                  icon: const Icon(Icons.format_italic),
+                  splashRadius: 16,
+                  tooltip: 'Italics',
+                ),
+              ),
+
+              //STRIKE THROUGH TOGGLE
+              Center(
+                child: IconButton(
+                  onPressed: _toggleStrikethrough,
+                  icon: const Icon(Icons.strikethrough_s),
+                  splashRadius: 16,
+                  tooltip: 'Strikethrough',
+                ),
+              ),
+
+              //UNDERLINE THROUGH TOGGLE
+              Center(
+                child: IconButton(
+                  onPressed: _toggleUnderlinethrough,
+                  icon: const Icon(Icons.format_underline_rounded),
+                  splashRadius: 16,
+                  tooltip: 'Underlinethrough',
+                ),
+              ),
+
+              _buildVerticalDivider(),
+
+              //INCREMENT FONT SIZE BUTTON
+              Center(
+                child: IconButton(
+                  onPressed: () {
+                    final initialValue = num.parse(_fontSizeController.text);
+                    final value = initialValue + 1;
+                    _fontSizeController.value =
+                        TextEditingValue(text: value.toString());
+                    //remove intiial attribution
+                    _removeFontSizeAttribution(initialValue);
+                    //set the updated value
+                    _setFontSize(value);
+                  },
+                  icon: const Icon(Icons.add_rounded),
+                  splashRadius: 16,
+                  tooltip: 'increase font size by one',
+                ),
+              ),
+
+              Center(
+                child: buildFontSizeField(),
+              ),
+
+              //DECREMENT THE FONT SIZE
+              Center(
+                child: IconButton(
+                  onPressed: () {
+                    final initialValue = num.parse(_fontSizeController.text);
+                    final value = initialValue - 1;
+                    _fontSizeController.value =
+                        TextEditingValue(text: value.toString());
+                    //remove intiial attribution
+                    _removeFontSizeAttribution(initialValue);
+                    //set the updated value
+                    _setFontSize(value);
+                  },
+                  icon: Transform.translate(
+                    offset: const Offset(0.0, -10.0),
+                    child: const Icon(Icons.minimize_rounded),
+                  ),
+                  splashRadius: 16,
+                  tooltip: 'decrement font size by one',
+                ),
+              ),
+
+              _buildVerticalDivider(),
+
+              //TEXT COLOR
+              Center(
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.text_format),
+                  tooltip: 'text color',
+                ),
+              ),
+
+              //TEXT BACKGROUND COLOR
+              Center(
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.colorize_rounded,
+                  ),
+                  tooltip: 'text background color',
+                ),
+              ),
+
+              //TEXT LINE Decoration STYLE\
+              Center(
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.line_style_rounded),
+                  tooltip: 'text line decoration',
+                ),
+              ),
+
+              //TEXT DECORATION COLOR
+              Center(
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(FontAwesomeIcons.paintbrush),
+                  tooltip: 'text decoration color',
+                ),
+              ),
+
+              //SET THE LINK
+              Center(
+                child: IconButton(
+                  onPressed:
+                      _areMultipleLinksSelected() ? null : _onLinkPressed,
+                  icon: const Icon(Icons.link),
+                  color: _isSingleLinkSelected()
+                      ? const Color(0xFF007AFF)
+                      : IconTheme.of(context).color,
+                  splashRadius: 16,
+                  tooltip: 'Link',
+                ),
+              ),
+              // Only display alignment controls if the currently selected text
+              // node respects alignment. List items, for example, do not.
+              if (_isTextAlignable()) ...[
+                _buildVerticalDivider(),
+                Tooltip(
+                  message: 'Text Alignment',
+                  child: DropdownButton<TextAlign>(
+                    value: _getCurrentTextAlignment(),
+                    items: [
+                      TextAlign.left,
+                      TextAlign.center,
+                      TextAlign.right,
+                      TextAlign.justify
+                    ]
+                        .map((textAlign) => DropdownMenuItem<TextAlign>(
+                              value: textAlign,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Icon(_buildTextAlignIcon(textAlign)),
+                              ),
+                            ))
+                        .toList(),
+                    icon: const Icon(Icons.arrow_drop_down),
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                    ),
+                    underline: const SizedBox(),
+                    elevation: 0,
+                    onChanged: _changeAlignment,
+                  ),
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );
@@ -763,6 +904,60 @@ class _EditorToolbarState extends State<EditorToolbar> {
                   _urlController.clear();
                 });
               },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildFontSizeField() {
+    return Material(
+      child: SizedBox(
+        width: 50.0,
+        height: 30.0,
+        child: Row(
+          children: [
+            Expanded(
+              child: TextField(
+                focusNode: _fontSizeFocusNode,
+                controller: _fontSizeController,
+                style: GoogleFonts.rubik(
+                  color: ColorTheme.primaryTextColor,
+                ),
+                textAlignVertical: TextAlignVertical.center,
+                textAlign: TextAlign.left,
+                onChanged: (value) {
+                  final initialValue = intialFontSize;
+                  print("Initial Value :: " + initialValue.toString());
+                  print("final Value :: " + value.toString());
+                  //remove intiial attribution
+                  _removeFontSizeAttribution(initialValue);
+                  //set the updated value
+                  _setFontSize(num.parse(value));
+                  intialFontSize = num.parse(value);
+                  _fontSizeFocusNode.requestFocus();
+                },
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.only(
+                    top: 14.0,
+                    left: 8.0,
+                  ),
+                  hintText: "font...",
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.grey.shade700,
+                      width: 0.9,
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.grey.shade700,
+                      width: 0.9,
+                    ),
+                  ),
+                ),
+              ),
             ),
           ],
         ),

@@ -27,7 +27,7 @@ class _DropViewerWidgetState extends State<DropViewerWidget> {
   Widget _dropAction() {
     return DropzoneView(
       operation: DragOperation.copy,
-      cursor: CursorType.text,
+      // cursor: CursorType.text,
       onCreated: (DropzoneViewController ctrl) => _controller = ctrl,
       onLoaded: () => print('Zone 1 loaded'),
       onError: (ev) {

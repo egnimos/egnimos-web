@@ -50,6 +50,7 @@ dependencies:
   shared_preferences: ^2.0.15
   flutter_dropzone: ^3.0.5
   dotted_border: ^2.0.0+2
+  flex_color_picker: ^2.5.0
   
   super_editor:
     git:

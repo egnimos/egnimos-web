@@ -23,24 +23,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // bool _isLoading = true;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   loadInfo();
-  // }
-
-  // void loadInfo() async {
-  //   await Future.delayed(const Duration(seconds: 5), () {
-  //     if (mounted) {
-  //       setState(() {
-  //         _isLoading = false;
-  //       });
-  //     }
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -59,25 +41,26 @@ class _MyAppState extends State<MyApp> {
       child: LayoutBuilder(builder: (context, constraints) {
         Responsive.init(constraints);
         return MaterialApp(
-            title: 'egnimos',
-            theme: ThemeData.light().copyWith(
-              primaryColor: ColorTheme.primaryColor,
-              textSelectionTheme: TextSelectionThemeData(
-                cursorColor: ColorTheme.primaryColor,
-                selectionColor: ColorTheme.primaryColor.withOpacity(0.4),
-                selectionHandleColor: ColorTheme.primaryColor.withOpacity(0.4),
-              ),
+          title: 'egnimos',
+          theme: ThemeData.light().copyWith(
+            primaryColor: ColorTheme.primaryColor,
+            textSelectionTheme: TextSelectionThemeData(
+              cursorColor: ColorTheme.primaryColor,
+              selectionColor: ColorTheme.primaryColor.withOpacity(0.4),
+              selectionHandleColor: ColorTheme.primaryColor.withOpacity(0.4),
             ),
-            debugShowCheckedModeBanner: false,
-            home: const Home(),
-            routes: {
-              Blog.routeName: (ctx) => const Blog(),
-              Home.routeName: (ctx) => const Home(),
-              ProfilePage.routeName: (ctx) => const ProfilePage(),
-              AboutPage.routeName: (ctx) => const AboutPage(),
-              AuthPage.routeName: (ctx) => const AuthPage(),
-              BlogPage.routeName: (ctx) => const BlogPage(),
-            });
+          ),
+          debugShowCheckedModeBanner: false,
+          home: const Home(),
+          routes: {
+            Blog.routeName: (ctx) => const Blog(),
+            Home.routeName: (ctx) => const Home(),
+            ProfilePage.routeName: (ctx) => const ProfilePage(),
+            AboutPage.routeName: (ctx) => const AboutPage(),
+            AuthPage.routeName: (ctx) => const AuthPage(),
+            BlogPage.routeName: (ctx) => const BlogPage(),
+          },
+        );
       }),
     );
   }

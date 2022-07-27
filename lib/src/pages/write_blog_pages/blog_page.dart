@@ -1,12 +1,16 @@
 import 'package:egnimos/src/pages/write_blog_pages/editor_style_sheet.dart';
 import 'package:egnimos/src/pages/write_blog_pages/mutuable_doc_exmp.dart';
+import 'package:egnimos/src/pages/write_blog_pages/styles/header_styles.dart';
+import 'package:egnimos/src/pages/write_blog_pages/styles/inlinetext_styles.dart';
+import 'package:egnimos/src/pages/write_blog_pages/styles/main_layout.dart';
+import 'package:egnimos/src/pages/write_blog_pages/toolbar/image_editor_toolbar.dart';
 import 'package:egnimos/src/theme/color_theme.dart';
 import 'package:egnimos/src/widgets/drop_viewer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dropzone/flutter_dropzone.dart';
 import 'package:super_editor/super_editor.dart';
 
-import 'editor_tool_bar.dart';
+import 'toolbar/editor_tool_bar.dart';
 
 class BlogPage extends StatefulWidget {
   static const routeName = "/blog-page";
@@ -26,7 +30,9 @@ class _BlogPageState extends State<BlogPage> {
   late ScrollController _scrollController;
 
   OverlayEntry? _formatBarOverlayEntry;
+  OverlayEntry? _imageFormatBarOverlayEntry;
 
+  final _imageSelectionAnchor = ValueNotifier<Offset?>(null);
   final _selectionAnchor = ValueNotifier<Offset?>(null);
 
   @override
@@ -94,35 +100,55 @@ class _BlogPageState extends State<BlogPage> {
     //if the selection is null then don't show the toolbar
     if (selection == null) {
       _hideEditorToolbar();
+      _hideImageEditorToolBar();
       return;
     }
     //if it is selected with more than one node then don't show the toolbar
     if (selection.base.nodeId != selection.extent.nodeId) {
+      final selectedNode = _doc.getNodeById(selection.extent.nodeId);
+      if (selectedNode is TextNode) {
+        return;
+      }
       _hideEditorToolbar();
+      _hideImageEditorToolBar();
       return;
     }
     //we only want to show the toolbar when a span of text
     //is selected. therefore, we ignore collapsed selections
     if (selection.isCollapsed) {
       _hideEditorToolbar();
+      _hideImageEditorToolBar();
       return;
     }
 
-    final textNode = _doc.getNodeById(selection.extent.nodeId);
-    if (textNode is! TextNode) {
+    final selectedNode = _doc.getNodeById(selection.extent.nodeId);
+
+    //if the given node is image
+    if (selectedNode is ImageNode) {
+      _showImageEditorToolbar();
+      _hideEditorToolbar();
+      return;
+    } else {
+      _hideImageEditorToolBar();
+    }
+
+    //if the given node is text
+    if (selectedNode is TextNode) {
       // The currently selected content is not a paragraph. We don't
       // want to show a toolbar in this case.
-      _hideEditorToolbar();
-
-      return;
-    }
-
-    if (_formatBarOverlayEntry == null) {
-      // Show the editor's toolbar for text styling.
       _showEditorToolbar();
+      _hideImageEditorToolBar();
+      return;
     } else {
-      _updateToolbarOffset();
+      _hideEditorToolbar();
     }
+
+    // if (_formatBarOverlayEntry == null) {
+    //   // Show the editor's toolbar for text styling.
+    //   _showEditorToolbar();
+    // } else {
+    //   _updateToolbarOffset();
+    // }
   }
 
   //hide the editor toolbar
@@ -196,7 +222,80 @@ class _BlogPageState extends State<BlogPage> {
 
   ///this methods used to display the image editor
   ///to edit the image for e.g. marker, croper, overlaytext, replace,
-  void _showImageEditor() {}
+  void _showImageEditorToolbar() {
+    if (_imageFormatBarOverlayEntry == null) {
+      _imageFormatBarOverlayEntry = OverlayEntry(builder: (context) {
+        return ImageEditorToolbar(
+          anchor: _imageSelectionAnchor,
+          composer: _composer,
+          editor: _documentEditor,
+          setWidth: (nodeId, width) {
+            //get the image node
+            final imageNode = _documentEditor.document.getNodeById(nodeId);
+            final currentStyles =
+                SingleColumnLayoutComponentStyles.fromMetadata(imageNode!);
+            //apply the styles
+            SingleColumnLayoutComponentStyles(
+              width: width,
+              padding: currentStyles.padding,
+            ).applyTo(imageNode);
+          },
+          closeToolbar: _hideImageEditorToolBar,
+        );
+      });
+
+      final overlay = Overlay.of(context);
+      overlay!.insert(_imageFormatBarOverlayEntry!);
+
+      // Schedule a callback after this frame to locate the selection
+      // bounds on the screen and display the toolbar near the selected
+      // text.
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        _updateImageToolbarOffset();
+      });
+    }
+  }
+
+  void _updateImageToolbarOffset() {
+    if (_imageFormatBarOverlayEntry == null) {
+      return;
+    }
+
+    //get selected doc bound box
+    final docBoundingBox =
+        (_docLayoutKey.currentState! as DocumentLayout).getRectForSelection(
+      _composer.selection!.base,
+      _composer.selection!.extent,
+    );
+    //get the doc render box
+    final docBound =
+        _docLayoutKey.currentContext!.findRenderObject() as RenderBox;
+    final overBoundingBox = Rect.fromPoints(
+      docBound.localToGlobal(docBoundingBox!.topLeft),
+      docBound.localToGlobal(docBoundingBox.bottomRight),
+    );
+
+    _imageSelectionAnchor.value = overBoundingBox.center;
+  }
+
+  void _hideImageEditorToolBar() {
+    //if the selection anchor is not null
+    //then set it to the null
+    _imageSelectionAnchor.value = null;
+
+    if (_imageFormatBarOverlayEntry != null) {
+      //remove the toolbar oevrlay and null-out the entry
+      //we null out the entry because we can't query whether
+      //or not the entry exists in the overlay, so in our case
+      //null implies the entry is not in the overlay, and non-null implies
+      //the entry is in the overlay
+      _imageFormatBarOverlayEntry!.remove();
+      _imageFormatBarOverlayEntry = null;
+    }
+
+    //ensure that focus returns to the editor
+    _editorFocusNode.requestFocus();
+  }
 
   ///this method activates when the given file is droped
   ///on the active screen
@@ -225,10 +324,15 @@ class _BlogPageState extends State<BlogPage> {
           documentLayoutKey: _docLayoutKey,
           editor: _documentEditor,
           selectionStyle: SelectionStyles(
-            caretColor: ColorTheme.bgColor8,
             selectionColor: ColorTheme.primaryColor.shade200,
           ),
-          stylesheet: EditorStyleSheet(context, _composer).wideStyleSheet(),
+          stylesheet: defaultStylesheet.copyWith(
+            addRulesAfter: [
+              ...initialLayout(),
+              ...headers(context),
+            ],
+            inlineTextStyler: inlinetextStyle,
+          ),
         ),
       ),
     );
