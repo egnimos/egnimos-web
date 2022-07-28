@@ -41,10 +41,15 @@ TextStyle inlineStyleBuilder(Set<Attribution> attributions) {
         color: Colors.lightBlue.shade800,
         decoration: TextDecoration.underline,
       );
-    } else if (attribution is FontSizeAttribution) {
-      print("STYLE BUILDER FONT SIZE ::" + attribution.fontSize.toString());
+    } else if (attribution is FontDecorationAttribution) {
+      print("STYLE BUILDER FONT SIZE ::" +
+          attribution.textStyle.fontSize.toString());
       newStyle = newStyle.copyWith(
-        fontSize: attribution.fontSize.toDouble(),
+        fontSize: attribution.textStyle.fontSize,
+        color: attribution.textStyle.color,
+        backgroundColor: attribution.textStyle.backgroundColor,
+        decorationColor: attribution.textStyle.decorationColor,
+        decorationStyle: attribution.textStyle.decorationStyle,
       );
     }
   }

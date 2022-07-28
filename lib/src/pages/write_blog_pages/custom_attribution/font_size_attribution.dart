@@ -1,17 +1,18 @@
+import 'package:flutter/cupertino.dart';
 import 'package:super_editor/super_editor.dart';
 
 ///Attribution to be used within [AttributedText] to
 ///set the font size of the particular selected
 ///attributed text
-class FontSizeAttribution implements Attribution {
-  FontSizeAttribution({
-    required this.fontSize,
+class FontDecorationAttribution implements Attribution {
+  FontDecorationAttribution({
+    required this.textStyle,
   });
 
   @override
   String get id => 'fontSizeAttribution';
 
-  final num fontSize;
+  final TextStyle textStyle;
 
   @override
   bool canMergeWith(Attribution other) {
@@ -21,15 +22,15 @@ class FontSizeAttribution implements Attribution {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is FontSizeAttribution &&
+      other is FontDecorationAttribution &&
           runtimeType == other.runtimeType &&
-          fontSize == other.fontSize;
+          textStyle == other.textStyle;
 
   @override
-  int get hashCode => fontSize.hashCode;
+  int get hashCode => textStyle.hashCode;
 
   @override
   String toString() {
-    return '[FontSizeAttribution]: $fontSize';
+    return '[FontSizeAttribution]: $textStyle';
   }
 }

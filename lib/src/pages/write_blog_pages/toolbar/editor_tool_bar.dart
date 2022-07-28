@@ -306,22 +306,22 @@ class _EditorToolbarState extends State<EditorToolbar> {
     );
   }
 
-  void _removeFontSizeAttribution(num initialValue) {
+  void _removeFontSizeAttribution(TextStyle initialValue) {
     widget.editor.executeCommand(
       RemoveTextAttributionsCommand(
         documentSelection: widget.composer.selection!,
-        attributions: {FontSizeAttribution(fontSize: initialValue)},
+        attributions: {FontDecorationAttribution(textStyle: initialValue)},
       ),
     );
   }
 
-  void _setFontSize(num value) {
+  void _setFontSize(TextStyle value) {
     widget.editor.executeCommand(
       AddTextAttributionsCommand(
         documentSelection: widget.composer.selection!,
         attributions: {
-          FontSizeAttribution(
-            fontSize: value,
+          FontDecorationAttribution(
+            textStyle: value,
           )
         },
       ),
@@ -697,14 +697,22 @@ class _EditorToolbarState extends State<EditorToolbar> {
               Center(
                 child: IconButton(
                   onPressed: () {
-                    final initialValue = num.parse(_fontSizeController.text);
-                    final value = initialValue + 1;
+                    final initialFontSize = num.parse(_fontSizeController.text);
+                    final updatedFontSize = initialFontSize + 1;
                     _fontSizeController.value =
-                        TextEditingValue(text: value.toString());
+                        TextEditingValue(text: updatedFontSize.toString());
                     //remove intiial attribution
-                    _removeFontSizeAttribution(initialValue);
+                    _removeFontSizeAttribution(
+                      TextStyle(
+                        fontSize: initialFontSize.toDouble(),
+                      ),
+                    );
                     //set the updated value
-                    _setFontSize(value);
+                    _setFontSize(
+                      TextStyle(
+                        fontSize: updatedFontSize.toDouble(),
+                      ),
+                    );
                   },
                   icon: const Icon(Icons.add_rounded),
                   splashRadius: 16,
@@ -720,14 +728,22 @@ class _EditorToolbarState extends State<EditorToolbar> {
               Center(
                 child: IconButton(
                   onPressed: () {
-                    final initialValue = num.parse(_fontSizeController.text);
-                    final value = initialValue - 1;
+                    final initialFontSize = num.parse(_fontSizeController.text);
+                    final updatedFontSize = initialFontSize - 1;
                     _fontSizeController.value =
-                        TextEditingValue(text: value.toString());
+                        TextEditingValue(text: updatedFontSize.toString());
                     //remove intiial attribution
-                    _removeFontSizeAttribution(initialValue);
+                    _removeFontSizeAttribution(
+                      TextStyle(
+                        fontSize: initialFontSize.toDouble(),
+                      ),
+                    );
                     //set the updated value
-                    _setFontSize(value);
+                    _setFontSize(
+                      TextStyle(
+                        fontSize: updatedFontSize.toDouble(),
+                      ),
+                    );
                   },
                   icon: Transform.translate(
                     offset: const Offset(0.0, -10.0),
@@ -927,15 +943,23 @@ class _EditorToolbarState extends State<EditorToolbar> {
                 ),
                 textAlignVertical: TextAlignVertical.center,
                 textAlign: TextAlign.left,
-                onChanged: (value) {
-                  final initialValue = intialFontSize;
-                  print("Initial Value :: " + initialValue.toString());
-                  print("final Value :: " + value.toString());
+                onChanged: (updatedFontSize) {
+                  final initialFontSizeValue = intialFontSize;
+                  print("Initial Value :: " + initialFontSizeValue.toString());
+                  print("final Value :: " + updatedFontSize.toString());
                   //remove intiial attribution
-                  _removeFontSizeAttribution(initialValue);
+                  _removeFontSizeAttribution(
+                    TextStyle(
+                      fontSize: initialFontSizeValue.toDouble(),
+                    ),
+                  );
                   //set the updated value
-                  _setFontSize(num.parse(value));
-                  intialFontSize = num.parse(value);
+                  _setFontSize(
+                    TextStyle(
+                      fontSize: num.parse(updatedFontSize).toDouble(),
+                    ),
+                  );
+                  intialFontSize = num.parse(updatedFontSize);
                   _fontSizeFocusNode.requestFocus();
                 },
                 decoration: InputDecoration(

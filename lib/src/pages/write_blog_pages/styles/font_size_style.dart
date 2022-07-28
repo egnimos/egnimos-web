@@ -26,9 +26,9 @@ double getFontSizeInfoOfSelectedNode(
   );
   for (var attribution in attributions) {
     print("SELECTED ATTRIBUTIONS ID " + attribution.id);
-    if (attribution is FontSizeAttribution) {
-      print("FONT SIZE ATTRIBUTION :: " + attribution.fontSize.toString());
-      return attribution.fontSize.toDouble();
+    if (attribution is FontDecorationAttribution) {
+      print("FONT SIZE ATTRIBUTION :: " + attribution.textStyle.fontSize.toString());
+      return attribution.textStyle.fontSize??18.0;
     }
   }
 
