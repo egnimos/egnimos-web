@@ -32,13 +32,17 @@ dependencies:
   cloud_firestore: ^3.1.8
   cross_file: ^0.3.3+1
   cupertino_icons: ^1.0.2
+  dotted_border: ^2.0.0+2
   file_picker: ^4.6.1
   firebase_auth: ^3.4.0
   firebase_core: ^1.19.0
   firebase_storage: ^10.3.0
+  flex_color_picker: ^2.5.0
   flutter:
     sdk: flutter
+  flutter_colorpicker: ^1.0.3
   flutter_dotenv: ^5.0.2
+  flutter_dropzone: ^3.0.5
   flutter_markdown: ^0.6.9
   font_awesome_flutter: ^10.1.0
   google_fonts: ^2.3.1
@@ -46,21 +50,13 @@ dependencies:
   lottie: ^1.2.2
   mime: ^1.0.2
   provider: ^6.0.2
-  url_launcher: ^6.0.20
   shared_preferences: ^2.0.15
-  flutter_dropzone: ^3.0.5
-  dotted_border: ^2.0.0+2
-  flex_color_picker: ^2.5.0
-  
   super_editor:
     git:
       url: https://github.com/superlistapp/super_editor.git
       path: super_editor
-  # super_editor_markdown:
-  #   git:
-  #     url: https://github.com/superlistapp/super_editor.git
-  #     path: super_editor_markdown
   super_text_layout: ^0.1.0
+  url_launcher: ^6.0.20
 
 dependency_overrides:
   # Override to local mono-repo path so devs can test this repo
@@ -71,7 +67,6 @@ dependency_overrides:
     path: package/super_editor/super_editor_markdown
   super_text_layout:
     path: package/super_editor/super_text_layout
-
 
 dev_dependencies:
   flutter_lints: ^1.0.0

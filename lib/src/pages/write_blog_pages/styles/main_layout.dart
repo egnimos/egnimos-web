@@ -13,7 +13,7 @@ StyleRules initialLayout() => [
             "maxWidth": Responsive.widthMultiplier * 80.0,
             "padding": const CascadingPadding.symmetric(horizontal: 24),
             "textStyle": const TextStyle(
-              color: Colors.black,
+              color: textColor,
               fontSize: 18,
               height: 1.4,
             ),

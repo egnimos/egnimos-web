@@ -4,15 +4,15 @@ import 'package:super_editor/super_editor.dart';
 ///Attribution to be used within [AttributedText] to
 ///set the font size of the particular selected
 ///attributed text
-class FontDecorationAttribution implements Attribution {
-  FontDecorationAttribution({
-    required this.textStyle,
+class FontSizeDecorationAttribution implements Attribution {
+  FontSizeDecorationAttribution({
+    required this.fontSize,
   });
 
   @override
-  String get id => 'fontSizeAttribution';
+  String get id => 'fontSizeDecorationAttribution';
 
-  final TextStyle textStyle;
+  final num fontSize;
 
   @override
   bool canMergeWith(Attribution other) {
@@ -22,15 +22,15 @@ class FontDecorationAttribution implements Attribution {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is FontDecorationAttribution &&
+      other is FontSizeDecorationAttribution &&
           runtimeType == other.runtimeType &&
-          textStyle == other.textStyle;
+          fontSize == other.fontSize;
 
   @override
-  int get hashCode => textStyle.hashCode;
+  int get hashCode => fontSize.hashCode;
 
   @override
   String toString() {
-    return '[FontSizeAttribution]: $textStyle';
+    return '[FontSizeDecorationAttribution]: $fontSize';
   }
 }

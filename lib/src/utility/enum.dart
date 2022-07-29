@@ -97,3 +97,10 @@ enum TextType {
   orderedListItem,
   unorderedListItem,
 }
+
+enum ColorBoxType {
+  fontColor,
+  fontBackgroundColor,
+  decorationColor,
+  unknown,
+}

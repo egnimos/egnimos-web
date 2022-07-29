@@ -4,13 +4,16 @@ import 'package:egnimos/src/pages/write_blog_pages/custom_attribution/font_size_
 import 'package:egnimos/src/pages/write_blog_pages/editor_style_sheet.dart';
 import 'package:egnimos/src/pages/write_blog_pages/styles/font_size_style.dart';
 import 'package:egnimos/src/theme/color_theme.dart';
+import 'package:egnimos/src/widgets/color_picker_dialouge.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:super_editor/super_editor.dart';
 
 import '../../../utility/enum.dart';
+import '../custom_attribution/font_decoration_attribution.dart';
 
 /// Small toolbar that is intended to display near some selected
 /// text and offer a few text formatting controls.
@@ -56,6 +59,8 @@ class EditorToolbar extends StatefulWidget {
 
 class _EditorToolbarState extends State<EditorToolbar> {
   bool _showUrlField = false;
+  bool _showColorBox = false;
+  ColorBoxType _colorBoxType = ColorBoxType.unknown;
   // bool _showFontSizeField = false;
   late final FocusNode _urlFocusNode;
   final FocusNode _fontSizeFocusNode = FocusNode();
@@ -64,16 +69,28 @@ class _EditorToolbarState extends State<EditorToolbar> {
       TextEditingController(text: "18.0");
   num intialFontSize = 18.0;
 
+  ///TEXT STYLE ATTRIBUTION PROPERTIES
+  late num fontSize;
+  late Color fontColor;
+  late Color fontBackgroundColor;
+  late Color decorationColor;
+  late TextDecorationStyle decorationStyle;
+
   @override
   void initState() {
     super.initState();
-    final fontSize =
-        getFontSizeInfoOfSelectedNode(widget.composer, widget.editor)
-            .toString();
+    fontSize = getFontSizeOfSelectedNode(widget.composer, widget.editor);
+    fontColor = getFontColorOfSelectedNode(widget.composer, widget.editor);
+    fontBackgroundColor =
+        getFontBackgroundColorOfSelectedNode(widget.composer, widget.editor);
+    decorationStyle =
+        getFontDecorationStyleOfSelectedNode(widget.composer, widget.editor);
+    decorationColor =
+        getFontDecorationColorOfSelectedNode(widget.composer, widget.editor);
     print("FONT SIZE:: $fontSize");
     _urlFocusNode = FocusNode();
     _urlController = TextEditingController();
-    _fontSizeController.value = TextEditingValue(text: fontSize);
+    _fontSizeController.value = TextEditingValue(text: fontSize.toString());
     // setState(() {});
   }
 
@@ -306,22 +323,22 @@ class _EditorToolbarState extends State<EditorToolbar> {
     );
   }
 
-  void _removeFontSizeAttribution(TextStyle initialValue) {
+  void _removeFontSizeAttribution(double initialValue) {
     widget.editor.executeCommand(
       RemoveTextAttributionsCommand(
         documentSelection: widget.composer.selection!,
-        attributions: {FontDecorationAttribution(textStyle: initialValue)},
+        attributions: {FontSizeDecorationAttribution(fontSize: initialValue)},
       ),
     );
   }
 
-  void _setFontSize(TextStyle value) {
+  void _setFontSize(double value) {
     widget.editor.executeCommand(
       AddTextAttributionsCommand(
         documentSelection: widget.composer.selection!,
         attributions: {
-          FontDecorationAttribution(
-            textStyle: value,
+          FontSizeDecorationAttribution(
+            fontSize: value,
           )
         },
       ),
@@ -585,6 +602,16 @@ class _EditorToolbarState extends State<EditorToolbar> {
                   ),
                 ),
 
+              if (_showColorBox)
+                Positioned(
+                  left: widget.anchor.value!.dx,
+                  top: widget.anchor.value!.dy - 420.0,
+                  child: FractionalTranslation(
+                    translation: const Offset(-0.5, 0.0),
+                    child: _buildColorBox(),
+                  ),
+                ),
+
               // The hard-coded clamp values are based on empirical checks
               // with the marketing website. The clamping behavior should be
               // generalized to use this toolbar in an app.
@@ -602,6 +629,136 @@ class _EditorToolbarState extends State<EditorToolbar> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildColorBox() {
+    return Material(
+      elevation: 5.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30.0),
+      ),
+      child: SizedBox(
+        // height: 550.0,
+        child: IntrinsicWidth(
+          child: Column(
+            children: [
+              //HEADING COLOR PICKER
+              ListTile(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                title: const Text("Pick the Color"),
+                trailing: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _showColorBox = false;
+                      _colorBoxType = ColorBoxType.unknown;
+                    });
+                  },
+                  icon: const Icon(
+                    Icons.close,
+                    color: ColorTheme.primaryColor,
+                  ),
+                ),
+              ),
+              //COLOR PICKER
+              HueRingPicker(
+                colorPickerHeight: 300.0,
+                enableAlpha: true,
+                pickerColor: fontColor,
+                onColorChanged: (color) {
+                  if (_colorBoxType == ColorBoxType.fontColor) {
+                    widget.editor.executeCommand(
+                      RemoveTextAttributionsCommand(
+                        documentSelection: widget.composer.selection!,
+                        attributions: {
+                          FontColorDecorationAttribution(
+                            fontColor: fontColor,
+                          )
+                        },
+                      ),
+                    );
+
+                    //set the updated value
+                    widget.editor.executeCommand(
+                      AddTextAttributionsCommand(
+                        documentSelection: widget.composer.selection!,
+                        attributions: {
+                          FontColorDecorationAttribution(
+                            fontColor: color,
+                          )
+                        },
+                      ),
+                    );
+
+                    //update the intial font color value
+                    fontColor = color;
+                  }
+
+                  //set background color
+                  if (_colorBoxType == ColorBoxType.fontBackgroundColor) {
+                    //remove intiial attribution
+                    widget.editor.executeCommand(
+                      RemoveTextAttributionsCommand(
+                        documentSelection: widget.composer.selection!,
+                        attributions: {
+                          FontBackgroundColorDecorationAttribution(
+                            fontBackgroundColor: fontBackgroundColor,
+                          )
+                        },
+                      ),
+                    );
+                    //set the updated value
+                    widget.editor.executeCommand(
+                      AddTextAttributionsCommand(
+                        documentSelection: widget.composer.selection!,
+                        attributions: {
+                          FontBackgroundColorDecorationAttribution(
+                            fontBackgroundColor: color,
+                          )
+                        },
+                      ),
+                    );
+
+                    //update the intial font background color value
+                    fontBackgroundColor = color;
+                  }
+
+                  //set the decoration color
+                  if (_colorBoxType == ColorBoxType.decorationColor) {
+                    //remove intiial attribution
+                    widget.editor.executeCommand(
+                      RemoveTextAttributionsCommand(
+                        documentSelection: widget.composer.selection!,
+                        attributions: {
+                          FontDecorationColorDecorationAttribution(
+                            fontDecorationColor: decorationColor,
+                          )
+                        },
+                      ),
+                    );
+                    //set the updated value
+                    widget.editor.executeCommand(
+                      AddTextAttributionsCommand(
+                        documentSelection: widget.composer.selection!,
+                        attributions: {
+                          FontDecorationColorDecorationAttribution(
+                            fontDecorationColor: color,
+                          )
+                        },
+                      ),
+                    );
+
+                    //update the intial font decoration color value
+                    decorationColor = color;
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -703,15 +860,11 @@ class _EditorToolbarState extends State<EditorToolbar> {
                         TextEditingValue(text: updatedFontSize.toString());
                     //remove intiial attribution
                     _removeFontSizeAttribution(
-                      TextStyle(
-                        fontSize: initialFontSize.toDouble(),
-                      ),
+                      initialFontSize.toDouble(),
                     );
                     //set the updated value
                     _setFontSize(
-                      TextStyle(
-                        fontSize: updatedFontSize.toDouble(),
-                      ),
+                      updatedFontSize.toDouble(),
                     );
                   },
                   icon: const Icon(Icons.add_rounded),
@@ -734,15 +887,11 @@ class _EditorToolbarState extends State<EditorToolbar> {
                         TextEditingValue(text: updatedFontSize.toString());
                     //remove intiial attribution
                     _removeFontSizeAttribution(
-                      TextStyle(
-                        fontSize: initialFontSize.toDouble(),
-                      ),
+                      initialFontSize.toDouble(),
                     );
                     //set the updated value
                     _setFontSize(
-                      TextStyle(
-                        fontSize: updatedFontSize.toDouble(),
-                      ),
+                      updatedFontSize.toDouble(),
                     );
                   },
                   icon: Transform.translate(
@@ -759,8 +908,16 @@ class _EditorToolbarState extends State<EditorToolbar> {
               //TEXT COLOR
               Center(
                 child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.text_format),
+                  onPressed: () {
+                    setState(() {
+                      _showColorBox = true;
+                      _colorBoxType = ColorBoxType.fontColor;
+                    });
+                  },
+                  icon: Icon(
+                    Icons.text_format,
+                    color: fontColor,
+                  ),
                   tooltip: 'text color',
                 ),
               ),
@@ -768,31 +925,95 @@ class _EditorToolbarState extends State<EditorToolbar> {
               //TEXT BACKGROUND COLOR
               Center(
                 child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
+                  onPressed: () {
+                    setState(() {
+                      _showColorBox = true;
+                      _colorBoxType = ColorBoxType.fontBackgroundColor;
+                    });
+                  },
+                  icon: Icon(
                     Icons.colorize_rounded,
+                    color: fontBackgroundColor,
                   ),
                   tooltip: 'text background color',
                 ),
               ),
 
               //TEXT LINE Decoration STYLE\
-              Center(
-                child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.line_style_rounded),
-                  tooltip: 'text line decoration',
+              Tooltip(
+                message: 'text line decoration',
+                child: DropdownButton<TextDecorationStyle>(
+                  value: decorationStyle,
+                  items: TextDecorationStyle.values
+                      .map((textDecorationStyle) =>
+                          DropdownMenuItem<TextDecorationStyle>(
+                            value: textDecorationStyle,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: _buildTextDecorationStyleIcon(
+                                  textDecorationStyle),
+                            ),
+                          ))
+                      .toList(),
+                  icon: const Icon(Icons.arrow_drop_down),
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 12,
+                  ),
+                  underline: const SizedBox(),
+                  elevation: 0,
+                  onChanged: (decorationStyle) {
+                    //remove intiial attribution
+                    widget.editor.executeCommand(
+                      RemoveTextAttributionsCommand(
+                        documentSelection: widget.composer.selection!,
+                        attributions: {
+                          FontDecorationStyleAttribution(
+                            fontDecorationStyle: this.decorationStyle,
+                          )
+                        },
+                      ),
+                    );
+                    //set the updated value
+                    widget.editor.executeCommand(
+                      AddTextAttributionsCommand(
+                        documentSelection: widget.composer.selection!,
+                        attributions: {
+                          FontDecorationStyleAttribution(
+                            fontDecorationStyle:
+                                decorationStyle ?? TextDecorationStyle.solid,
+                          )
+                        },
+                      ),
+                    );
+
+                    //update the intial font decoration color value
+                    setState(() {
+                      this.decorationStyle =
+                          decorationStyle ?? TextDecorationStyle.solid;
+                    });
+                  },
                 ),
               ),
 
               //TEXT DECORATION COLOR
               Center(
                 child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(FontAwesomeIcons.paintbrush),
+                  onPressed: () {
+                    setState(() {
+                      _showColorBox = true;
+                      _colorBoxType = ColorBoxType.decorationColor;
+                    });
+                  },
+                  icon: Icon(
+                    FontAwesomeIcons.paintbrush,
+                    color: decorationColor,
+                  ),
                   tooltip: 'text decoration color',
                 ),
               ),
+
+              _buildVerticalDivider(),
 
               //SET THE LINK
               Center(
@@ -869,6 +1090,23 @@ class _EditorToolbarState extends State<EditorToolbar> {
     }
   }
 
+  Widget _buildTextDecorationStyleIcon(TextDecorationStyle style) {
+    switch (style) {
+      case TextDecorationStyle.dashed:
+        return Image.asset("assets/images/png/dashed_line.png");
+      case TextDecorationStyle.dotted:
+        return Image.asset("assets/images/png/dotted_line.png");
+      case TextDecorationStyle.solid:
+        return Image.asset("assets/images/png/line.png");
+      case TextDecorationStyle.wavy:
+        return Image.asset("assets/images/png/wavy_line.png");
+      case TextDecorationStyle.double:
+        return Image.asset("assets/images/png/double_line.png");
+      default:
+        return Image.asset("assets/images/png/line.png");
+    }
+  }
+
   //display the URL input field to take it as a input
   Widget _buildUrlField() {
     return Material(
@@ -877,7 +1115,7 @@ class _EditorToolbarState extends State<EditorToolbar> {
       clipBehavior: Clip.hardEdge,
       child: Container(
         width: 400,
-        height: 100,
+        height: 60,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Row(
           children: [
@@ -949,15 +1187,11 @@ class _EditorToolbarState extends State<EditorToolbar> {
                   print("final Value :: " + updatedFontSize.toString());
                   //remove intiial attribution
                   _removeFontSizeAttribution(
-                    TextStyle(
-                      fontSize: initialFontSizeValue.toDouble(),
-                    ),
+                    initialFontSizeValue.toDouble(),
                   );
                   //set the updated value
                   _setFontSize(
-                    TextStyle(
-                      fontSize: num.parse(updatedFontSize).toDouble(),
-                    ),
+                    num.parse(updatedFontSize).toDouble(),
                   );
                   intialFontSize = num.parse(updatedFontSize);
                   _fontSizeFocusNode.requestFocus();

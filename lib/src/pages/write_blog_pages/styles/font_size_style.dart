@@ -5,7 +5,12 @@ import 'package:egnimos/src/pages/write_blog_pages/custom_attribution/font_size_
 import 'package:flutter/cupertino.dart';
 import 'package:super_editor/super_editor.dart';
 
-double getFontSizeInfoOfSelectedNode(
+import '../custom_attribution/font_decoration_attribution.dart';
+import 'header_styles.dart';
+
+///get the font size of the selected node
+///to display on the editor toolbar
+double getFontSizeOfSelectedNode(
     DocumentComposer composer, DocumentEditor editor) {
   final selection = composer.selection!;
   final selectedNode = editor.document.getNodeById(selection.extent.nodeId);
@@ -21,14 +26,14 @@ double getFontSizeInfoOfSelectedNode(
   final attributions = selectedNode.text.getAllAttributionsThroughout(
     SpanRange(
       start: selectionStart,
-      end: selectionEnd-1,
+      end: selectionEnd - 1,
     ),
   );
   for (var attribution in attributions) {
     print("SELECTED ATTRIBUTIONS ID " + attribution.id);
-    if (attribution is FontDecorationAttribution) {
-      print("FONT SIZE ATTRIBUTION :: " + attribution.textStyle.fontSize.toString());
-      return attribution.textStyle.fontSize??18.0;
+    if (attribution is FontSizeDecorationAttribution) {
+      print("FONT SIZE ATTRIBUTION :: " + attribution.fontSize.toString());
+      return attribution.fontSize.toDouble();
     }
   }
 
@@ -53,6 +58,137 @@ double getFontSizeInfoOfSelectedNode(
   } else {
     return 18.0;
   }
+}
+
+///get the font color of the selected attributed text
+///to display on to the editor toolbar
+Color getFontColorOfSelectedNode(
+    DocumentComposer composer, DocumentEditor editor) {
+  final selection = composer.selection!;
+  final selectedNode = editor.document.getNodeById(selection.extent.nodeId);
+  if (selectedNode is! TextNode) {
+    return textColor;
+  }
+
+  final extentOffset = (selection.extent.nodePosition as TextPosition).offset;
+  final baseOffset = (selection.base.nodePosition as TextPosition).offset;
+  final selectionStart = min(baseOffset, extentOffset);
+  final selectionEnd = max(baseOffset, extentOffset);
+
+  final attributions = selectedNode.text.getAllAttributionsThroughout(
+    SpanRange(
+      start: selectionStart,
+      end: selectionEnd - 1,
+    ),
+  );
+  for (var attribution in attributions) {
+    print("SELECTED ATTRIBUTIONS ID " + attribution.id);
+    if (attribution is FontColorDecorationAttribution) {
+      print("FONT COLOR ATTRIBUTION :: " + attribution.fontColor.toString());
+      return attribution.fontColor;
+    }
+  }
+
+  return textColor;
+}
+
+///get the font background color of the selected attributed text
+///to display on to the editor toolbar
+Color getFontBackgroundColorOfSelectedNode(
+    DocumentComposer composer, DocumentEditor editor) {
+  final selection = composer.selection!;
+  final selectedNode = editor.document.getNodeById(selection.extent.nodeId);
+  if (selectedNode is! TextNode) {
+    return textColor;
+  }
+
+  final extentOffset = (selection.extent.nodePosition as TextPosition).offset;
+  final baseOffset = (selection.base.nodePosition as TextPosition).offset;
+  final selectionStart = min(baseOffset, extentOffset);
+  final selectionEnd = max(baseOffset, extentOffset);
+
+  final attributions = selectedNode.text.getAllAttributionsThroughout(
+    SpanRange(
+      start: selectionStart,
+      end: selectionEnd - 1,
+    ),
+  );
+  for (var attribution in attributions) {
+    print("SELECTED ATTRIBUTIONS ID " + attribution.id);
+    if (attribution is FontBackgroundColorDecorationAttribution) {
+      print("FONT BACKGROUND COLOR ATTRIBUTION :: " +
+          attribution.fontBackgroundColor.toString());
+      return attribution.fontBackgroundColor;
+    }
+  }
+
+  return textColor;
+}
+
+///get the font decoration color of the selected attributed text
+///to display on to the editor toolbar
+Color getFontDecorationColorOfSelectedNode(
+    DocumentComposer composer, DocumentEditor editor) {
+  final selection = composer.selection!;
+  final selectedNode = editor.document.getNodeById(selection.extent.nodeId);
+  if (selectedNode is! TextNode) {
+    return textColor;
+  }
+
+  final extentOffset = (selection.extent.nodePosition as TextPosition).offset;
+  final baseOffset = (selection.base.nodePosition as TextPosition).offset;
+  final selectionStart = min(baseOffset, extentOffset);
+  final selectionEnd = max(baseOffset, extentOffset);
+
+  final attributions = selectedNode.text.getAllAttributionsThroughout(
+    SpanRange(
+      start: selectionStart,
+      end: selectionEnd - 1,
+    ),
+  );
+  for (var attribution in attributions) {
+    print("SELECTED ATTRIBUTIONS ID " + attribution.id);
+    if (attribution is FontDecorationColorDecorationAttribution) {
+      print("FONT DECORATION COLOR ATTRIBUTION :: " +
+          attribution.fontDecorationColor.toString());
+      return attribution.fontDecorationColor;
+    }
+  }
+
+  return textColor;
+}
+
+///get the font decoration style of the selected attributed text
+///to display on to the editor toolbar
+TextDecorationStyle getFontDecorationStyleOfSelectedNode(
+    DocumentComposer composer, DocumentEditor editor) {
+  final selection = composer.selection!;
+  final selectedNode = editor.document.getNodeById(selection.extent.nodeId);
+  if (selectedNode is! TextNode) {
+    return TextDecorationStyle.solid;
+  }
+
+  final extentOffset = (selection.extent.nodePosition as TextPosition).offset;
+  final baseOffset = (selection.base.nodePosition as TextPosition).offset;
+  final selectionStart = min(baseOffset, extentOffset);
+  final selectionEnd = max(baseOffset, extentOffset);
+
+  final attributions = selectedNode.text.getAllAttributionsThroughout(
+    SpanRange(
+      start: selectionStart,
+      end: selectionEnd - 1,
+    ),
+  );
+  for (var attribution in attributions) {
+    print("SELECTED ATTRIBUTIONS ID " + attribution.id);
+    if (attribution is FontDecorationStyleAttribution) {
+      print("FONT DECORATION STYLE ATTRIBUTION :: " +
+          attribution.fontDecorationStyle.toString());
+      return attribution.fontDecorationStyle;
+    }
+  }
+
+  return TextDecorationStyle.solid;
 }
 
 /// Applies the given `attributions` to the given `documentSelection`,
