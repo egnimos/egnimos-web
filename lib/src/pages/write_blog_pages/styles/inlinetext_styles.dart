@@ -16,8 +16,6 @@ TextStyle inlineStyleBuilder(Set<Attribution> attributions) {
     if (attribution == boldAttribution) {
       newStyle = newStyle.copyWith(
         fontWeight: FontWeight.bold,
-        // color: Colors.pink,
-        fontSize: 18.0,
       );
     } else if (attribution == italicsAttribution) {
       newStyle = newStyle.copyWith(

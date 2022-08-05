@@ -5,7 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomeHeader extends StatelessWidget {
-  const HomeHeader({Key? key}) : super(key: key);
+  final Color? leadingTextColor;
+  final Color animatedTextColor;
+  final Color? infoColor;
+  const HomeHeader({
+    Key? key,
+    this.animatedTextColor = ColorTheme.bgColor10,
+    this.infoColor,
+    this.leadingTextColor,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +35,7 @@ class HomeHeader extends StatelessWidget {
                         fontSize: (constraints.maxWidth / 100) * 4.5,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1.2,
+                        color: leadingTextColor,
                       ),
                     ),
                   ),
@@ -43,7 +52,7 @@ class HomeHeader extends StatelessWidget {
                         fontSize: (constraints.maxWidth / 100) * 4.5,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1.0,
-                        color: ColorTheme.bgColor10,
+                        color: animatedTextColor,
                       ),
                       child: AnimatedTextKit(
                         repeatForever: true,
@@ -82,6 +91,7 @@ class HomeHeader extends StatelessWidget {
                     "The Creativity that needs to be done for building a thoughtful process that works smoothely and makes your business grow like never before.",
                     textAlign: TextAlign.center,
                     style: GoogleFonts.raleway().copyWith(
+                      color: infoColor,
                       fontSize: constraints.maxWidth > K.kMobileWidth
                           ? (constraints.maxWidth / 100) * 2.3
                           : 16.0,

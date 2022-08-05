@@ -8,6 +8,29 @@ import 'package:super_editor/super_editor.dart';
 import '../custom_attribution/font_decoration_attribution.dart';
 import 'header_styles.dart';
 
+Set<Attribution> getSelectedNodeAttributions(
+    DocumentComposer composer, DocumentEditor editor) {
+  final selection = composer.selection!;
+  final selectedNode = editor.document.getNodeById(selection.extent.nodeId);
+  if (selectedNode is! TextNode) {
+    return {};
+  }
+
+  final extentOffset = (selection.extent.nodePosition as TextPosition).offset;
+  final baseOffset = (selection.base.nodePosition as TextPosition).offset;
+  final selectionStart = min(baseOffset, extentOffset);
+  final selectionEnd = max(baseOffset, extentOffset);
+
+  final attributions = selectedNode.text.getAllAttributionsThroughout(
+    SpanRange(
+      start: selectionStart,
+      end: selectionEnd - 1,
+    ),
+  );
+
+  return attributions;
+}
+
 ///get the font size of the selected node
 ///to display on the editor toolbar
 double getFontSizeOfSelectedNode(
@@ -58,6 +81,66 @@ double getFontSizeOfSelectedNode(
   } else {
     return 18.0;
   }
+}
+
+///check the strike through attribution exists or not of the selected attributed text
+///to display on to the editor toolbar
+bool isStrikeThroughExistsOfSelectedNode(
+    DocumentComposer composer, DocumentEditor editor) {
+  final attributions = getSelectedNodeAttributions(composer, editor);
+  for (var attribution in attributions) {
+    print("SELECTED ATTRIBUTIONS ID " + attribution.id);
+    if (attribution == strikethroughAttribution) {
+      print("FONT COLOR ATTRIBUTION :: " + attribution.id);
+      return true;
+    }
+  }
+
+  return false;
+}
+
+///check the underline through attribution exists or not of the selected attributed text
+///to display on to the editor toolbar
+bool isunderlineThroughExistsOfSelectedNode(
+    DocumentComposer composer, DocumentEditor editor) {
+  final attributions = getSelectedNodeAttributions(composer, editor);
+  for (var attribution in attributions) {
+    print("SELECTED ATTRIBUTIONS ID " + attribution.id);
+    if (attribution == underlineAttribution) {
+      print("FONT COLOR ATTRIBUTION :: " + attribution.id);
+      return true;
+    }
+  }
+
+  return false;
+}
+
+bool isBoldExistsOfSelectedNode(
+    DocumentComposer composer, DocumentEditor editor) {
+  final attributions = getSelectedNodeAttributions(composer, editor);
+  for (var attribution in attributions) {
+    print("SELECTED ATTRIBUTIONS ID " + attribution.id);
+    if (attribution == boldAttribution) {
+      print("FONT COLOR ATTRIBUTION :: " + attribution.id);
+      return true;
+    }
+  }
+
+  return false;
+}
+
+bool isItalicExistsOfSelectedNode(
+    DocumentComposer composer, DocumentEditor editor) {
+  final attributions = getSelectedNodeAttributions(composer, editor);
+  for (var attribution in attributions) {
+    print("SELECTED ATTRIBUTIONS ID " + attribution.id);
+    if (attribution == italicsAttribution) {
+      print("FONT COLOR ATTRIBUTION :: " + attribution.id);
+      return true;
+    }
+  }
+
+  return false;
 }
 
 ///get the font color of the selected attributed text

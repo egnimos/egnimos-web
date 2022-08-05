@@ -10,8 +10,8 @@ StyleRules initialLayout() => [
         BlockSelector.all,
         (doc, docNode) {
           return {
-            "maxWidth": Responsive.widthMultiplier * 80.0,
-            "padding": const CascadingPadding.symmetric(horizontal: 24),
+            "maxWidth": double.infinity,
+            // "padding": const CascadingPadding.symmetric(horizontal: 24),
             "textStyle": const TextStyle(
               color: textColor,
               fontSize: 18,

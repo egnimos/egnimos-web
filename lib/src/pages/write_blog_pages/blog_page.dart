@@ -1,3 +1,6 @@
+import 'package:egnimos/src/config/responsive.dart';
+import 'package:egnimos/src/pages/write_blog_pages/command_based_actions/execute_command.dart';
+import 'package:egnimos/src/pages/write_blog_pages/custom_editor_comand.dart/shift_to_newline.dart';
 import 'package:egnimos/src/pages/write_blog_pages/editor_style_sheet.dart';
 import 'package:egnimos/src/pages/write_blog_pages/mutuable_doc_exmp.dart';
 import 'package:egnimos/src/pages/write_blog_pages/styles/header_styles.dart';
@@ -29,6 +32,7 @@ class _BlogPageState extends State<BlogPage> {
   late FocusNode _editorFocusNode;
   late ScrollController _scrollController;
 
+  //Toolbar
   OverlayEntry? _formatBarOverlayEntry;
   OverlayEntry? _imageFormatBarOverlayEntry;
 
@@ -38,19 +42,34 @@ class _BlogPageState extends State<BlogPage> {
   @override
   void initState() {
     super.initState();
-
     //create  the initial document content
     _doc = doc
       ..addListener(() {
-        print(doc.nodes.last.metadata);
-        final node = doc.getNodeById(doc.nodes.last.id);
-        if (node is TextNode) {
-          // ignore: unnecessary_cast
-          final textNode = node as TextNode;
-          print(textNode.text);
+        print(doc.nodes.last.copyMetadata());
+        if (doc.nodes.last is ParagraphNode) {
+          final value = doc.nodes.last as ParagraphNode;
+          print(value.metadata);
+          print("SPaN MARKER:: ${value.text.spans.markers}");
         }
+        // _documentEditor.document.nodes.last.
         //update the tool bar display
         _updateToolbarDisplay();
+        //set the command
+        ExecuteCommand(
+          restoreFocus: () {
+            _editorFocusNode.requestFocus();
+          },
+          anchor: _selectionAnchor,
+          context: context,
+          updateToolbarOffset: () {
+            WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+              _selectionAnchor.value = _updateToolbarOffset();
+            });
+          },
+          composer: _composer,
+          editor: _documentEditor,
+          mutableDoc: doc,
+        ).startCommand();
       });
 
     // Create the DocumentEditor, which is responsible for applying all
@@ -66,14 +85,7 @@ class _BlogPageState extends State<BlogPage> {
     // over the initial caret position. If you don't need any external
     // control over content selection then you don't need to create your
     // own DocumentComposer. The Editor widget will do that on your behalf.
-    _composer = DocumentComposer(
-      initialSelection: DocumentSelection.collapsed(
-        position: DocumentPosition(
-          nodeId: _doc.nodes.last.id,
-          nodePosition: (_doc.nodes.last as TextNode).endPosition,
-        ),
-      ),
-    )..addListener(_updateToolbarDisplay);
+    _composer = DocumentComposer()..addListener(_updateToolbarDisplay);
 
     // Create a FocusNode so that we can explicitly toggle editor focus.
     _editorFocusNode = FocusNode();
@@ -81,6 +93,13 @@ class _BlogPageState extends State<BlogPage> {
     // Use our own ScrollController for the editor so that we can refresh
     // our popup toolbar position as the user scrolls the editor.
     _scrollController = ScrollController()..addListener(_updateToolbarDisplay);
+
+    docOps = CommonEditorOperations(
+      editor: _documentEditor,
+      composer: _composer,
+      documentLayoutResolver: () =>
+          _docLayoutKey.currentState as DocumentLayout,
+    );
   }
 
   @override
@@ -191,16 +210,15 @@ class _BlogPageState extends State<BlogPage> {
       // bounds on the screen and display the toolbar near the selected
       // text.
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        _updateToolbarOffset();
+        if (_formatBarOverlayEntry == null) {
+          return;
+        }
+        _selectionAnchor.value = _updateToolbarOffset();
       });
     }
   }
 
-  void _updateToolbarOffset() {
-    if (_formatBarOverlayEntry == null) {
-      return;
-    }
-
+  Offset _updateToolbarOffset() {
     final docBoundingBox =
         (_docLayoutKey.currentState! as DocumentLayout).getRectForSelection(
       _composer.selection!.base,
@@ -217,7 +235,7 @@ class _BlogPageState extends State<BlogPage> {
     ).translate(parentInOverlayOffset.dx, parentInOverlayOffset.dy);
 
     final offset = overlayBoundingBox.topCenter;
-    _selectionAnchor.value = offset;
+    return offset;
   }
 
   ///this methods used to display the image editor
@@ -318,20 +336,24 @@ class _BlogPageState extends State<BlogPage> {
     return Scaffold(
       body: DropViewerWidget(
         onDrop: _onDropImage,
-        child: SuperEditor(
-          composer: _composer,
-          focusNode: _editorFocusNode,
-          documentLayoutKey: _docLayoutKey,
-          editor: _documentEditor,
-          selectionStyle: SelectionStyles(
-            selectionColor: ColorTheme.primaryColor.shade200,
-          ),
-          stylesheet: defaultStylesheet.copyWith(
-            addRulesAfter: [
-              ...initialLayout(),
-              ...headers(context),
-            ],
-            inlineTextStyler: inlinetextStyle,
+        child: SizedBox(
+          // width: Responsive.widthMultiplier * 80.0,
+          // height: Responsive.heightMultiplier * 100.0,
+          child: SuperEditor(
+            composer: _composer,
+            focusNode: _editorFocusNode,
+            documentLayoutKey: _docLayoutKey,
+            editor: _documentEditor,
+            selectionStyle: SelectionStyles(
+              selectionColor: ColorTheme.primaryColor.shade200,
+            ),
+            stylesheet: defaultStylesheet.copyWith(
+              addRulesAfter: [
+                ...initialLayout(),
+                ...headers(context),
+              ],
+              inlineTextStyler: inlinetextStyle,
+            ),
           ),
         ),
       ),

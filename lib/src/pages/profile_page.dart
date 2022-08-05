@@ -254,40 +254,32 @@ class NavigationRailWide extends StatelessWidget {
           onTap: () async {
             await Navigator.of(context).pushReplacementNamed(Home.routeName);
           },
-          child: Flexible(
-            child: Row(children: [
-              const SizedBox(
-                width: 8.0,
-              ),
-              Image.asset(
-                "assets/images/png/Group_392-4.png",
-                width: 50,
-                height: 50,
-                fit: BoxFit.contain,
-              ),
-              const SizedBox(
-                width: 10.0,
-              ),
-              Flexible(
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    top: 6.0,
-                    bottom: 10.0,
-                  ),
-                  child: Text(
-                    "EGNIMOS",
-                    maxLines: 1,
-                    overflow: TextOverflow.clip,
-                    style: GoogleFonts.raleway().copyWith(
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey.shade300,
-                    ),
-                  ),
+          child: Row(children: [
+            const SizedBox(
+              width: 8.0,
+            ),
+            Image.asset(
+              "assets/images/png/Group_392-4.png",
+              width: 50,
+              height: 50,
+              fit: BoxFit.contain,
+            ),
+            const SizedBox(
+              width: 10.0,
+            ),
+            Flexible(
+              child: Text(
+                "EGNIMOS",
+                maxLines: 1,
+                overflow: TextOverflow.clip,
+                style: GoogleFonts.raleway().copyWith(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey.shade300,
                 ),
               ),
-            ]),
-          ),
+            ),
+          ]),
         ),
 
         const SizedBox(

@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:egnimos/src/pages/write_blog_pages/custom_attribution/font_size_attribution.dart';
 import 'package:egnimos/src/pages/write_blog_pages/editor_style_sheet.dart';
-import 'package:egnimos/src/pages/write_blog_pages/styles/font_size_style.dart';
+import 'package:egnimos/src/pages/write_blog_pages/styles/font_style.dart';
 import 'package:egnimos/src/theme/color_theme.dart';
 import 'package:egnimos/src/widgets/color_picker_dialouge.dart';
 import 'package:flutter/cupertino.dart';
@@ -75,10 +75,20 @@ class _EditorToolbarState extends State<EditorToolbar> {
   late Color fontBackgroundColor;
   late Color decorationColor;
   late TextDecorationStyle decorationStyle;
+  bool isBold = false;
+  bool isItalic = false;
+  bool isStrikeThrough = false;
+  bool isUnderlineThrough = false;
 
   @override
   void initState() {
     super.initState();
+    isBold = isBoldExistsOfSelectedNode(widget.composer, widget.editor);
+    isItalic = isItalicExistsOfSelectedNode(widget.composer, widget.editor);
+    isStrikeThrough =
+        isStrikeThroughExistsOfSelectedNode(widget.composer, widget.editor);
+    isUnderlineThrough =
+        isunderlineThroughExistsOfSelectedNode(widget.composer, widget.editor);
     fontSize = getFontSizeOfSelectedNode(widget.composer, widget.editor);
     fontColor = getFontColorOfSelectedNode(widget.composer, widget.editor);
     fontBackgroundColor =
@@ -291,6 +301,9 @@ class _EditorToolbarState extends State<EditorToolbar> {
         attributions: {boldAttribution},
       ),
     );
+    setState(() {
+      isBold = !isBold;
+    });
   }
 
   /// Toggles italic styling for the current selected text.
@@ -301,6 +314,9 @@ class _EditorToolbarState extends State<EditorToolbar> {
         attributions: {italicsAttribution},
       ),
     );
+    setState(() {
+      isItalic = !isItalic;
+    });
   }
 
   /// Toggles strikethrough styling for the current selected text.
@@ -311,6 +327,9 @@ class _EditorToolbarState extends State<EditorToolbar> {
         attributions: {strikethroughAttribution},
       ),
     );
+    setState(() {
+      isStrikeThrough = !isStrikeThrough;
+    });
   }
 
   /// Toggles underlinethrough styling for the current selected text.
@@ -321,6 +340,9 @@ class _EditorToolbarState extends State<EditorToolbar> {
         attributions: {underlineAttribution},
       ),
     );
+    setState(() {
+      isUnderlineThrough = !isUnderlineThrough;
+    });
   }
 
   void _removeFontSizeAttribution(double initialValue) {
@@ -344,28 +366,6 @@ class _EditorToolbarState extends State<EditorToolbar> {
       ),
     );
   }
-
-  // final selection = widget.composer.selection;
-  //   final baseOffset =
-  //       (selection!.base.nodePosition as TextNodePosition).offset;
-  //   final extentOffset =
-  //       (selection.extent.nodePosition as TextNodePosition).offset;
-  //   //get the start & end offset value
-  //   final selectionStart = min(baseOffset, extentOffset);
-  //   final selectionEnd = min(baseOffset, extentOffset);
-  //   //get the selection range
-  //   final selectionRange =
-  //       SpanRange(start: selectionStart, end: selectionEnd - 1);
-  //   final textNode = widget.editor.document
-  //       .getNodeById(selection.extent.nodeId)! as TextNode;
-  //   final text = textNode.text;
-  //   final trimmedRange = _trimTextRangeWhitespace(text, selectionRange);
-
-  //   //add the attribute
-  //   text.addAttribution(
-  //     FontSizeAttribution(fontSize: value),
-  //     trimmedRange,
-  //   );
 
   /// Returns true if the current text selection includes part
   /// or all of a single link, returns false if zero links are
@@ -812,7 +812,11 @@ class _EditorToolbarState extends State<EditorToolbar> {
               Center(
                 child: IconButton(
                   onPressed: _toggleBold,
-                  icon: const Icon(Icons.format_bold),
+                  icon: Icon(
+                    Icons.format_bold,
+                    color: isBold ? ColorTheme.bgColor6 : null,
+                    size: isBold ? 30.0 : null,
+                  ),
                   splashRadius: 16,
                   tooltip: 'Bold',
                 ),
@@ -822,7 +826,11 @@ class _EditorToolbarState extends State<EditorToolbar> {
               Center(
                 child: IconButton(
                   onPressed: _toggleItalics,
-                  icon: const Icon(Icons.format_italic),
+                  icon: Icon(
+                    Icons.format_italic,
+                    color: isItalic ? ColorTheme.bgColor6 : null,
+                    size: isItalic ? 30.0 : null,
+                  ),
                   splashRadius: 16,
                   tooltip: 'Italics',
                 ),
@@ -832,7 +840,11 @@ class _EditorToolbarState extends State<EditorToolbar> {
               Center(
                 child: IconButton(
                   onPressed: _toggleStrikethrough,
-                  icon: const Icon(Icons.strikethrough_s),
+                  icon: Icon(
+                    Icons.strikethrough_s,
+                    color: isStrikeThrough ? ColorTheme.bgColor6 : null,
+                    size: isStrikeThrough ? 30.0 : null,
+                  ),
                   splashRadius: 16,
                   tooltip: 'Strikethrough',
                 ),
@@ -842,7 +854,11 @@ class _EditorToolbarState extends State<EditorToolbar> {
               Center(
                 child: IconButton(
                   onPressed: _toggleUnderlinethrough,
-                  icon: const Icon(Icons.format_underline_rounded),
+                  icon: Icon(
+                    Icons.format_underline_rounded,
+                    color: isUnderlineThrough ? ColorTheme.bgColor6 : null,
+                    size: isUnderlineThrough ? 30.0 : null,
+                  ),
                   splashRadius: 16,
                   tooltip: 'Underlinethrough',
                 ),
