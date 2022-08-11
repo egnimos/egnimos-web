@@ -1,17 +1,14 @@
-import 'package:egnimos/src/pages/about.dart';
-import 'package:egnimos/src/pages/blog.dart';
+import 'package:egnimos/src/pages/about_page.dart';
 import 'package:egnimos/src/pages/profile_page.dart';
-import 'package:egnimos/src/pages/write_blog_pages/blog_page.dart';
+import 'package:egnimos/src/pages/write_blog_pages/write_blog_page.dart';
 import 'package:egnimos/src/providers/auth_provider.dart';
 import 'package:egnimos/src/providers/blog_provider.dart';
 import 'package:egnimos/src/theme/color_theme.dart';
-
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-
 import 'config/responsive.dart';
 import 'pages/auth_pages/auth_page.dart';
+import 'pages/blog_page.dart';
 import 'pages/home.dart';
 import 'providers/upload_provider.dart';
 
@@ -53,12 +50,12 @@ class _MyAppState extends State<MyApp> {
           debugShowCheckedModeBanner: false,
           home: const Home(),
           routes: {
-            Blog.routeName: (ctx) => const Blog(),
+            BlogPage.routeName: (ctx) => const BlogPage(),
             Home.routeName: (ctx) => const Home(),
             ProfilePage.routeName: (ctx) => const ProfilePage(),
             AboutPage.routeName: (ctx) => const AboutPage(),
             AuthPage.routeName: (ctx) => const AuthPage(),
-            BlogPage.routeName: (ctx) => const BlogPage(),
+            // WriteBlogPage.routeName: (ctx) => const WriteBlogPage(),
           },
         );
       }),

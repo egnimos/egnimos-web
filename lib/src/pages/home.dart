@@ -1,7 +1,3 @@
-import 'dart:html';
-
-import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:egnimos/main.dart';
 import 'package:egnimos/src/config/responsive.dart';
 import 'package:egnimos/src/providers/auth_provider.dart';
 import 'package:egnimos/src/theme/color_theme.dart';
@@ -10,14 +6,11 @@ import 'package:egnimos/src/widgets/footer.dart';
 import 'package:egnimos/src/widgets/home_header.dart';
 import 'package:egnimos/src/widgets/menu.dart';
 import 'package:egnimos/src/widgets/nav.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:matrix4_transform/matrix4_transform.dart';
 import 'package:provider/provider.dart';
-
-import '../config/k.dart';
 import '../widgets/custom_vertical_text_widget.dart';
 
 class Home extends StatelessWidget {
@@ -188,14 +181,12 @@ class _HeaderState extends State<Header> {
                               : AnimatedOpacity(
                                   opacity: opacity,
                                   duration: const Duration(milliseconds: 400),
-                                  child: Flexible(
-                                    child: CustomVerticalTextWidget(
-                                      "DISABLE",
-                                      textStyle: GoogleFonts.rubik(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 22.0,
-                                        color: ColorTheme.bgColor10,
-                                      ),
+                                  child: CustomVerticalTextWidget(
+                                    "DISABLE",
+                                    textStyle: GoogleFonts.rubik(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 22.0,
+                                      color: ColorTheme.bgColor10,
                                     ),
                                   ),
                                 ),
@@ -212,77 +203,3 @@ class _HeaderState extends State<Header> {
     );
   }
 }
-
-
-// IntrinsicHeight(
-//                             child: Container(
-//                               padding: const EdgeInsets.all(10.0),
-//                               alignment: Alignment.center,
-//                               width: 50.0,
-//                               decoration: BoxDecoration(
-//                                 color: isAnimationDisable
-//                                     ? Colors.redAccent
-//                                     : ColorTheme.bgColor10,
-//                                 borderRadius: BorderRadius.circular(22.0),
-//                               ),
-//                               child: CustomVerticalTextWidget(
-//                                 isAnimationDisable ? "ENABLE" : "DISABLE",
-//                                 textStyle: GoogleFonts.rubik(
-//                                   fontWeight: FontWeight.w600,
-//                                   fontSize: 22.0,
-//                                   color: ColorTheme.secondaryTextColor,
-//                                 ),
-//                               ),
-//                             ),
-//                           ),
-
-// FittedBox(
-//                 fit: BoxFit.fitHeight,
-//                 child: Row(
-//                   mainAxisAlignment: MainAxisAlignment.center,
-//                   children: [
-//                     Text(
-//                       "We",
-//                       style: GoogleFonts.rubik().copyWith(
-//                         fontSize: (Responsive.widthMultiplier) * 4.5,
-//                         fontWeight: FontWeight.bold,
-//                         letterSpacing: 1.2,
-//                         color: ColorTheme.secondaryTextColor,
-//                       ),
-//                     ),
-
-//                     // const SizedBox(
-//                     //   width: .0,
-//                     // ),
-//                     DefaultTextStyle(
-//                       softWrap: false,
-//                       maxLines: 1,
-//                       overflow: TextOverflow.ellipsis,
-//                       textWidthBasis: TextWidthBasis.longestLine,
-//                       style: GoogleFonts.rubik().copyWith(
-//                         fontSize: (Responsive.widthMultiplier) * 4.5,
-//                         fontWeight: FontWeight.bold,
-//                         letterSpacing: 1.0,
-//                         color: ColorTheme.bgColor18,
-//                       ),
-//                       child: AnimatedTextKit(
-//                         repeatForever: true,
-//                         animatedTexts: [
-//                           TypewriterAnimatedText(' Are Creative Team',
-//                               speed: const Duration(milliseconds: 300),
-//                               cursor: '_'),
-//                           TypewriterAnimatedText(' Provide',
-//                               speed: const Duration(milliseconds: 300),
-//                               cursor: '_'),
-//                           TypewriterAnimatedText(' Create',
-//                               speed: const Duration(milliseconds: 300),
-//                               cursor: '_'),
-//                           TypewriterAnimatedText(' Care About You',
-//                               speed: const Duration(milliseconds: 300),
-//                               cursor: '_'),
-//                         ],
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),

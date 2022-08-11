@@ -40,12 +40,20 @@ enum PickerType {
 enum ProfileOptions {
   edit,
   blogs,
+  drafts,
+  category,
+  messages,
 }
 
 enum WriteOptions {
   blog,
   book,
   unknown,
+}
+
+enum BlogAction {
+  update,
+  create,
 }
 
 enum Cat {
@@ -103,4 +111,9 @@ enum ColorBoxType {
   fontBackgroundColor,
   decorationColor,
   unknown,
+}
+
+enum BlogType {
+  draft,
+  published,
 }

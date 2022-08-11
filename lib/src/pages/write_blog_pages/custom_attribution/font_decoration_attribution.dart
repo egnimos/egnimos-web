@@ -80,7 +80,7 @@ class FontDecorationColorDecorationAttribution implements Attribution {
   });
 
   @override
-  String get id => 'fontBackgroundColorDecorationAttribution';
+  String get id => 'fontDecorationColorDecorationAttribution';
 
   final Color fontDecorationColor;
 

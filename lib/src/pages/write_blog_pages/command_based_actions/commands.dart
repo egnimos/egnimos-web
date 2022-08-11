@@ -10,6 +10,8 @@ final List<String> commands = [
   h4,
   h5,
   h6,
+  ul,
+  ol,
   blockquote,
   checkbox,
   table,

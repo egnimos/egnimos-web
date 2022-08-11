@@ -9,6 +9,8 @@ Map<String, String> commandNames = {
   h4: "Header 4",
   h5: "Header 5",
   h6: "Header 6",
+  ul: "Unordered List",
+  ol: "Ordered List",
   blockquote: "Blockquote",
   checkbox: "Checkbox",
   table: "Table",

@@ -1,14 +1,8 @@
-import 'package:egnimos/src/pages/write_blog_pages/command_based_actions/command_suggestion_constants.dart';
 import 'package:egnimos/src/pages/write_blog_pages/command_based_actions/command_suggestion_handler.dart';
-import 'package:egnimos/src/pages/write_blog_pages/custom_attribution/font_decoration_attribution.dart';
-import 'package:egnimos/src/pages/write_blog_pages/custom_editor_comand.dart/convert_command_hr_node.dart';
-import 'package:egnimos/src/pages/write_blog_pages/custom_editor_comand.dart/shift_to_newline.dart';
 import 'package:egnimos/src/pages/write_blog_pages/toolbar/option_toolbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:super_editor/super_editor.dart';
-
-import '../toolbar/editor_tool_bar.dart';
 import 'command_constants.dart';
 import 'commands.dart';
 

@@ -1,17 +1,15 @@
 import 'package:egnimos/src/config/k.dart';
-import 'package:egnimos/src/pages/about.dart';
+import 'package:egnimos/src/pages/about_page.dart';
 import 'package:egnimos/src/pages/auth_pages/auth_page.dart';
-import 'package:egnimos/src/pages/blog.dart';
+import 'package:egnimos/src/pages/blog_page.dart';
 import 'package:egnimos/src/pages/profile_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
 import '/main.dart';
 import '../pages/auth_pages/auth_page.dart';
 import '../pages/home.dart';
-import '../providers/auth_provider.dart';
 import '../theme/color_theme.dart';
 import '../utility/enum.dart';
 
@@ -165,7 +163,7 @@ class NavButtons extends StatelessWidget {
                 option: NavOptions.blog.name,
                 selectedOption: selectedOption.name,
                 onTap: () {
-                  Navigator.of(context).pushNamed(Blog.routeName);
+                  Navigator.of(context).pushNamed(BlogPage.routeName);
                 },
               ),
               SizedBox(

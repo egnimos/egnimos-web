@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:egnimos/src/models/blog.dart';
 import 'package:egnimos/src/models/category.dart';
 import 'package:egnimos/src/providers/blog_provider.dart';
 import 'package:egnimos/src/widgets/blog_post_card.dart';
@@ -11,11 +9,11 @@ import '../config/k.dart';
 import '../theme/color_theme.dart';
 import '../utility/enum.dart';
 
-class BlogList extends StatelessWidget {
+class BlogList extends StatefulWidget {
   final String heading;
   final bool isLoading;
   final List<Category> categories;
-  final void Function(Cat catType) onClick;
+  final Future<void> Function(Cat catType) onClick;
 
   const BlogList({
     required this.onClick,
@@ -24,6 +22,17 @@ class BlogList extends StatelessWidget {
     required this.heading,
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<BlogList> createState() => _BlogListState();
+}
+
+class _BlogListState extends State<BlogList> {
+  @override
+  void initState() {
+    super.initState();
+    widget.onClick(Cat.all);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,19 +49,18 @@ class BlogList extends StatelessWidget {
             children: [
               //heading
               Text(
-                  heading,
-                  maxLines: 1,
-                  softWrap: false,
-                  style: GoogleFonts.rubik().copyWith(
-                    fontSize: constraints.maxWidth > K.kTableteWidth
-                        ? (constraints.maxWidth / 100) * 2.6
-                        : 22.0,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.0,
-                    color: ColorTheme.bgColor,
-                  ),
+                widget.heading,
+                maxLines: 1,
+                softWrap: false,
+                style: GoogleFonts.rubik().copyWith(
+                  fontSize: constraints.maxWidth > K.kTableteWidth
+                      ? (constraints.maxWidth / 100) * 2.6
+                      : 22.0,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.0,
+                  color: ColorTheme.bgColor,
                 ),
-             
+              ),
 
               const SizedBox(
                 height: 20.0,
@@ -67,87 +75,81 @@ class BlogList extends StatelessWidget {
               ),
 
               BlogCategoryList(
-                categories: categories,
+                categories: widget.categories,
                 constraints: constraints,
-                onClick: (val) => onClick,
+                onClick: (val) => widget.onClick,
               ),
               const SizedBox(
                 height: 20.0,
               ),
 
               //Blogs
-              if (isLoading)
-                const Align(
-                  child: CircularProgressIndicator(),
-                )
-              else
-                Consumer<BlogProvider>(
-                  builder: (context, bp, __) => bp.blogs.isEmpty
-                      ? Container(
-                          width: double.infinity,
-                          height: 250.0,
-                          alignment: Alignment.center,
-                          child: Column(
-                            children: [
-                              Expanded(
-                                child: Lottie.asset(
-                                  "assets/json/not-found.json",
-                                  reverse: true,
-                                ),
+              Consumer<BlogProvider>(
+                builder: (context, bp, __) => bp.publishedBlogSnaps.isEmpty
+                    ? Container(
+                        width: double.infinity,
+                        height: 250.0,
+                        alignment: Alignment.center,
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: Lottie.asset(
+                                "assets/json/not-found.json",
+                                reverse: true,
                               ),
-                              const SizedBox(
-                                height: 20.0,
-                              ),
-                              Text(
-                                "no blog post available",
-                                style: Theme.of(context).textTheme.headline5,
-                              ),
-                            ],
-                          ),
-                        )
-                      : Wrap(
-                          children: bp.blogs
-                              .map((bo) => BlogPostCard(blog: bo))
-                              .toList(),
+                            ),
+                            const SizedBox(
+                              height: 20.0,
+                            ),
+                            Text(
+                              "no blog post available",
+                              style: Theme.of(context).textTheme.headline5,
+                            ),
+                          ],
                         ),
-                ),
-
-              //error
-              // if (snapshot.hasError) {
-              //   return Align(
-              //     child: Padding(
-              //       padding: const EdgeInsets.all(8.0),
-              //       child: Text(snapshot.error.toString()),
-              //     ),
-              //   );
-              // }
+                      )
+                    : Wrap(
+                        children: bp.publishedBlogSnaps
+                            .map((bo) => BlogPostCard(
+                                  blog: bo,
+                                  showEditOptions: false,
+                                ))
+                            .toList(),
+                      ),
+              ),
 
               const SizedBox(
                 height: 100.0,
               ),
 
-              OutlinedButton(
-                onPressed: () {},
-                style: OutlinedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  elevation: 6.0,
-                  fixedSize: const Size(150.0, 50.0),
-                  minimumSize: const Size(150.0, 50.0),
-                  side: const BorderSide(color: ColorTheme.bgColor10),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-                child: Text(
-                  "Load More",
-                  style: GoogleFonts.rubik().copyWith(
-                    fontSize: 18.0,
-                    // letterSpacing: 1.1,
-                    fontWeight: FontWeight.w500,
-                    color: ColorTheme.bgColor10,
-                  ),
-                ),
-              )
+              widget.isLoading
+                  ? const Align(
+                      child: CircularProgressIndicator(),
+                    )
+                  : OutlinedButton(
+                      onPressed: () async {
+                        await widget.onClick(Cat.all);
+                      },
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        elevation: 6.0,
+                        fixedSize: const Size(150.0, 50.0),
+                        minimumSize: const Size(150.0, 50.0),
+                        side: const BorderSide(color: ColorTheme.bgColor10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                      ),
+                      child: Text(
+                        "Load More",
+                        style: GoogleFonts.rubik().copyWith(
+                          fontSize: 18.0,
+                          // letterSpacing: 1.1,
+                          fontWeight: FontWeight.w500,
+                          color: ColorTheme.bgColor10,
+                        ),
+                      ),
+                    )
             ],
           ),
         );
@@ -181,7 +183,7 @@ class _BlogCategoryListState extends State<BlogCategoryList> {
       child: Row(
         children: widget.categories
             .map(
-              (cat) => BlogType(
+              (cat) => BlogTypeOptionWidget(
                 constraints: widget.constraints,
                 cat: cat,
                 selectedCat: _selectedCat,
@@ -200,13 +202,13 @@ class _BlogCategoryListState extends State<BlogCategoryList> {
   }
 }
 
-class BlogType extends StatefulWidget {
+class BlogTypeOptionWidget extends StatefulWidget {
   final Category cat;
   final Cat selectedCat;
   final BoxConstraints constraints;
   final void Function(Cat cat) onSelect;
 
-  const BlogType({
+  const BlogTypeOptionWidget({
     required this.cat,
     required this.selectedCat,
     required this.constraints,
@@ -215,10 +217,10 @@ class BlogType extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<BlogType> createState() => _BlogTypeState();
+  State<BlogTypeOptionWidget> createState() => _BlogTypeOptionWidgetState();
 }
 
-class _BlogTypeState extends State<BlogType> {
+class _BlogTypeOptionWidgetState extends State<BlogTypeOptionWidget> {
   double height = 0.0;
   @override
   Widget build(BuildContext context) {

@@ -41,3 +41,9 @@ const drag = "@<drag>";
 
 //command to display the options
 const options = "@<options>";
+
+//ordered list
+const ol = "@<ol>";
+
+//unordered list
+const ul = "@<ul>";

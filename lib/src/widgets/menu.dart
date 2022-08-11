@@ -1,14 +1,10 @@
-import 'package:egnimos/src/pages/blog.dart';
+import 'package:egnimos/src/pages/blog_page.dart';
 import 'package:egnimos/src/pages/profile_page.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../models/user.dart';
 import '/main.dart';
-import '../pages/about.dart';
+import '../pages/about_page.dart';
 import '../pages/auth_pages/auth_page.dart';
 import '../pages/home.dart';
-import '../providers/auth_provider.dart';
 import '../theme/color_theme.dart';
 import '../utility/enum.dart';
 import 'buttons.dart';
@@ -88,7 +84,7 @@ class Menu extends StatelessWidget {
                     option: NavOptions.blog.name,
                     selectedOption: selectedOption.name,
                     onTap: () {
-                      Navigator.of(context).pushNamed(Blog.routeName);
+                      Navigator.of(context).pushNamed(BlogPage.routeName);
                     },
                   ),
                   const SizedBox(

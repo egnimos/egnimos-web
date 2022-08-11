@@ -1,15 +1,17 @@
 import 'package:cross_file/cross_file.dart';
 import 'package:egnimos/src/pages/write_blog_pages/command_based_actions/command_constants.dart';
 import 'package:egnimos/src/pages/write_blog_pages/command_based_actions/command_suggestion_constants.dart';
-import 'package:egnimos/src/pages/write_blog_pages/custom_editor_comand.dart/convert_command_img_node.dart';
+import 'package:egnimos/src/pages/write_blog_pages/custom_editor_comands/convert_command_img_node.dart';
 import 'package:egnimos/src/services/picker_service.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:super_editor/super_editor.dart';
-import '../custom_editor_comand.dart/convert_command_blockquote_node.dart';
-import '../custom_editor_comand.dart/convert_command_header_node.dart';
-import '../custom_editor_comand.dart/convert_command_hr_node.dart';
+import '../custom_editor_comands/convert_command_blockquote_node.dart';
+import '../custom_editor_comands/convert_command_checkbox_node.dart';
+import '../custom_editor_comands/convert_command_header_node.dart';
+import '../custom_editor_comands/convert_command_hr_node.dart';
+import '../custom_editor_comands/convert_command_list_node.dart';
 
 class OptionToolbar extends StatefulWidget {
   final ValueNotifier<Offset?> anchor;
@@ -99,6 +101,7 @@ class _OptionToolbarState extends State<OptionToolbar> {
           nodeId: widget.cmdNode.id,
         ),
       );
+      widget.runAfterExecution();
     }
 
     //Header
@@ -159,6 +162,7 @@ class _OptionToolbarState extends State<OptionToolbar> {
           break;
         default:
       }
+      widget.runAfterExecution();
     }
 
     //Blockquote
@@ -168,6 +172,39 @@ class _OptionToolbarState extends State<OptionToolbar> {
           nodeId: widget.cmdNode.id,
         ),
       );
+      widget.runAfterExecution();
+    }
+
+    //checkbox
+    if (cmdText == checkbox) {
+      widget.editor.executeCommand(
+        ConvertCommandToCheckboxNode(
+          nodeId: widget.cmdNode.id,
+        ),
+      );
+      widget.runAfterExecution();
+    }
+
+    //ordered list
+    if (cmdText == ol) {
+      widget.editor.executeCommand(
+        ConvertCommandToListItemNode(
+          nodeId: widget.cmdNode.id,
+          type: ListItemType.ordered,
+        ),
+      );
+      widget.runAfterExecution();
+    }
+
+    //unordered list
+    if (cmdText == ul) {
+      widget.editor.executeCommand(
+        ConvertCommandToListItemNode(
+          nodeId: widget.cmdNode.id,
+          type: ListItemType.unordered,
+        ),
+      );
+      widget.runAfterExecution();
     }
 
     //Horizontal Image
@@ -185,8 +222,8 @@ class _OptionToolbarState extends State<OptionToolbar> {
         //set the node
         onSetCommandBasedImage(file.path);
       }
+      widget.runAfterExecution();
     }
-    widget.runAfterExecution();
     // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
     // widget.editor.document.notifyListeners();
   }

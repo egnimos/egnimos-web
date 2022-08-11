@@ -1,11 +1,10 @@
 import 'dart:math';
 
+import 'package:egnimos/src/pages/write_blog_pages/custom_attribution/attribution_holder.dart';
 import 'package:egnimos/src/pages/write_blog_pages/custom_attribution/font_size_attribution.dart';
 import 'package:egnimos/src/pages/write_blog_pages/editor_style_sheet.dart';
 import 'package:egnimos/src/pages/write_blog_pages/styles/font_style.dart';
 import 'package:egnimos/src/theme/color_theme.dart';
-import 'package:egnimos/src/widgets/color_picker_dialouge.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -345,27 +344,81 @@ class _EditorToolbarState extends State<EditorToolbar> {
     });
   }
 
-  void _removeFontSizeAttribution(double initialValue) {
-    widget.editor.executeCommand(
-      RemoveTextAttributionsCommand(
-        documentSelection: widget.composer.selection!,
-        attributions: {FontSizeDecorationAttribution(fontSize: initialValue)},
+  void removeAttributionOfTheGivenSpanRange(Attribution attribution) {
+    final selection = widget.composer.selection!;
+    final selectedNode =
+        widget.editor.document.getNodeById(selection.extent.nodeId);
+    if (selectedNode is! TextNode) {
+      return;
+    }
+
+    final extentOffset = (selection.extent.nodePosition as TextPosition).offset;
+    final baseOffset = (selection.base.nodePosition as TextPosition).offset;
+    final selectionStart = min(baseOffset, extentOffset);
+    final selectionEnd = max(baseOffset, extentOffset);
+    final attributions = selectedNode.text.getAllAttributionsThroughout(
+      SpanRange(
+        start: selectionStart,
+        end: selectionEnd - 1,
+      ),
+    );
+
+    for (var attr in attributions) {
+      if (attr.id == attribution.id) {
+        selectedNode.text.removeAttribution(
+          attr,
+          SpanRange(
+            start: selectionStart,
+            end: selectionEnd - 1,
+          ),
+        );
+      }
+    }
+  }
+
+  //apply the attribution spans to the selections
+  void applyAttributionOfTheGivenSpanRange(Attribution attribution) {
+    final selection = widget.composer.selection!;
+    final selectedNode =
+        widget.editor.document.getNodeById(selection.extent.nodeId);
+    if (selectedNode is! TextNode) {
+      return;
+    }
+
+    final extentOffset = (selection.extent.nodePosition as TextPosition).offset;
+    final baseOffset = (selection.base.nodePosition as TextPosition).offset;
+    final selectionStart = min(baseOffset, extentOffset);
+    final selectionEnd = max(baseOffset, extentOffset);
+    selectedNode.text.addAttribution(
+      attribution,
+      SpanRange(
+        start: selectionStart,
+        end: selectionEnd - 1,
       ),
     );
   }
 
-  void _setFontSize(double value) {
-    widget.editor.executeCommand(
-      AddTextAttributionsCommand(
-        documentSelection: widget.composer.selection!,
-        attributions: {
-          FontSizeDecorationAttribution(
-            fontSize: value,
-          )
-        },
-      ),
-    );
-  }
+  // void _removeFontSizeAttribution(double initialValue) {
+  //   widget.editor.executeCommand(
+  //     RemoveTextAttributionsCommand(
+  //       documentSelection: widget.composer.selection!,
+  //       attributions: {FontSizeDecorationAttribution(fontSize: initialValue)},
+  //     ),
+  //   );
+  // }
+
+  // void _setFontSize(double value) {
+  //   widget.editor.executeCommand(
+  //     AddTextAttributionsCommand(
+  //       documentSelection: widget.composer.selection!,
+  //       attributions: {
+  //         FontSizeDecorationAttribution(
+  //           fontSize: value,
+  //         )
+  //       },
+  //     ),
+  //   );
+  // }
 
   /// Returns true if the current text selection includes part
   /// or all of a single link, returns false if zero links are
@@ -485,6 +538,14 @@ class _EditorToolbarState extends State<EditorToolbar> {
       linkAttribution,
       trimmedRange,
     );
+
+    //add it to the decoration holder
+    // AttributionHolder.saveDecorations(
+    //   composer: widget.composer,
+    //   editor: widget.editor,
+    //   attribution: linkAttribution,
+    //   funcType: DecorationFunctionType.add,
+    // );
 
     // Clear the field and hide the URL bar
     _urlController.clear();
@@ -669,28 +730,48 @@ class _EditorToolbarState extends State<EditorToolbar> {
                 pickerColor: fontColor,
                 onColorChanged: (color) {
                   if (_colorBoxType == ColorBoxType.fontColor) {
-                    widget.editor.executeCommand(
-                      RemoveTextAttributionsCommand(
-                        documentSelection: widget.composer.selection!,
-                        attributions: {
-                          FontColorDecorationAttribution(
-                            fontColor: fontColor,
-                          )
-                        },
+                    // widget.editor.executeCommand(
+                    //   RemoveTextAttributionsCommand(
+                    //     documentSelection: widget.composer.selection!,
+                    //     attributions: {
+                    //       FontColorDecorationAttribution(
+                    //         fontColor: fontColor,
+                    //       )
+                    //     },
+                    //   ),
+                    // );
+                    removeAttributionOfTheGivenSpanRange(
+                      FontColorDecorationAttribution(
+                        fontColor: fontColor,
                       ),
                     );
 
                     //set the updated value
-                    widget.editor.executeCommand(
-                      AddTextAttributionsCommand(
-                        documentSelection: widget.composer.selection!,
-                        attributions: {
-                          FontColorDecorationAttribution(
-                            fontColor: color,
-                          )
-                        },
+                    // widget.editor.executeCommand(
+                    //   AddTextAttributionsCommand(
+                    //     documentSelection: widget.composer.selection!,
+                    //     attributions: {
+                    //       FontColorDecorationAttribution(
+                    //         fontColor: color,
+                    //       )
+                    //     },
+                    //   ),
+                    // );
+                    applyAttributionOfTheGivenSpanRange(
+                      FontColorDecorationAttribution(
+                        fontColor: color,
                       ),
                     );
+
+                    //add it to the decoration holder
+                    // AttributionHolder.saveDecorations(
+                    //   composer: widget.composer,
+                    //   editor: widget.editor,
+                    //   attribution: FontColorDecorationAttribution(
+                    //     fontColor: color,
+                    //   ),
+                    //   funcType: DecorationFunctionType.add,
+                    // );
 
                     //update the intial font color value
                     fontColor = color;
@@ -699,27 +780,47 @@ class _EditorToolbarState extends State<EditorToolbar> {
                   //set background color
                   if (_colorBoxType == ColorBoxType.fontBackgroundColor) {
                     //remove intiial attribution
-                    widget.editor.executeCommand(
-                      RemoveTextAttributionsCommand(
-                        documentSelection: widget.composer.selection!,
-                        attributions: {
-                          FontBackgroundColorDecorationAttribution(
-                            fontBackgroundColor: fontBackgroundColor,
-                          )
-                        },
+                    // widget.editor.executeCommand(
+                    //   RemoveTextAttributionsCommand(
+                    //     documentSelection: widget.composer.selection!,
+                    //     attributions: {
+                    //       FontBackgroundColorDecorationAttribution(
+                    //         fontBackgroundColor: fontBackgroundColor,
+                    //       )
+                    //     },
+                    //   ),
+                    // );
+                    removeAttributionOfTheGivenSpanRange(
+                      FontBackgroundColorDecorationAttribution(
+                        fontBackgroundColor: fontBackgroundColor,
+                      ),
+                    );
+                    applyAttributionOfTheGivenSpanRange(
+                      FontBackgroundColorDecorationAttribution(
+                        fontBackgroundColor: color,
                       ),
                     );
                     //set the updated value
-                    widget.editor.executeCommand(
-                      AddTextAttributionsCommand(
-                        documentSelection: widget.composer.selection!,
-                        attributions: {
-                          FontBackgroundColorDecorationAttribution(
-                            fontBackgroundColor: color,
-                          )
-                        },
-                      ),
-                    );
+                    // widget.editor.executeCommand(
+                    //   AddTextAttributionsCommand(
+                    //     documentSelection: widget.composer.selection!,
+                    //     attributions: {
+                    //       FontBackgroundColorDecorationAttribution(
+                    //         fontBackgroundColor: color,
+                    //       )
+                    //     },
+                    //   ),
+                    // );
+
+                    //add it to the decoration holder
+                    // AttributionHolder.saveDecorations(
+                    //   composer: widget.composer,
+                    //   editor: widget.editor,
+                    //   attribution: FontBackgroundColorDecorationAttribution(
+                    //     fontBackgroundColor: color,
+                    //   ),
+                    //   funcType: DecorationFunctionType.add,
+                    // );
 
                     //update the intial font background color value
                     fontBackgroundColor = color;
@@ -728,27 +829,47 @@ class _EditorToolbarState extends State<EditorToolbar> {
                   //set the decoration color
                   if (_colorBoxType == ColorBoxType.decorationColor) {
                     //remove intiial attribution
-                    widget.editor.executeCommand(
-                      RemoveTextAttributionsCommand(
-                        documentSelection: widget.composer.selection!,
-                        attributions: {
-                          FontDecorationColorDecorationAttribution(
-                            fontDecorationColor: decorationColor,
-                          )
-                        },
+                    // widget.editor.executeCommand(
+                    //   RemoveTextAttributionsCommand(
+                    //     documentSelection: widget.composer.selection!,
+                    //     attributions: {
+                    //       FontDecorationColorDecorationAttribution(
+                    //         fontDecorationColor: decorationColor,
+                    //       )
+                    //     },
+                    //   ),
+                    // );
+                    removeAttributionOfTheGivenSpanRange(
+                      FontDecorationColorDecorationAttribution(
+                        fontDecorationColor: decorationColor,
+                      ),
+                    );
+                    applyAttributionOfTheGivenSpanRange(
+                      FontDecorationColorDecorationAttribution(
+                        fontDecorationColor: color,
                       ),
                     );
                     //set the updated value
-                    widget.editor.executeCommand(
-                      AddTextAttributionsCommand(
-                        documentSelection: widget.composer.selection!,
-                        attributions: {
-                          FontDecorationColorDecorationAttribution(
-                            fontDecorationColor: color,
-                          )
-                        },
-                      ),
-                    );
+                    // widget.editor.executeCommand(
+                    //   AddTextAttributionsCommand(
+                    //     documentSelection: widget.composer.selection!,
+                    //     attributions: {
+                    //       FontDecorationColorDecorationAttribution(
+                    //         fontDecorationColor: color,
+                    //       )
+                    //     },
+                    //   ),
+                    // );
+
+                    //add it to the decoration holder
+                    // AttributionHolder.saveDecorations(
+                    //   composer: widget.composer,
+                    //   editor: widget.editor,
+                    //   attribution: FontDecorationColorDecorationAttribution(
+                    //     fontDecorationColor: color,
+                    //   ),
+                    //   funcType: DecorationFunctionType.add,
+                    // );
 
                     //update the intial font decoration color value
                     decorationColor = color;
@@ -811,7 +932,16 @@ class _EditorToolbarState extends State<EditorToolbar> {
               //BOLD TOGGLE
               Center(
                 child: IconButton(
-                  onPressed: _toggleBold,
+                  onPressed: () {
+                    _toggleBold();
+                    //add it to the decoration holder
+                    // AttributionHolder.saveDecorations(
+                    //   composer: widget.composer,
+                    //   editor: widget.editor,
+                    //   attribution: boldAttribution,
+                    //   funcType: DecorationFunctionType.toggle,
+                    // );
+                  },
                   icon: Icon(
                     Icons.format_bold,
                     color: isBold ? ColorTheme.bgColor6 : null,
@@ -825,7 +955,16 @@ class _EditorToolbarState extends State<EditorToolbar> {
               //ITALICS TOGGLE
               Center(
                 child: IconButton(
-                  onPressed: _toggleItalics,
+                  onPressed: () {
+                    _toggleItalics();
+                    //add it to the decoration holder
+                    // AttributionHolder.saveDecorations(
+                    //   composer: widget.composer,
+                    //   editor: widget.editor,
+                    //   attribution: italicsAttribution,
+                    //   funcType: DecorationFunctionType.toggle,
+                    // );
+                  },
                   icon: Icon(
                     Icons.format_italic,
                     color: isItalic ? ColorTheme.bgColor6 : null,
@@ -839,7 +978,16 @@ class _EditorToolbarState extends State<EditorToolbar> {
               //STRIKE THROUGH TOGGLE
               Center(
                 child: IconButton(
-                  onPressed: _toggleStrikethrough,
+                  onPressed: () {
+                    _toggleStrikethrough();
+                    //add it to the decoration holder
+                    // AttributionHolder.saveDecorations(
+                    //   composer: widget.composer,
+                    //   editor: widget.editor,
+                    //   attribution: strikethroughAttribution,
+                    //   funcType: DecorationFunctionType.toggle,
+                    // );
+                  },
                   icon: Icon(
                     Icons.strikethrough_s,
                     color: isStrikeThrough ? ColorTheme.bgColor6 : null,
@@ -853,7 +1001,16 @@ class _EditorToolbarState extends State<EditorToolbar> {
               //UNDERLINE THROUGH TOGGLE
               Center(
                 child: IconButton(
-                  onPressed: _toggleUnderlinethrough,
+                  onPressed: () {
+                    _toggleUnderlinethrough();
+                    //add it to the decoration holder
+                    // AttributionHolder.saveDecorations(
+                    //   composer: widget.composer,
+                    //   editor: widget.editor,
+                    //   attribution: underlineAttribution,
+                    //   funcType: DecorationFunctionType.toggle,
+                    // );
+                  },
                   icon: Icon(
                     Icons.format_underline_rounded,
                     color: isUnderlineThrough ? ColorTheme.bgColor6 : null,
@@ -875,13 +1032,32 @@ class _EditorToolbarState extends State<EditorToolbar> {
                     _fontSizeController.value =
                         TextEditingValue(text: updatedFontSize.toString());
                     //remove intiial attribution
-                    _removeFontSizeAttribution(
-                      initialFontSize.toDouble(),
+                    // _removeFontSizeAttribution(
+                    //   initialFontSize.toDouble(),
+                    // );
+                    removeAttributionOfTheGivenSpanRange(
+                      FontSizeDecorationAttribution(
+                        fontSize: initialFontSize.toDouble(),
+                      ),
                     );
                     //set the updated value
-                    _setFontSize(
-                      updatedFontSize.toDouble(),
+                    // _setFontSize(
+                    //   updatedFontSize.toDouble(),
+                    // );
+                    applyAttributionOfTheGivenSpanRange(
+                      FontSizeDecorationAttribution(
+                        fontSize: updatedFontSize.toDouble(),
+                      ),
                     );
+                    //add it to the decoration holder
+                    // AttributionHolder.saveDecorations(
+                    //   composer: widget.composer,
+                    //   editor: widget.editor,
+                    //   attribution: FontSizeDecorationAttribution(
+                    //     fontSize: updatedFontSize,
+                    //   ),
+                    //   funcType: DecorationFunctionType.add,
+                    // );
                   },
                   icon: const Icon(Icons.add_rounded),
                   splashRadius: 16,
@@ -902,13 +1078,33 @@ class _EditorToolbarState extends State<EditorToolbar> {
                     _fontSizeController.value =
                         TextEditingValue(text: updatedFontSize.toString());
                     //remove intiial attribution
-                    _removeFontSizeAttribution(
-                      initialFontSize.toDouble(),
+                    // _removeFontSizeAttribution(
+                    //   initialFontSize.toDouble(),
+                    // );
+                    removeAttributionOfTheGivenSpanRange(
+                      FontSizeDecorationAttribution(
+                        fontSize: initialFontSize.toDouble(),
+                      ),
                     );
                     //set the updated value
-                    _setFontSize(
-                      updatedFontSize.toDouble(),
+                    // _setFontSize(
+                    //   updatedFontSize.toDouble(),
+                    // );
+                    applyAttributionOfTheGivenSpanRange(
+                      FontSizeDecorationAttribution(
+                        fontSize: updatedFontSize.toDouble(),
+                      ),
                     );
+
+                    //add it to the decoration holder
+                    // AttributionHolder.saveDecorations(
+                    //   composer: widget.composer,
+                    //   editor: widget.editor,
+                    //   attribution: FontSizeDecorationAttribution(
+                    //     fontSize: updatedFontSize,
+                    //   ),
+                    //   funcType: DecorationFunctionType.add,
+                    // );
                   },
                   icon: Transform.translate(
                     offset: const Offset(0.0, -10.0),
@@ -980,28 +1176,50 @@ class _EditorToolbarState extends State<EditorToolbar> {
                   elevation: 0,
                   onChanged: (decorationStyle) {
                     //remove intiial attribution
-                    widget.editor.executeCommand(
-                      RemoveTextAttributionsCommand(
-                        documentSelection: widget.composer.selection!,
-                        attributions: {
-                          FontDecorationStyleAttribution(
-                            fontDecorationStyle: this.decorationStyle,
-                          )
-                        },
+                    // widget.editor.executeCommand(
+                    //   RemoveTextAttributionsCommand(
+                    //     documentSelection: widget.composer.selection!,
+                    //     attributions: {
+                    //       FontDecorationStyleAttribution(
+                    //         fontDecorationStyle: this.decorationStyle,
+                    //       )
+                    //     },
+                    //   ),
+                    // );
+                    removeAttributionOfTheGivenSpanRange(
+                      FontDecorationStyleAttribution(
+                        fontDecorationStyle: this.decorationStyle,
                       ),
                     );
                     //set the updated value
-                    widget.editor.executeCommand(
-                      AddTextAttributionsCommand(
-                        documentSelection: widget.composer.selection!,
-                        attributions: {
-                          FontDecorationStyleAttribution(
-                            fontDecorationStyle:
-                                decorationStyle ?? TextDecorationStyle.solid,
-                          )
-                        },
+                    // widget.editor.executeCommand(
+                    //   AddTextAttributionsCommand(
+                    //     documentSelection: widget.composer.selection!,
+                    //     attributions: {
+                    //       FontDecorationStyleAttribution(
+                    //         fontDecorationStyle:
+                    //             decorationStyle ?? TextDecorationStyle.solid,
+                    //       )
+                    //     },
+                    //   ),
+                    // );
+                    applyAttributionOfTheGivenSpanRange(
+                      FontDecorationStyleAttribution(
+                        fontDecorationStyle:
+                            decorationStyle ?? TextDecorationStyle.solid,
                       ),
                     );
+
+                    //add it to the decoration holder
+                    // AttributionHolder.saveDecorations(
+                    //   composer: widget.composer,
+                    //   editor: widget.editor,
+                    //   attribution: FontDecorationStyleAttribution(
+                    //     fontDecorationStyle:
+                    //         decorationStyle ?? TextDecorationStyle.solid,
+                    //   ),
+                    //   funcType: DecorationFunctionType.add,
+                    // );
 
                     //update the intial font decoration color value
                     setState(() {
@@ -1202,13 +1420,32 @@ class _EditorToolbarState extends State<EditorToolbar> {
                   print("Initial Value :: " + initialFontSizeValue.toString());
                   print("final Value :: " + updatedFontSize.toString());
                   //remove intiial attribution
-                  _removeFontSizeAttribution(
-                    initialFontSizeValue.toDouble(),
+                  // _removeFontSizeAttribution(
+                  //   initialFontSizeValue.toDouble(),
+                  // );
+                  removeAttributionOfTheGivenSpanRange(
+                    FontSizeDecorationAttribution(
+                      fontSize: initialFontSizeValue.toDouble(),
+                    ),
                   );
                   //set the updated value
-                  _setFontSize(
-                    num.parse(updatedFontSize).toDouble(),
+                  applyAttributionOfTheGivenSpanRange(
+                    FontSizeDecorationAttribution(
+                      fontSize: num.parse(updatedFontSize),
+                    ),
                   );
+                  // _setFontSize(
+                  //   num.parse(updatedFontSize).toDouble(),
+                  // );
+                  //add it to the decoration holder
+                  // AttributionHolder.saveDecorations(
+                  //   composer: widget.composer,
+                  //   editor: widget.editor,
+                  //   attribution: FontSizeDecorationAttribution(
+                  //     fontSize: num.parse(updatedFontSize),
+                  //   ),
+                  //   funcType: DecorationFunctionType.add,
+                  // );
                   intialFontSize = num.parse(updatedFontSize);
                   _fontSizeFocusNode.requestFocus();
                 },

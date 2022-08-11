@@ -1,6 +1,3 @@
-import 'dart:ui';
-
-import 'package:egnimos/src/config/responsive.dart';
 import 'package:egnimos/src/pages/write_blog_pages/styles/header_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:super_editor/super_editor.dart';
@@ -17,6 +14,18 @@ StyleRules initialLayout() => [
               fontSize: 18,
               height: 1.4,
             ),
+          };
+        },
+      ),
+      StyleRule(
+        const BlockSelector("listItem"),
+        (doc, docNode) {
+          if (docNode is! ListItemNode) {
+            return {};
+          }
+
+          return {
+            "padding": const CascadingPadding.only(top: 24),
           };
         },
       ),

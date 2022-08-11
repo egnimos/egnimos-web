@@ -1,10 +1,8 @@
-import 'dart:ui';
-
 import 'package:egnimos/src/pages/write_blog_pages/command_based_actions/command_constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/services/text_editing.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:super_editor/super_editor.dart';
+
+import '../custom_attribution/named_attributions.dart';
 
 class CheckboxNode extends TextNode {
   CheckboxNode({
@@ -18,7 +16,7 @@ class CheckboxNode extends TextNode {
         super(id: id, text: text, metadata: metadata) {
     // Set a block type so that TaskNode's can be styled by
     // StyleRule's.
-    putMetadataValue("blockType", checkbox);
+    putMetadataValue("blockType", checkboxAttribution);
   }
 
   //check whether the task is complete or not
@@ -245,25 +243,39 @@ class CheckboxComponent extends StatelessWidget {
     Key? key,
     required this.textKey,
     required this.viewModel,
+    this.indentCalculator = _defaultIndentCalculator,
     this.showDebugPaint = false,
   }) : super(key: key);
 
   final GlobalKey textKey;
   final CheckboxComponentViewModel viewModel;
+  final double Function(TextStyle, int indent) indentCalculator;
   final bool showDebugPaint;
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = viewModel.textStyleBuilder({});
+    final indentSpace = indentCalculator(textStyle, viewModel.indent);
+    final lineHeight = textStyle.fontSize! * (textStyle.height ?? 1.0);
+    const manualVerticalAdjustment = 3.0;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 16, right: 4),
-          child: Checkbox(
-            value: viewModel.isComplete,
-            onChanged: (newValue) {
-              viewModel.setComplete(newValue!);
-            },
+        Container(
+          width: indentSpace,
+          margin: const EdgeInsets.only(top: manualVerticalAdjustment),
+          decoration: BoxDecoration(
+            border: showDebugPaint ? Border.all(width: 1, color: Colors.grey) : null,
+          ),
+          child: SizedBox(
+            height: lineHeight,
+            child: Checkbox(
+              value: viewModel.isComplete,
+              onChanged: (newValue) {
+                viewModel.setComplete(newValue!);
+              },
+            ),
           ),
         ),
         Expanded(
@@ -272,7 +284,7 @@ class CheckboxComponent extends StatelessWidget {
             text: viewModel.text,
             textStyleBuilder: (attributions) {
               // Show a strikethrough across the entire task if it's complete.
-              final style = viewModel.textStyleBuilder(attributions);
+              final style = textStyle.merge(textStyle);
               return viewModel.isComplete
                   ? style.copyWith(
                       decoration: style.decoration == null
@@ -291,4 +303,9 @@ class CheckboxComponent extends StatelessWidget {
       ],
     );
   }
+}
+
+
+double _defaultIndentCalculator(TextStyle textStyle, int indent) {
+  return (textStyle.fontSize! * 0.60) * 4 * (indent + 1);
 }

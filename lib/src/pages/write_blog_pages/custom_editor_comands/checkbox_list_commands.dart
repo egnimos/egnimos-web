@@ -1,6 +1,5 @@
-import 'package:egnimos/src/pages/write_blog_pages/custom_document_nodes/task_node.dart';
-import 'package:egnimos/src/pages/write_blog_pages/custom_editor_comand.dart/shift_to_newline.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:egnimos/src/pages/write_blog_pages/custom_document_nodes/checkbox_node.dart';
+import 'package:egnimos/src/pages/write_blog_pages/custom_editor_comands/shift_to_newline.dart';
 import 'package:flutter/services.dart';
 import 'package:super_editor/super_editor.dart';
 
@@ -41,7 +40,7 @@ class UnIndentCheckboxNodeCommand implements EditorCommand {
     if (checkbox.indent > 0) {
       checkbox.indent -= 1;
     } else {
-      ConvertListItemToParagraphCommand(
+      ConvertCheckboxToParagraphCommand(
         nodeId: nodeId,
       ).execute(document, transaction);
     }
@@ -238,8 +237,30 @@ ExecutionInstruction splitCheckboxItemWhenEnterPressed({
     return ExecutionInstruction.continueExecution;
   }
 
-  final didSplitCheckboxItem = editContext.commonOps.insertBlockLevelNewline();
+  final didSplitCheckboxItem = insertBlockLevelNewline(
+    editor: editContext.editor,
+    composer: editContext.composer,
+  );
   return didSplitCheckboxItem
+      ? ExecutionInstruction.haltExecution
+      : ExecutionInstruction.continueExecution;
+}
+
+ExecutionInstruction enterToInsertBlockNewlineForCheckbox({
+  required EditContext editContext,
+  required RawKeyEvent keyEvent,
+}) {
+  if (keyEvent.logicalKey != LogicalKeyboardKey.enter &&
+      keyEvent.logicalKey != LogicalKeyboardKey.numpadEnter) {
+    return ExecutionInstruction.continueExecution;
+  }
+
+  final didInsertBlockNewline = insertBlockLevelNewline(
+    editor: editContext.editor,
+    composer: editContext.composer,
+  );
+
+  return didInsertBlockNewline
       ? ExecutionInstruction.haltExecution
       : ExecutionInstruction.continueExecution;
 }
@@ -281,7 +302,8 @@ bool insertBlockLevelNewline({
   if (!composer.selection!.isCollapsed) {
     // The selection is not collapsed. Delete the selected content first,
     // then continue the process.
-    final newSelectionPosition = CommonEditorOperations.getDocumentPositionAfterExpandedDeletion(
+    final newSelectionPosition =
+        CommonEditorOperations.getDocumentPositionAfterExpandedDeletion(
       document: editor.document,
       selection: composer.selection!,
     );
@@ -303,7 +325,7 @@ bool insertBlockLevelNewline({
       return docOps!.convertToParagraph();
     }
 
-    // Split the list item into two.
+    // Split the checkbox item into two.
     editor.executeCommand(
       SplitCheckboxCommand(
         nodeId: extentNode.id,
@@ -312,52 +334,54 @@ bool insertBlockLevelNewline({
         newNodeId: newNodeId,
       ),
     );
-  } else if (extentNode is ParagraphNode) {
-    // Split the paragraph into two. This includes headers, blockquotes, and
-    // any other block-level paragraph.
-    final currentExtentPosition =
-        composer.selection!.extent.nodePosition as TextNodePosition;
-    final endOfParagraph = extentNode.endPosition;
+  }
+  // else if (extentNode is ParagraphNode) {
+  //   // Split the paragraph into two. This includes headers, blockquotes, and
+  //   // any other block-level paragraph.
+  //   final currentExtentPosition =
+  //       composer.selection!.extent.nodePosition as TextNodePosition;
+  //   final endOfParagraph = extentNode.endPosition;
 
-    editor.executeCommand(
-      SplitParagraphCommand(
-        nodeId: extentNode.id,
-        splitPosition: currentExtentPosition,
-        newNodeId: newNodeId,
-        replicateExistingMetadata:
-            currentExtentPosition.offset != endOfParagraph.offset,
-      ),
-    );
-  } else if (composer.selection!.extent.nodePosition
-      is UpstreamDownstreamNodePosition) {
-    final extentPosition = composer.selection!.extent.nodePosition
-        as UpstreamDownstreamNodePosition;
-    if (extentPosition.affinity == TextAffinity.downstream) {
-      // The caret sits on the downstream edge of block-level content. Insert
-      // a new paragraph after this node.
-      editor.executeCommand(EditorCommandFunction((doc, transaction) {
-        transaction.insertNodeAfter(
-          existingNode: extentNode,
-          newNode: ParagraphNode(
-            id: newNodeId,
-            text: AttributedText(text: ''),
-          ),
-        );
-      }));
-    } else {
-      // The caret sits on the upstream edge of block-level content. Insert
-      // a new paragraph before this node.
-      editor.executeCommand(EditorCommandFunction((doc, transaction) {
-        transaction.insertNodeBefore(
-          existingNode: extentNode,
-          newNode: ParagraphNode(
-            id: newNodeId,
-            text: AttributedText(text: ''),
-          ),
-        );
-      }));
-    }
-  } else {
+  //   editor.executeCommand(
+  //     SplitParagraphCommand(
+  //       nodeId: extentNode.id,
+  //       splitPosition: currentExtentPosition,
+  //       newNodeId: newNodeId,
+  //       replicateExistingMetadata:
+  //           currentExtentPosition.offset != endOfParagraph.offset,
+  //     ),
+  //   );
+  // } else if (composer.selection!.extent.nodePosition
+  //     is UpstreamDownstreamNodePosition) {
+  //   final extentPosition = composer.selection!.extent.nodePosition
+  //       as UpstreamDownstreamNodePosition;
+  //   if (extentPosition.affinity == TextAffinity.downstream) {
+  //     // The caret sits on the downstream edge of block-level content. Insert
+  //     // a new paragraph after this node.
+  //     editor.executeCommand(EditorCommandFunction((doc, transaction) {
+  //       transaction.insertNodeAfter(
+  //         existingNode: extentNode,
+  //         newNode: ParagraphNode(
+  //           id: newNodeId,
+  //           text: AttributedText(text: ''),
+  //         ),
+  //       );
+  //     }));
+  //   } else {
+  //     // The caret sits on the upstream edge of block-level content. Insert
+  //     // a new paragraph before this node.
+  //     editor.executeCommand(EditorCommandFunction((doc, transaction) {
+  //       transaction.insertNodeBefore(
+  //         existingNode: extentNode,
+  //         newNode: ParagraphNode(
+  //           id: newNodeId,
+  //           text: AttributedText(text: ''),
+  //         ),
+  //       );
+  //     }));
+  //   }
+  // }
+  else {
     // We don't know how to handle this type of node position. Do nothing.
     return false;
   }
