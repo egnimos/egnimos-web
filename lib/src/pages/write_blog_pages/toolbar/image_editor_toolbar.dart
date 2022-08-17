@@ -1,3 +1,4 @@
+import 'package:egnimos/src/config/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:super_editor/super_editor.dart';
 
@@ -44,7 +45,10 @@ class _ImageEditorToolbarState extends State<ImageEditorToolbar> {
   }
 
   void _makeImageFullBleed() {
-    widget.setWidth(widget.composer.selection!.extent.nodeId, double.infinity);
+    widget.setWidth(
+      widget.composer.selection!.extent.nodeId,
+      Responsive.widthMultiplier * 100.0,
+    );
   }
 
   @override

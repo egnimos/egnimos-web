@@ -1,12 +1,14 @@
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:egnimos/src/models/blog.dart';
 import 'package:egnimos/src/pages/view_blog_page.dart';
 import 'package:egnimos/src/pages/write_blog_pages/write_blog_page.dart';
 import 'package:egnimos/src/providers/blog_provider.dart';
 import 'package:egnimos/src/utility/enum.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dropzone/flutter_dropzone.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -30,6 +32,8 @@ class BlogPostCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDeleting = ValueNotifier<bool>(false);
+    final isTransfering = ValueNotifier<bool>(false);
+    final selectedTag = ValueNotifier<String>("");
     final user = Provider.of<AuthProvider>(context, listen: false).user;
     print(user);
     return Container(
@@ -144,11 +148,42 @@ class BlogPostCard extends StatelessWidget {
                   horizontal: 16.0,
                   vertical: 5.0,
                 ),
-                child: Text(
-                  blog.tags.join(" "),
-                  style: TextStyle(
-                    color: Colors.blue.shade600,
-                  ),
+                child: Wrap(
+                  children: blog.tags
+                      .map(
+                        (tag) => //tag
+                            MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          onEnter: (val) {
+                            selectedTag.value = tag;
+                          },
+                          onExit: (val) {
+                            selectedTag.value = "";
+                          },
+                          child: GestureDetector(
+                            onTap: () {
+                              print(tag);
+                            },
+                            child: ValueListenableBuilder<String>(
+                              valueListenable: selectedTag,
+                              builder: (context, value, child) => Text(
+                                tag + " ",
+                                style: GoogleFonts.openSans(
+                                  fontSize: 18.0,
+                                  decoration: tag == value
+                                      ? TextDecoration.underline
+                                      : null,
+                                  decorationThickness: 2.0,
+                                  decorationColor: Colors.blue.shade600,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.blue.shade600,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                      .toList(),
                 ),
               ),
 
@@ -254,6 +289,40 @@ class BlogPostCard extends StatelessWidget {
                       topRight: Radius.circular(10.0),
                     ),
                   ),
+
+                  if (blogType == BlogType.draft)
+                    //transfer
+                    ValueListenableBuilder<bool>(
+                      valueListenable: isTransfering,
+                      builder: (context, value, child) => optionWidget(
+                        onClick: () async {
+                          try {
+                            isTransfering.value = true;
+                            //publish the blog
+                            await Provider.of<BlogProvider>(context,
+                                    listen: false)
+                                .publishBlog(blog);
+                          } catch (e) {
+                            print(e);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  e.toString(),
+                                ),
+                              ),
+                            );
+                          } finally {
+                            isTransfering.value = false;
+                          }
+                        },
+                        color: Colors.blue,
+                        label: value ? "Processing..." : "Publish",
+                        radius: const BorderRadius.only(
+                          topLeft: Radius.circular(10.0),
+                          topRight: Radius.circular(10.0),
+                        ),
+                      ),
+                    ),
 
                   //delete
                   ValueListenableBuilder<bool>(

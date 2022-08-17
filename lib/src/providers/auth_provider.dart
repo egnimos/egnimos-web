@@ -93,19 +93,15 @@ class AuthProvider with ChangeNotifier {
         //   type: PickerType.image,
         // );
         final mimeInf = mime;
-        uri = await _up!.uploadFile(
-          file,
-          mimeInf.uploadType,
-          mimeInf.fileExt,
-        );
+        uri = await _up!.uploadFile(file, mimeInf.uploadType, mimeInf.fileExt,
+            childName: "user_files");
       }
       //else register or save the user
       final uInf = User(
         id: userId,
         name: userInfo.name,
         email: email,
-        uri: uri?.generatedUri ?? "",
-        uriName: uri?.fileName ?? "",
+        image: uri,
         gender: userInfo.gender,
         dob: userInfo.dob,
         ageAccountType: userInfo.ageAccountType,
@@ -196,20 +192,15 @@ class AuthProvider with ChangeNotifier {
         //   type: PickerType.image,
         // );
         final mimeInf = mime;
-        uri = await _up!.uploadFile(
-          file,
-          mimeInf.uploadType,
-          mimeInf.fileExt,
-          fileN: fileName,
-        );
+        uri = await _up!.uploadFile(file, mimeInf.uploadType, mimeInf.fileExt,
+            fileN: fileName, childName: "user_files");
       }
       //else register or save the user
       final uInf = User(
         id: userInfo.id,
         name: userInfo.name,
         email: userInfo.email,
-        uri: uri?.generatedUri ?? userInfo.uri,
-        uriName: uri?.fileName ?? userInfo.uriName,
+        image: uri ?? userInfo.image,
         gender: userInfo.gender,
         dob: userInfo.dob,
         ageAccountType: userInfo.ageAccountType,

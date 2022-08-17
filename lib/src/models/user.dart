@@ -1,3 +1,4 @@
+import 'package:egnimos/src/providers/upload_provider.dart';
 import 'package:egnimos/src/utility/enum.dart';
 
 class User {
@@ -6,8 +7,7 @@ class User {
   final String email;
   final Gender gender;
   final String dob;
-  final String uri;
-  final String uriName;
+  final UploadOutput? image;
   final AgeAccountType ageAccountType;
   final String createdAt;
   final String updatedAt;
@@ -18,8 +18,7 @@ class User {
     required this.email,
     required this.gender,
     required this.dob,
-    required this.uri,
-    required this.uriName,
+    required this.image,
     required this.ageAccountType,
     required this.createdAt,
     required this.updatedAt,
@@ -30,13 +29,12 @@ class User {
         id: data["id"],
         name: data["name"],
         email: data["email"],
-        uriName: data["uri_name"],
         gender: Gender.values.firstWhere(
           (element) => element.name == data["gender"],
           orElse: () => Gender.male,
         ),
         dob: data["dob"],
-        uri: data["uri"],
+        image: UploadOutput.fromJson(data["uri"]),
         ageAccountType: AgeAccountType.values.firstWhere(
           (element) => element.name == data["age_account_type"],
           orElse: () => AgeAccountType.adult,
@@ -51,8 +49,7 @@ class User {
         "email": email,
         "gender": gender.name,
         "dob": dob,
-        "uri": uri,
-        "uri_name": uriName,
+        "uri": image?.toJson(),
         "age_account_type": ageAccountType.name,
         "created_at": createdAt,
         "updated_at": updatedAt,

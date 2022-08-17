@@ -318,4 +318,44 @@ class BlogProvider with ChangeNotifier {
       rethrow;
     }
   }
+
+  //publish the blog from the draft
+  Future<void> publishBlog(Blog blog) async {
+    try {
+      final response = await firestoreInstance
+          .collection(draftArticleSnapsCollection)
+          .doc(blog.id)
+          .collection("blog")
+          .doc(blog.id)
+          .get();
+      final json = response.data()!;
+      final updatedBlog = Blog(
+        id: DocumentEditor.createNodeId(),
+        userId: blog.userId,
+        category: blog.category,
+        title: blog.title,
+        description: blog.description,
+        coverImage: blog.coverImage,
+        tags: blog.tags,
+        createdAt: blog.createdAt,
+        updatedAt: blog.updatedAt,
+      );
+      //save the blog
+      await saveBlog(
+        BlogType.published,
+        blogInfo: updatedBlog,
+        json: json,
+      );
+      //delete the blog
+      await deleteBlog(
+        BlogType.draft,
+        blogId: blog.id,
+      );
+      // _draftBlogSnaps.removeWhere((e) => e.id == blog.id);
+      _userPublishedBlogSnaps.add(updatedBlog);
+      notifyListeners();
+    } catch (error) {
+      rethrow;
+    }
+  }
 }

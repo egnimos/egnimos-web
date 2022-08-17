@@ -41,8 +41,10 @@ class _AuthFormState extends State<AuthForm> {
     id: "",
     name: "",
     email: "",
-    uri: "",
-    uriName: "",
+    image: UploadOutput(
+      fileName: "",
+      generatedUri: "",
+    ),
     gender: Gender.male,
     dob: "",
     ageAccountType: AgeAccountType.adult,
@@ -76,8 +78,7 @@ class _AuthFormState extends State<AuthForm> {
               id: userInfo.id,
               name: userInfo.name,
               email: userInfo.email,
-              uri: userInfo.uri,
-              uriName: userInfo.uriName,
+              image: userInfo.image,
               gender: val!,
               dob: userInfo.dob,
               ageAccountType: userInfo.ageAccountType,
@@ -130,8 +131,7 @@ class _AuthFormState extends State<AuthForm> {
           name: userInfo.name,
           email: userInfo.email,
           gender: userInfo.gender,
-          uri: userInfo.uri,
-          uriName: userInfo.uriName,
+          image: userInfo.image,
           dob: picked.toString(),
           ageAccountType: (int.parse(currYear) - int.parse(year)) > 16
               ? AgeAccountType.adult
@@ -176,6 +176,13 @@ class _AuthFormState extends State<AuthForm> {
               }
             } catch (e) {
               print(e.toString());
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    e.toString(),
+                  ),
+                ),
+              );
             }
           },
           child: Container(
@@ -275,8 +282,7 @@ class _AuthFormState extends State<AuthForm> {
                 name: val,
                 email: userInfo.email,
                 gender: userInfo.gender,
-                uri: userInfo.uri,
-                uriName: userInfo.uriName,
+                image: userInfo.image,
                 dob: userInfo.dob,
                 ageAccountType: userInfo.ageAccountType,
                 createdAt: userInfo.createdAt,

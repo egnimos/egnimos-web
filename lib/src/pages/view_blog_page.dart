@@ -1,14 +1,11 @@
-import 'dart:html';
-
 import 'package:egnimos/src/providers/blog_provider.dart';
 import 'package:egnimos/src/utility/enum.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:super_editor/super_editor.dart';
 
+import '../models/user.dart';
 import 'write_blog_pages/custom_document_nodes/checkbox_node.dart';
 import 'write_blog_pages/styles/header_styles.dart';
 import 'write_blog_pages/styles/inlinetext_styles.dart';
@@ -38,8 +35,10 @@ class _ViewBlogPageState extends State<ViewBlogPage> {
 
   late FocusNode _editorFocusNode;
 
-  late ScrollController _scrollController;
+  ScrollController? _scrollController;
+  User? userInfo;
   bool _isLoading = true;
+  bool _isInit = true;
 
   // final _darkBackground = const Color(0xFF222222);
   // final _lightBackground = Colors.white;
@@ -50,13 +49,16 @@ class _ViewBlogPageState extends State<ViewBlogPage> {
 
   @override
   void didChangeDependencies() {
-    loadInfo();
+    if (_isInit) {
+      loadInfo();
+    }
+    _isInit = false;
     super.didChangeDependencies();
   }
 
   @override
   void dispose() {
-    _scrollController.dispose();
+    _scrollController?.dispose();
     _editorFocusNode.dispose();
     _composer.dispose();
     super.dispose();
@@ -72,6 +74,7 @@ class _ViewBlogPageState extends State<ViewBlogPage> {
       _doc = mutableDoc..addListener(() {});
       _docEditor = DocumentEditor(document: _doc as MutableDocument);
       _composer = DocumentComposer()..addListener(() {});
+      _scrollController = ScrollController()..addListener(() {});
       _docOps = CommonEditorOperations(
         editor: _docEditor,
         composer: _composer,
@@ -79,8 +82,8 @@ class _ViewBlogPageState extends State<ViewBlogPage> {
             _docLayoutKey.currentState as DocumentLayout,
       );
       _editorFocusNode = FocusNode();
-      _scrollController = ScrollController()..addListener(() {});
     } catch (error) {
+      print(error);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(error.toString()),

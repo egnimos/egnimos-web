@@ -1,3 +1,4 @@
+import 'package:egnimos/src/config/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:super_editor/super_editor.dart';
 
@@ -16,10 +17,12 @@ const checkboxNode = "checkbox_node";
 ///[fromJson] to rewind back to the [ImageNode] object
 extension ImageNodeJsonParser on ImageNode {
   Map<String, dynamic> toJson(ImageNode node) {
+    print(double.infinity);
     final currentStyles = SingleColumnLayoutComponentStyles.fromMetadata(node);
     return {
       "id": node.id,
       "width": currentStyles.width,
+      "is_infinity": node.metadata["is_infinity"] ?? false,
       "node": imageNode,
       "uri": node.imageUrl,
       "alt_text": node.altText,
@@ -40,7 +43,9 @@ extension ImageNodeJsonParser on ImageNode {
     );
     final currentStyles = SingleColumnLayoutComponentStyles.fromMetadata(node);
     SingleColumnLayoutComponentStyles(
-      width: data["width"] ?? currentStyles.width,
+      width: data["is_infinity"] ?? false
+          ? Responsive.widthMultiplier * 100.0
+          : currentStyles.width,
       padding: currentStyles.padding,
     ).applyTo(node);
     return node;
@@ -125,7 +130,7 @@ extension AttributedTextJsonParser on AttributedText {
         attribution = strikethroughAttribution;
       } else if (attributionId == LinkAttribution(url: Uri.parse("")).id) {
         attribution = LinkAttribution(
-          url: data["decoration_data"]["url"],
+          url: Uri.parse(data["decoration_data"]["url"].toString()),
         );
       } else if (attributionId ==
           FontSizeDecorationAttribution(fontSize: 0).id) {

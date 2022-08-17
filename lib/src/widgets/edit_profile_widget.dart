@@ -37,8 +37,10 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
     id: "",
     name: "",
     email: "",
-    uri: "",
-    uriName: "",
+    image: UploadOutput(
+      fileName: "",
+      generatedUri: "",
+    ),
     gender: Gender.male,
     dob: "",
     ageAccountType: AgeAccountType.adult,
@@ -63,16 +65,15 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
         id: user!.id,
         name: user.name,
         email: user.email,
-        uri: user.uri,
-        uriName: user.uriName,
+        image: user.image,
         gender: user.gender,
         dob: user.dob,
         ageAccountType: user.ageAccountType,
         createdAt: user.createdAt,
         updatedAt: DateTime.now().toString(),
       );
-      initialFileName = user.uriName;
-      initialFileUrl = user.uri;
+      initialFileName = user.image?.fileName ?? "";
+      initialFileUrl = user.image?.generatedUri ?? "";
       selectedGender = user.gender;
       nameController.text = user.name;
       if (mounted) {
@@ -104,8 +105,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
               id: userInfo.id,
               name: userInfo.name,
               email: userInfo.email,
-              uri: userInfo.uri,
-              uriName: userInfo.uriName,
+              image: userInfo.image,
               gender: val!,
               dob: userInfo.dob,
               ageAccountType: userInfo.ageAccountType,
@@ -287,8 +287,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                     name: val,
                     email: userInfo.email,
                     gender: userInfo.gender,
-                    uri: userInfo.uri,
-                    uriName: userInfo.uriName,
+                    image: userInfo.image,
                     dob: userInfo.dob,
                     ageAccountType: userInfo.ageAccountType,
                     createdAt: userInfo.createdAt,

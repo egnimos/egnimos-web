@@ -23,96 +23,106 @@ class UserBlogsWidget extends StatefulWidget {
 }
 
 class _UserBlogsWidgetState extends State<UserBlogsWidget> {
-  bool _isInit = true;
-  bool isLoading = true;
+  // bool _isInit = true;
+  final isLoading = ValueNotifier<bool>(false);
   User? user;
 
-  @override
-  void didChangeDependencies() {
-    if (_isInit) {
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+
+  //   });
+  // }
+
+  void loadInfo() {
+    try {
+      isLoading.value = true;
       user = Provider.of<AuthProvider>(context, listen: false).user;
       widget.blogType == BlogType.published
           ? Provider.of<BlogProvider>(context, listen: false)
               .getUserPublishedBlogSnaps(Cat.all, user!.id)
-              .then(
-                (value) => setState(
-                  () => isLoading = false,
-                ),
-              )
+              .then((value) => isLoading.value = false)
           : Provider.of<BlogProvider>(context, listen: false)
               .getDraftBlogSnaps(Cat.all, user!.id)
-              .then(
-                (value) => setState(
-                  () => isLoading = false,
-                ),
-              );
+              .then((value) => isLoading.value = false);
+    } catch (e) {
+      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+        ),
+      );
     }
-    _isInit = false;
-    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) {
-      return const Align(
-        child: CircularProgressIndicator(),
-      );
-    } else {
-      return Consumer<BlogProvider>(builder: (context, bp, __) {
-        final isEmpty = widget.blogType == BlogType.published
-            ? bp.userPublishedBlogSnaps.isEmpty
-            : bp.draftBlogSnaps.isEmpty;
+    //load info
+    loadInfo();
+    return ValueListenableBuilder<bool>(
+        valueListenable: isLoading,
+        builder: (context, loading, child) {
+          if (loading) {
+            return const Align(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return Consumer<BlogProvider>(builder: (context, bp, __) {
+              final isEmpty = widget.blogType == BlogType.published
+                  ? bp.userPublishedBlogSnaps.isEmpty
+                  : bp.draftBlogSnaps.isEmpty;
 
-        return isEmpty
-            ? Container(
-                width: double.infinity,
-                height: 250.0,
-                alignment: Alignment.center,
-                child: Column(
-                  children: [
-                    Flexible(
-                      child: Lottie.asset(
-                        "assets/json/not-found.json",
-                        reverse: true,
-                        width: Responsive.imageSizeMultiplier * 30.0,
-                        height: Responsive.imageSizeMultiplier * 30.0,
+              return isEmpty
+                  ? Container(
+                      width: double.infinity,
+                      height: 250.0,
+                      alignment: Alignment.center,
+                      child: Column(
+                        children: [
+                          Flexible(
+                            child: Lottie.asset(
+                              "assets/json/not-found.json",
+                              reverse: true,
+                              width: Responsive.imageSizeMultiplier * 30.0,
+                              height: Responsive.imageSizeMultiplier * 30.0,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20.0,
+                          ),
+                          Text(
+                            "no ${widget.blogType.name} blogs post available",
+                            style: Theme.of(context).textTheme.headline5,
+                          ),
+                        ],
                       ),
-                    ),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    Text(
-                      "no ${widget.blogType.name} blogs post available",
-                      style: Theme.of(context).textTheme.headline5,
-                    ),
-                  ],
-                ),
-              )
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //blogs
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Wrap(
-                      children: widget.blogType == BlogType.published
-                          ? bp.userPublishedBlogSnaps
-                              .map((bo) => BlogPostCard(
-                                    blog: bo,
-                                    blogType: widget.blogType,
-                                  ))
-                              .toList()
-                          : bp.draftBlogSnaps
-                              .map((bo) => BlogPostCard(
-                                    blog: bo,
-                                    blogType: widget.blogType,
-                                  ))
-                              .toList(),
-                    ),
-                  ),
-                ],
-              );
-      });
-    }
+                    )
+                  : ListView(
+                      children: [
+                        //blogs
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Wrap(
+                            children: widget.blogType == BlogType.published
+                                ? bp.userPublishedBlogSnaps
+                                    .map((bo) => BlogPostCard(
+                                          blog: bo,
+                                          blogType: widget.blogType,
+                                        ))
+                                    .toList()
+                                : bp.draftBlogSnaps
+                                    .map((bo) => BlogPostCard(
+                                          blog: bo,
+                                          blogType: widget.blogType,
+                                        ))
+                                    .toList(),
+                          ),
+                        ),
+                      ],
+                    );
+            });
+          }
+        });
   }
 }

@@ -19,6 +19,7 @@ import 'package:egnimos/src/pages/write_blog_pages/styles/node_styles.dart';
 import 'package:egnimos/src/pages/write_blog_pages/toolbar/image_editor_toolbar.dart';
 import 'package:egnimos/src/providers/auth_provider.dart';
 import 'package:egnimos/src/providers/blog_provider.dart';
+import 'package:egnimos/src/providers/upload_provider.dart';
 import 'package:egnimos/src/theme/color_theme.dart';
 import 'package:egnimos/src/utility/enum.dart';
 import 'package:egnimos/src/utility/prefs_keys.dart';
@@ -356,8 +357,9 @@ class _BlogPageState extends State<WriteBlogPage> {
           setWidth: (nodeId, width) {
             //get the image node
             final imageNode = _documentEditor.document.getNodeById(nodeId);
+            imageNode!.putMetadataValue("is_infinity", true);
             final currentStyles =
-                SingleColumnLayoutComponentStyles.fromMetadata(imageNode!);
+                SingleColumnLayoutComponentStyles.fromMetadata(imageNode);
             //apply the styles
             SingleColumnLayoutComponentStyles(
               width: width,
@@ -452,7 +454,11 @@ class _BlogPageState extends State<WriteBlogPage> {
           category: Category(
             id: "",
             label: "Article",
-            image: "",
+            description: "",
+            image: UploadOutput(
+              fileName: "",
+              generatedUri: "",
+            ),
             catEnum: Cat.books,
           ),
           title: blogjson["title"],

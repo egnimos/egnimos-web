@@ -2,14 +2,30 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+const extensions = [
+  "png",
+  "jpg",
+  "jpeg",
+  "pdf",
+  "doc",
+  ".docx",
+  "mp4",
+  "mkv",
+  "gif",
+  "avi",
+  "webm",
+];
+
 class PickerService {
   Future<PlatformFile?> pick(
     BuildContext context, {
     required FileType fileType,
+    List<String>? allowedExtension,
   }) async {
     try {
       final xFile = await FilePicker.platform.pickFiles(
         type: fileType,
+        allowedExtensions: allowedExtension,
       );
 
       if (xFile == null) {

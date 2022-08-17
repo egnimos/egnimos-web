@@ -1,3 +1,4 @@
+import 'package:egnimos/src/providers/upload_provider.dart';
 import 'package:egnimos/src/utility/convert.dart';
 import 'package:egnimos/src/utility/enum.dart';
 
@@ -5,7 +6,8 @@ class Category {
   final String id;
   final String label;
   final int? color;
-  final String image;
+  final UploadOutput? image;
+  final String description;
   final Cat catEnum;
 
   Category({
@@ -13,6 +15,7 @@ class Category {
     required this.label,
     this.color,
     required this.image,
+    required this.description,
     required this.catEnum,
   });
 
@@ -20,7 +23,8 @@ class Category {
         id: data["id"],
         label: data["label"],
         color: data["color"],
-        image: data["image"],
+        image: UploadOutput.fromJson(data["image"]),
+        description: data["description"],
         catEnum: Convert.stringToenum<Cat>(
             Cat.values, data["cat_enum"], () => Cat.unknown),
       );
@@ -29,7 +33,8 @@ class Category {
         "id": id,
         "label": label,
         "color": color,
-        "image": image,
+        "image": image?.toJson(),
+        "description": description,
         "cat_enum": Convert.enumTostring(Cat.values, catEnum, () => null),
       };
 }

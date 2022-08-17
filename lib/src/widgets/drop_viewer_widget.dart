@@ -1,5 +1,6 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:egnimos/src/config/responsive.dart';
+import 'package:egnimos/src/theme/color_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -70,6 +71,79 @@ class _DropViewerWidgetState extends State<DropViewerWidget> {
         // else
         //   //child
         widget.child,
+
+        //tools
+        Positioned(
+          right: 0.0,
+          top: (Responsive.heightMultiplier * 50.0) - 150.0,
+          child: Container(
+            width: 80.0,
+            height: 300.0,
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20.0),
+                bottomLeft: Radius.circular(20.0),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.shade400,
+                  blurRadius: 30,
+                  spreadRadius: -5,
+                  offset: const Offset(0, 10),
+                )
+              ],
+              color: ColorTheme.secondaryTextColor,
+            ),
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 18.0,
+                ),
+                //file collection
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.collections,
+                    color: Colors.grey.shade800,
+                    size: 40.0,
+                  ),
+                ),
+                const SizedBox(
+                  height: 18.0,
+                ),
+                Divider(
+                  height: 10.0,
+                  color: Colors.grey.shade800,
+                ),
+                //save
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.save,
+                    color: Colors.grey.shade800,
+                    size: 40.0,
+                  ),
+                ),
+                const SizedBox(
+                  height: 18.0,
+                ),
+                Divider(
+                  height: 10.0,
+                  color: Colors.grey.shade800,
+                ),
+                //layout
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.design_services,
+                    color: Colors.grey.shade800,
+                    size: 40.0,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
 
         //show indicator
         if (_highlight)

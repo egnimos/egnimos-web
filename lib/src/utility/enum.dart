@@ -43,6 +43,7 @@ enum ProfileOptions {
   drafts,
   category,
   messages,
+  collections,
 }
 
 enum WriteOptions {
@@ -116,4 +117,10 @@ enum ColorBoxType {
 enum BlogType {
   draft,
   published,
+}
+
+enum CollectionFilesType {
+  collections,
+  extensions,
+  files,
 }

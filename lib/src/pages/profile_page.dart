@@ -2,7 +2,10 @@ import 'package:egnimos/src/config/k.dart';
 import 'package:egnimos/src/providers/auth_provider.dart';
 import 'package:egnimos/src/theme/color_theme.dart';
 import 'package:egnimos/src/utility/enum.dart';
+import 'package:egnimos/src/widgets/category_list_widget.dart';
+import 'package:egnimos/src/widgets/create_pop_up_modal_widget.dart';
 import 'package:egnimos/src/widgets/edit_profile_widget.dart';
+import 'package:egnimos/src/widgets/file_collection_list.dart';
 import 'package:egnimos/src/widgets/indicator_widget.dart';
 import 'package:egnimos/src/widgets/profile_nav_widget.dart';
 import 'package:egnimos/src/widgets/user_blogs_widget.dart';
@@ -28,6 +31,12 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
     loadInfo();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final routeInfo =
+          ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+      _selectedOptions = routeInfo?["profile_option"] ?? ProfileOptions.blogs;
+      setState(() {});
+    });
   }
 
   void loadInfo() async {
@@ -63,9 +72,19 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         );
       case ProfileOptions.category:
-        return Container();
+        return Expanded(
+          child: CategoryListWidget(
+            constraints: constraints,
+          ),
+        );
       case ProfileOptions.messages:
         return Container();
+      case ProfileOptions.collections:
+        return Expanded(
+          child: FileCollectionList(
+            constraints: constraints,
+          ),
+        );
       default:
         return Container();
     }
@@ -85,74 +104,125 @@ class _ProfilePageState extends State<ProfilePage> {
           )
         : LayoutBuilder(
             builder: (context, constraints) {
-              return Scaffold(
-                drawer: NavigationRailWide(
-                  selectedOption: _selectedOptions,
-                  isDrawer: true,
-                  constraints: constraints,
-                  onTap: (option) {
-                    setState(() {
-                      _selectedOptions = option;
-                    });
-                  },
-                ),
-                body: SizedBox(
-                  width: constraints.maxWidth,
-                  height: constraints.maxHeight,
-                  child: Row(
-                    children: [
-                      //navigation
-                      if (constraints.maxWidth > K.kTableteWidth)
+              return GestureDetector(
+                onTap: () {
+                  enableEditingFile.value = "";
+                },
+                child: Scaffold(
+                  drawer: NavigationRailWide(
+                    selectedOption: _selectedOptions,
+                    isDrawer: true,
+                    constraints: constraints,
+                    onTap: (option) {
+                      setState(() {
+                        _selectedOptions = option;
+                      });
+                    },
+                  ),
+                  body: SizedBox(
+                    width: constraints.maxWidth,
+                    height: constraints.maxHeight,
+                    child: Row(
+                      children: [
+                        //navigation
+                        if (constraints.maxWidth > K.kTableteWidth)
+                          Expanded(
+                            child: NavigationRailWide(
+                              selectedOption: _selectedOptions,
+                              constraints: constraints,
+                              onTap: (option) {
+                                setState(() {
+                                  _selectedOptions = option;
+                                });
+                              },
+                            ),
+                          ),
+
+                        //profile info
                         Expanded(
-                          child: NavigationRailWide(
-                            selectedOption: _selectedOptions,
-                            constraints: constraints,
-                            onTap: (option) {
-                              setState(() {
-                                _selectedOptions = option;
-                              });
-                            },
+                          flex: 4,
+                          child: Column(
+                            children: [
+                              //nav
+                              Consumer<AuthProvider>(
+                                builder: (context, ap, __) => ProfileNavWidget(
+                                  constraints: constraints,
+                                  userInf: ap.user!,
+                                ),
+                              ),
+
+                              //divider
+                              Divider(
+                                indent: 30,
+                                endIndent: 30,
+                                color: Colors.grey.shade800,
+                                height: 0.0,
+                              ),
+
+                              //screen
+                              switchScreens(constraints),
+                            ],
                           ),
                         ),
-
-                      //profile info
-                      Expanded(
-                        flex: 4,
-                        child: Column(
-                          children: [
-                            //nav
-                            Consumer<AuthProvider>(
-                              builder: (context, ap, __) => ProfileNavWidget(
-                                constraints: constraints,
-                                userInf: ap.user!,
-                              ),
-                            ),
-
-                            //divider
-                            Divider(
-                              indent: 30,
-                              endIndent: 30,
-                              color: Colors.grey.shade800,
-                              height: 0.0,
-                            ),
-
-                            //screen
-                            switchScreens(constraints),
-                          ],
+                      ],
+                    ),
+                  ),
+                  floatingActionButton: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      //upload image
+                      FloatingActionButton(
+                        backgroundColor: Colors.blue.shade400,
+                        child: const Icon(
+                          Icons.file_upload,
+                          color: Colors.white,
                         ),
+                        onPressed: () {
+                          IndicatorWidget.showCreateBlogModal(
+                            context,
+                            barrierDismissible: false,
+                            child: UploadFilePopUpModel(
+                              constraints: constraints,
+                            ),
+                          );
+                        },
+                      ),
+
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      //create category
+                      FloatingActionButton(
+                        backgroundColor: Colors.grey.shade900,
+                        child: const Icon(
+                          Icons.category,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          IndicatorWidget.showCreateBlogModal(
+                            context,
+                            child: CreateCategoryPopupModel(
+                                constraints: constraints),
+                          );
+                        },
+                      ),
+
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      //create
+                      FloatingActionButton(
+                        backgroundColor: ColorTheme.bgColor14,
+                        child: const Icon(
+                          Icons.create,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          IndicatorWidget.showCreateBlogModal(context);
+                        },
                       ),
                     ],
                   ),
-                ),
-                floatingActionButton: FloatingActionButton(
-                  backgroundColor: ColorTheme.bgColor14,
-                  child: const Icon(
-                    Icons.create,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    IndicatorWidget.showCreateBlogModal(context);
-                  },
                 ),
               );
             },
@@ -258,6 +328,18 @@ class NavigationRailWide extends StatelessWidget {
               index: ProfileOptions.category.name,
               selectedIndex: selectedOption.name,
               onTap: () => onTap(ProfileOptions.category),
+            ),
+
+            const SizedBox(
+              height: 20.0,
+            ),
+            //categories,
+            ProfileMenuButton(
+              value: "Collections",
+              icon: Icons.collections,
+              index: ProfileOptions.collections.name,
+              selectedIndex: selectedOption.name,
+              onTap: () => onTap(ProfileOptions.collections),
             ),
 
             const SizedBox(

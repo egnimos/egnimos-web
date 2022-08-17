@@ -41,9 +41,10 @@ class IndicatorWidget {
     );
   }
 
-  IndicatorWidget.showCreateBlogModal(BuildContext context, {Widget? child}) {
+  IndicatorWidget.showCreateBlogModal(BuildContext context, {Widget? child, bool barrierDismissible = true,}) {
     showDialog(
       context: context,
+      barrierDismissible: barrierDismissible,
       builder: (context) => Dialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16.0),

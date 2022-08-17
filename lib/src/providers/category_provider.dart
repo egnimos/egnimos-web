@@ -16,7 +16,19 @@ class CategoryProvider with ChangeNotifier {
           .collection(catCollection)
           .doc(cat.id)
           .set(cat.toJson());
+      _categories.removeWhere((c) => c.id == cat.id);
       _categories.add(cat);
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  //delete the category
+  Future<void> deleteCategory(String id) async {
+    try {
+      await firestoreInstance.collection(catCollection).doc(id).delete();
+      _categories.removeWhere((c) => c.id == id);
       notifyListeners();
     } catch (e) {
       rethrow;

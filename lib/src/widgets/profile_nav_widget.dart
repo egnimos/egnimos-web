@@ -50,9 +50,9 @@ class ProfileNavWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(100.0),
               image: DecorationImage(
                 image: CachedNetworkImageProvider(
-                  userInf.uri.isEmpty
+                  userInf.image?.generatedUri.isEmpty ?? true
                       ? "https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_960_720.png"
-                      : userInf.uri,
+                      : userInf.image!.generatedUri,
                 ),
                 fit: BoxFit.cover,
               ),

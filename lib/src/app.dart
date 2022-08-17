@@ -10,6 +10,8 @@ import 'config/responsive.dart';
 import 'pages/auth_pages/auth_page.dart';
 import 'pages/blog_page.dart';
 import 'pages/home.dart';
+import 'providers/category_provider.dart';
+import 'providers/collection_provider.dart';
 import 'providers/upload_provider.dart';
 
 class MyApp extends StatefulWidget {
@@ -33,6 +35,12 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider(
           create: (context) => BlogProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CategoryProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CollectionProvider(),
         ),
       ],
       child: LayoutBuilder(builder: (context, constraints) {

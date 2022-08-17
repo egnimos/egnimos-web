@@ -2,17 +2,22 @@ import 'package:cross_file/cross_file.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mime/mime.dart';
+import 'package:super_editor/super_editor.dart';
 import 'package:uuid/uuid.dart';
 
 import '/main.dart';
 import '../utility/enum.dart';
 
 class MimeModel {
+  String fileId;
   String uploadType;
   String fileExt;
   PickerType type;
+  XFile? file;
 
   MimeModel({
+    this.fileId = "",
+    this.file,
     required this.uploadType,
     required this.fileExt,
     required this.type,
@@ -27,6 +32,18 @@ class UploadOutput {
     required this.fileName,
     required this.generatedUri,
   });
+
+  //fromJson
+  factory UploadOutput.fromJson(Map<String, dynamic>? data) => UploadOutput(
+        fileName: data?["file_name"] ?? "",
+        generatedUri: data?["uri"] ?? "",
+      );
+
+  //toJson
+  Map<String, dynamic> toJson() => {
+        "file_name": fileName,
+        "uri": generatedUri,
+      };
 }
 
 class UploadProvider with ChangeNotifier {
@@ -39,6 +56,7 @@ class UploadProvider with ChangeNotifier {
     String type,
     String ext, {
     String? fileN,
+    required String childName,
   }) async {
     try {
       String fileName = "";
@@ -56,7 +74,8 @@ class UploadProvider with ChangeNotifier {
       );
       //CreateRefernce to path.
       //https://firebasestorage.googleapis.com/v0/b/big-buddy-14d48.appspot.com/o/images%2Fa873a3f5-0318-4021-9843-ae108cccb663.jpeg?alt=media&token=f333412e-232e-4735-9699-0cef425bb5d7
-      final ref = storage.ref().child("${type}s").child("/$fileName");
+      final ref =
+          storage.ref().child(childName).child("${type}s").child("/$fileName");
       final uploadTask = await ref.putData(await file.readAsBytes(), metaData);
       final downloadUrl = await uploadTask.ref.getDownloadURL();
       return UploadOutput(
@@ -91,14 +110,16 @@ class UploadProvider with ChangeNotifier {
     }
   }
 
-  Future<void> removeFiles(String fileName, PickerType type) async {
+  Future<void> removeFiles(
+      String fileName, PickerType type, String childName) async {
     try {
       if (fileName.isEmpty) return;
       //CreateRefernce to path.
       final bucketName =
           type == PickerType.pdf ? "applications" : "${type.name}s";
       //https://firebasestorage.googleapis.com/v0/b/big-buddy-14d48.appspot.com/o/images%2Fa873a3f5-0318-4021-9843-ae108cccb663.jpeg?alt=media&token=f333412e-232e-4735-9699-0cef425bb5d7
-      final ref = storage.ref().child(bucketName).child("/$fileName");
+      final ref =
+          storage.ref().child(childName).child(bucketName).child("/$fileName");
       await ref.delete();
     } catch (e) {
       rethrow;
