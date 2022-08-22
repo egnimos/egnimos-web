@@ -121,7 +121,7 @@ class _ViewBlogPageState extends State<ViewBlogPage> {
               stylesheet: defaultStylesheet.copyWith(
                 addRulesAfter: [
                   ...initialLayout(),
-                  ...headers(context),
+                  ...defaultHeaders(context),
                   ...nodeStyles(),
                 ],
                 inlineTextStyler: inlinetextStyle,

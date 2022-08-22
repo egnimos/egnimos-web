@@ -2,7 +2,7 @@ import 'package:egnimos/src/pages/write_blog_pages/command_based_actions/command
 import 'package:flutter/material.dart';
 import 'package:super_editor/super_editor.dart';
 
-import '../custom_attribution/named_attributions.dart';
+import '../named_attributions.dart';
 
 class CheckboxNode extends TextNode {
   CheckboxNode({
@@ -284,7 +284,7 @@ class CheckboxComponent extends StatelessWidget {
             text: viewModel.text,
             textStyleBuilder: (attributions) {
               // Show a strikethrough across the entire task if it's complete.
-              final style = textStyle.merge(textStyle);
+              final style = viewModel.textStyleBuilder(attributions);
               return viewModel.isComplete
                   ? style.copyWith(
                       decoration: style.decoration == null

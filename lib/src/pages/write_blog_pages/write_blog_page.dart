@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:egnimos/main.dart';
 import 'package:egnimos/src/models/blog.dart';
 import 'package:egnimos/src/models/category.dart';
+import 'package:egnimos/src/models/style_models/styler.dart';
 import 'package:egnimos/src/pages/profile_page.dart';
 import 'package:egnimos/src/pages/write_blog_pages/command_based_actions/execute_command.dart';
 import 'package:egnimos/src/pages/write_blog_pages/custom_attribution/attribution_holder.dart';
@@ -23,6 +25,7 @@ import 'package:egnimos/src/providers/upload_provider.dart';
 import 'package:egnimos/src/theme/color_theme.dart';
 import 'package:egnimos/src/utility/enum.dart';
 import 'package:egnimos/src/utility/prefs_keys.dart';
+import 'package:egnimos/src/widgets/create_blog_widgets/layout_option_widget.dart';
 import 'package:egnimos/src/widgets/create_pop_up_modal_widget.dart';
 import 'package:egnimos/src/widgets/drop_viewer_widget.dart';
 import 'package:flutter/material.dart';
@@ -527,39 +530,60 @@ class _BlogPageState extends State<WriteBlogPage> {
                 ),
               ),
             )
-          : DropViewerWidget(
-              onDrop: _onDropImage,
-              child: SuperEditor(
-                composer: _composer,
-                focusNode: _editorFocusNode,
-                documentLayoutKey: _docLayoutKey,
-                editor: _documentEditor,
-                selectionStyle: SelectionStyles(
-                  selectionColor: ColorTheme.primaryColor.shade200,
-                ),
-                keyboardActions: <DocumentKeyboardAction>[
-                  backspaceToUnIndentCheckboxItem,
-                  ...defaultKeyboardActions,
-                  tabToIndentCheckboxItem,
-                  shiftTabToUnIndentCheckbox,
-                  splitCheckboxItemWhenEnterPressed,
-                  enterToInsertBlockNewlineForCheckbox,
-                  saveDocument,
-                ],
-                componentBuilders: [
-                  ...defaultComponentBuilders,
-                  CheckBoxComponentBuilder(_documentEditor),
-                ],
-                stylesheet: defaultStylesheet.copyWith(
-                  addRulesAfter: [
-                    ...initialLayout(),
-                    ...headers(context),
-                    ...nodeStyles(),
-                  ],
-                  inlineTextStyler: inlinetextStyle,
-                ),
-              ),
-            ),
+          : ValueListenableBuilder<LayoutStyler>(
+              valueListenable: layoutStyler,
+              builder: (context, layoutStyle, __) {
+                return Container(
+                  decoration: BoxDecoration(
+                    image: layoutStyle.layoutBgUri.isEmpty
+                        ? null
+                        : const DecorationImage(
+                            image: CachedNetworkImageProvider(
+                                "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"),
+                            fit: BoxFit.cover,
+                          ),
+                  ),
+                  child: ColoredBox(
+                    color: layoutStyle.layoutColor,
+                    child: DropViewerWidget(
+                      onDrop: _onDropImage,
+                      child: ValueListenableBuilder<StyleRules>(
+                        valueListenable: updatedStyleRules,
+                        builder: (context, values, __) => SuperEditor(
+                          composer: _composer,
+                          focusNode: _editorFocusNode,
+                          documentLayoutKey: _docLayoutKey,
+                          editor: _documentEditor,
+                          selectionStyle: SelectionStyles(
+                            selectionColor: ColorTheme.primaryColor.shade200,
+                          ),
+                          keyboardActions: <DocumentKeyboardAction>[
+                            backspaceToUnIndentCheckboxItem,
+                            ...defaultKeyboardActions,
+                            tabToIndentCheckboxItem,
+                            shiftTabToUnIndentCheckbox,
+                            splitCheckboxItemWhenEnterPressed,
+                            enterToInsertBlockNewlineForCheckbox,
+                            saveDocument,
+                          ],
+                          componentBuilders: [
+                            ...defaultComponentBuilders,
+                            CheckBoxComponentBuilder(_documentEditor),
+                          ],
+                          stylesheet: defaultStylesheet.copyWith(
+                            addRulesAfter: [
+                              ...initialLayout(),
+                              ...defaultHeaders(context),
+                              ...nodeStyles(),
+                            ],
+                            inlineTextStyler: inlinetextStyle,
+                          ).copyWith(addRulesAfter: [...values]),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }),
     );
   }
 }

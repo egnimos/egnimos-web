@@ -107,6 +107,19 @@ enum TextType {
   unorderedListItem,
 }
 
+enum TextTypes {
+  header1,
+  header2,
+  header3,
+  header4,
+  header5,
+  header6,
+  paragraph,
+  blockquote,
+  listItem,
+  checkbox,
+}
+
 enum ColorBoxType {
   fontColor,
   fontBackgroundColor,
@@ -123,4 +136,11 @@ enum CollectionFilesType {
   collections,
   extensions,
   files,
+}
+
+enum CreateBlogOptions {
+  category,
+  collection,
+  layout,
+  unknown,
 }

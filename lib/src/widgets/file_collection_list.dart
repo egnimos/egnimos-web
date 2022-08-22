@@ -11,12 +11,17 @@ import '../providers/collection_provider.dart';
 import '../utility/enum.dart';
 
 final enableEditingFile = ValueNotifier<String>("");
+
 // ignore: must_be_immutable
 class FileCollectionList extends StatelessWidget {
-  final BoxConstraints constraints;
+  final BoxConstraints? constraints;
+  final bool disableActions;
+  final void Function(List<CollectionFile> files)? selectedFiles;
   FileCollectionList({
     Key? key,
-    required this.constraints,
+    this.constraints,
+    this.disableActions = false,
+    this.selectedFiles,
   }) : super(key: key);
   final stackScreen = ValueNotifier<List<CollectionFilesType>>([
     CollectionFilesType.collections,
@@ -45,6 +50,8 @@ class FileCollectionList extends StatelessWidget {
         return CollectionFiles(
           collectionName: collectionName,
           extensionName: extensionName,
+          selectedFiles: selectedFiles,
+          disableActions: disableActions,
         );
       default:
         return const SizedBox.shrink();
@@ -303,11 +310,14 @@ class ExtensionWidget extends StatelessWidget {
 class CollectionFiles extends StatefulWidget {
   final String collectionName;
   final String extensionName;
+  final bool disableActions;
+  final void Function(List<CollectionFile> files)? selectedFiles;
   const CollectionFiles({
     Key? key,
     required this.collectionName,
     required this.extensionName,
-    // required this.screenType,
+    this.disableActions = false,
+    this.selectedFiles,
   }) : super(key: key);
 
   @override
@@ -334,9 +344,9 @@ class _CollectionFilesState extends State<CollectionFiles> {
     }
   }
 
-  
   final editableFilename = TextEditingController();
   final focusNode = FocusNode();
+  List<CollectionFile> selectedFiles = [];
 
   Widget fileWidget(
     BuildContext context, {
@@ -352,70 +362,122 @@ class _CollectionFilesState extends State<CollectionFiles> {
           ),
           child: Column(
             children: [
-              //images
               Stack(
+                alignment: Alignment.center,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      final index = files.indexOf(file);
-                      IndicatorWidget.showCreateBlogModal(
-                        context,
-                        barrierDismissible: false,
-                        child: ViewPopUp(
-                          uri: files,
-                          index: index,
-                        ),
-                      );
-                    },
-                    child: CachedNetworkImage(
-                      imageUrl: file.uri,
-                      errorWidget: (context, url, error) => IntrinsicWidth(
-                        child: IntrinsicHeight(
-                          child: Image.asset(
-                            "assets/images/png/Group_392-3.png",
-                            fit: BoxFit.contain,
-                            width: 140,
-                            height: 120,
+                  //selected box
+                  if (widget.selectedFiles != null)
+                    if (widget.disableActions)
+                      if (selectedFiles
+                          .where((e) => e.id == file.id)
+                          .toList()
+                          .isNotEmpty)
+                        Container(
+                          width: 150,
+                          height: 134,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            border: Border.all(
+                              width: 2.6,
+                              color: ColorTheme.bgColor18,
+                            ),
                           ),
                         ),
-                      ),
-                      progressIndicatorBuilder: (context, value, progress) {
-                        return Align(
-                          child: SizedBox(
-                            width: 140,
-                            height: 120,
-                            child: CircularProgressIndicator(
-                              value: progress.progress,
-                            ),
+
+                  //images
+                  InkWell(
+                    mouseCursor: SystemMouseCursors.click,
+                    onTap: () {
+                      if (!widget.disableActions) {
+                        final index = files.indexOf(file);
+                        IndicatorWidget.showCreateBlogModal(
+                          context,
+                          barrierDismissible: false,
+                          child: ViewPopUp(
+                            uri: files,
+                            index: index,
                           ),
                         );
-                      },
-                      fit: BoxFit.cover,
+                        return;
+                      }
+
+                      final isPresent = selectedFiles
+                          .where((e) => e.id == file.id)
+                          .toList()
+                          .isNotEmpty;
+                      if (!isPresent) {
+                        //store to the selected file
+                        selectedFiles.add(file);
+                        //update the function
+                        widget.selectedFiles!(selectedFiles);
+                      } else {
+                        //remove the selected file
+                        selectedFiles.removeWhere((f) => f.id == file.id);
+                        //update the function
+                        widget.selectedFiles!(selectedFiles);
+                      }
+                      setState(() {});
+                    },
+                    child: Container(
+                      width: 140.0,
+                      height: 124.0,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        image: DecorationImage(
+                          image: CachedNetworkImageProvider(
+                            file.uri,
+                            // errorWidget: (context, url, error) => IntrinsicWidth(
+                            //   child: IntrinsicHeight(
+                            //     child: Image.asset(
+                            //       "assets/images/png/Group_392-3.png",
+                            //       fit: BoxFit.contain,
+                            //       width: 140,
+                            //       height: 120,
+                            //     ),
+                            //   ),
+                            // ),
+                            // progressIndicatorBuilder: (context, value, progress) {
+                            //   return Align(
+                            //     child: SizedBox(
+                            //       width: 70,
+                            //       height: 70,
+                            //       child: CircularProgressIndicator(
+                            //         value: progress.progress,
+                            //       ),
+                            //     ),
+                            //   );
+                            // },
+                          ),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      // child: ,
+                    ),
+                  ),
+
+                  //delete
+                  if (!widget.disableActions)
+                    SizedBox(
                       width: 140,
                       height: 120,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 140,
-                    height: 120,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Transform.translate(
-                          offset: const Offset(15.0, -25.0),
-                          child: IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.delete,
-                              size: 32.0,
-                              color: Colors.redAccent,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Transform.translate(
+                            offset: const Offset(15.0, -25.0),
+                            child: IconButton(
+                              onPressed: () {},
+                              icon: const Icon(
+                                Icons.delete,
+                                size: 32.0,
+                                color: Colors.redAccent,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
                 ],
               ),
               const SizedBox(
@@ -429,9 +491,11 @@ class _CollectionFilesState extends State<CollectionFiles> {
                   builder: (context, value, child) => value != file.id
                       ? GestureDetector(
                           onDoubleTap: () {
-                            editableFilename.text = file.fileName;
-                            enableEditingFile.value = file.id;
-                            focusNode.requestFocus();
+                            if (!widget.disableActions) {
+                              editableFilename.text = file.fileName;
+                              enableEditingFile.value = file.id;
+                              focusNode.requestFocus();
+                            }
                           },
                           child: Text(
                             file.fileName,
@@ -498,9 +562,9 @@ class _CollectionFilesState extends State<CollectionFiles> {
                 alignment: Alignment.centerLeft,
                 child: Wrap(
                   children: [
-                    const SizedBox(
-                      width: 20.0,
-                    ),
+                    // const SizedBox(
+                    //   width: 20.0,
+                    // ),
                     ...cp.collFiles
                         .map(
                           (cf) => fileWidget(

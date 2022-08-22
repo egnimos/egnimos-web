@@ -261,7 +261,9 @@ class NavigationRailWide extends StatelessWidget {
           bottomRight: Radius.circular(10.0),
         ),
       ),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      child: ListView(
+        shrinkWrap: true,
+        children: [
         const SizedBox(
           height: 20.0,
         ),
@@ -297,75 +299,71 @@ class NavigationRailWide extends StatelessWidget {
         ),
 
         //options
-        ListView(
-          shrinkWrap: true,
-          children: [
-            //blogs
-            ProfileMenuButton(
-              value: "Blogs",
-              icon: Icons.article,
-              index: ProfileOptions.blogs.name,
-              selectedIndex: selectedOption.name,
-              onTap: () => onTap(ProfileOptions.blogs),
-            ),
-            const SizedBox(
-              height: 20.0,
-            ),
-            ProfileMenuButton(
-              value: "Drafts",
-              icon: Icons.drafts,
-              index: ProfileOptions.drafts.name,
-              selectedIndex: selectedOption.name,
-              onTap: () => onTap(ProfileOptions.drafts),
-            ),
-            const SizedBox(
-              height: 20.0,
-            ),
-            //categories,
-            ProfileMenuButton(
-              value: "Categories",
-              icon: Icons.category,
-              index: ProfileOptions.category.name,
-              selectedIndex: selectedOption.name,
-              onTap: () => onTap(ProfileOptions.category),
-            ),
 
-            const SizedBox(
-              height: 20.0,
-            ),
-            //categories,
-            ProfileMenuButton(
-              value: "Collections",
-              icon: Icons.collections,
-              index: ProfileOptions.collections.name,
-              selectedIndex: selectedOption.name,
-              onTap: () => onTap(ProfileOptions.collections),
-            ),
+        //blogs
+        ProfileMenuButton(
+          value: "Blogs",
+          icon: Icons.article,
+          index: ProfileOptions.blogs.name,
+          selectedIndex: selectedOption.name,
+          onTap: () => onTap(ProfileOptions.blogs),
+        ),
+        const SizedBox(
+          height: 20.0,
+        ),
+        ProfileMenuButton(
+          value: "Drafts",
+          icon: Icons.drafts,
+          index: ProfileOptions.drafts.name,
+          selectedIndex: selectedOption.name,
+          onTap: () => onTap(ProfileOptions.drafts),
+        ),
+        const SizedBox(
+          height: 20.0,
+        ),
+        //categories,
+        ProfileMenuButton(
+          value: "Categories",
+          icon: Icons.category,
+          index: ProfileOptions.category.name,
+          selectedIndex: selectedOption.name,
+          onTap: () => onTap(ProfileOptions.category),
+        ),
 
-            const SizedBox(
-              height: 20.0,
-            ),
-            //messages,
-            ProfileMenuButton(
-              value: "Messages",
-              icon: Icons.message,
-              index: ProfileOptions.messages.name,
-              selectedIndex: selectedOption.name,
-              onTap: () => onTap(ProfileOptions.messages),
-            ),
+        const SizedBox(
+          height: 20.0,
+        ),
+        //categories,
+        ProfileMenuButton(
+          value: "Collections",
+          icon: Icons.collections,
+          index: ProfileOptions.collections.name,
+          selectedIndex: selectedOption.name,
+          onTap: () => onTap(ProfileOptions.collections),
+        ),
 
-            const SizedBox(
-              height: 20.0,
-            ),
-            //edit profile,
-            ProfileMenuButton(
-              value: "Edit Profile",
-              icon: Icons.edit,
-              index: ProfileOptions.edit.name,
-              selectedIndex: selectedOption.name,
-              onTap: () => onTap(ProfileOptions.edit),
-            ),
-          ],
+        const SizedBox(
+          height: 20.0,
+        ),
+        //messages,
+        ProfileMenuButton(
+          value: "Messages",
+          icon: Icons.message,
+          index: ProfileOptions.messages.name,
+          selectedIndex: selectedOption.name,
+          onTap: () => onTap(ProfileOptions.messages),
+        ),
+
+        const SizedBox(
+          height: 20.0,
+        ),
+        //edit profile,
+        ProfileMenuButton(
+          value: "Edit Profile",
+          icon: Icons.edit,
+          index: ProfileOptions.edit.name,
+          selectedIndex: selectedOption.name,
+          onTap: () => onTap(ProfileOptions.edit),
         ),
 
         //spacer

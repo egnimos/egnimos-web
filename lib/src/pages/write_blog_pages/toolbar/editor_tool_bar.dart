@@ -1,9 +1,7 @@
 import 'dart:math';
 
-import 'package:egnimos/src/pages/write_blog_pages/custom_attribution/attribution_holder.dart';
 import 'package:egnimos/src/pages/write_blog_pages/custom_attribution/font_size_attribution.dart';
-import 'package:egnimos/src/pages/write_blog_pages/editor_style_sheet.dart';
-import 'package:egnimos/src/pages/write_blog_pages/styles/font_style.dart';
+import 'package:egnimos/src/pages/write_blog_pages/styles/font_style_attribution_handler.dart';
 import 'package:egnimos/src/theme/color_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -13,6 +11,7 @@ import 'package:super_editor/super_editor.dart';
 
 import '../../../utility/enum.dart';
 import '../custom_attribution/font_decoration_attribution.dart';
+import '../named_attributions.dart';
 
 /// Small toolbar that is intended to display near some selected
 /// text and offer a few text formatting controls.
@@ -1074,6 +1073,7 @@ class _EditorToolbarState extends State<EditorToolbar> {
                 child: IconButton(
                   onPressed: () {
                     final initialFontSize = num.parse(_fontSizeController.text);
+                    if (initialFontSize <= 0) return;
                     final updatedFontSize = initialFontSize - 1;
                     _fontSizeController.value =
                         TextEditingValue(text: updatedFontSize.toString());
@@ -1086,25 +1086,11 @@ class _EditorToolbarState extends State<EditorToolbar> {
                         fontSize: initialFontSize.toDouble(),
                       ),
                     );
-                    //set the updated value
-                    // _setFontSize(
-                    //   updatedFontSize.toDouble(),
-                    // );
                     applyAttributionOfTheGivenSpanRange(
                       FontSizeDecorationAttribution(
                         fontSize: updatedFontSize.toDouble(),
                       ),
                     );
-
-                    //add it to the decoration holder
-                    // AttributionHolder.saveDecorations(
-                    //   composer: widget.composer,
-                    //   editor: widget.editor,
-                    //   attribution: FontSizeDecorationAttribution(
-                    //     fontSize: updatedFontSize,
-                    //   ),
-                    //   funcType: DecorationFunctionType.add,
-                    // );
                   },
                   icon: Transform.translate(
                     offset: const Offset(0.0, -10.0),

@@ -1,4 +1,6 @@
-import 'package:egnimos/src/pages/write_blog_pages/custom_attribution/named_attributions.dart';
+import 'package:egnimos/src/pages/write_blog_pages/named_attributions.dart';
+import 'package:egnimos/src/pages/write_blog_pages/styles/default_paddings.dart';
+import 'package:egnimos/src/pages/write_blog_pages/styles/default_text_styles.dart';
 import 'package:egnimos/src/pages/write_blog_pages/styles/header_styles.dart';
 import 'package:super_editor/super_editor.dart';
 
@@ -13,7 +15,8 @@ StyleRules nodeStyles() => [
           }
 
           return {
-            "padding": const CascadingPadding.only(top: 24),
+            paddingKey: checkboxPadding,
+            textStyleKey: checkboxTextStyle,
           };
         },
       ),
