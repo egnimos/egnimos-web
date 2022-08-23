@@ -3,6 +3,7 @@ import 'package:egnimos/src/models/style_models/text_style_model.dart';
 import 'package:egnimos/src/pages/write_blog_pages/styles/default_text_styles.dart';
 import 'package:egnimos/src/pages/write_blog_pages/styles/header_styles.dart';
 import 'package:egnimos/src/pages/write_blog_pages/styles/main_layout.dart';
+import 'package:egnimos/src/widgets/create_blog_widgets/layout_widgets/layout_style_widgets.dart/layout_wallpaper_widget.dart';
 import 'package:egnimos/src/widgets/create_blog_widgets/layout_widgets/text_layout_setter_widget.dart';
 import 'package:egnimos/src/widgets/create_blog_widgets/layout_widgets/layout_style_widgets.dart/layout_bg_color_widget.dart';
 import 'package:flutter/material.dart';
@@ -94,6 +95,18 @@ class LayoutOptionWidget extends StatelessWidget {
                     shrinkWrap: true,
                     children: [
                       //Layout Wallpaper
+                      LayoutWallpaperWidget(
+                        output: (uri) {
+                          final initialLayoutInfo = layoutStyler.value;
+                          layoutStyler.value = LayoutStyler(
+                            layoutId: initialLayoutInfo.layoutId,
+                            layoutColor: initialLayoutInfo.layoutColor,
+                            layoutBgUri: uri.trim(),
+                          );
+                        },
+                      ),
+
+                      spaceWidget(),
 
                       //Layout Background Color
                       LayoutBgColorWidget(
@@ -122,6 +135,11 @@ class LayoutOptionWidget extends StatelessWidget {
                           stylers.value = initialValues;
                           print(stylers.value);
                         },
+                      ),
+
+                      //space
+                      const SizedBox(
+                        height: 70.0,
                       ),
                     ],
                   )),

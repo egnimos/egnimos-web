@@ -261,9 +261,7 @@ class NavigationRailWide extends StatelessWidget {
           bottomRight: Radius.circular(10.0),
         ),
       ),
-      child: ListView(
-        shrinkWrap: true,
-        children: [
+      child: ListView(shrinkWrap: true, children: [
         const SizedBox(
           height: 20.0,
         ),
@@ -367,8 +365,8 @@ class NavigationRailWide extends StatelessWidget {
         ),
 
         //spacer
-        const Spacer(
-          flex: 6,
+        const SizedBox(
+          height: 60,
         ),
 
         //divider

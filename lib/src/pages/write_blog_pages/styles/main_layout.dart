@@ -25,6 +25,7 @@ StyleRules initialLayout() => [
 
           return {
             paddingKey: listitemPadding,
+            textStyleKey: listitemTextStyle,
           };
         },
       ),

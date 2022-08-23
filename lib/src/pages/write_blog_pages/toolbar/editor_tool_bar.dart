@@ -11,6 +11,7 @@ import 'package:super_editor/super_editor.dart';
 
 import '../../../utility/enum.dart';
 import '../custom_attribution/font_decoration_attribution.dart';
+import '../custom_editor_comands/convert_command_list_node.dart';
 import '../named_attributions.dart';
 
 /// Small toolbar that is intended to display near some selected
@@ -223,7 +224,7 @@ class _EditorToolbarState extends State<EditorToolbar> {
 
     if (_isListItem(existingTextType) && _isListItem(newType)) {
       widget.editor.executeCommand(
-        ChangeListItemTypeCommand(
+        ChangeListItemTypeCustomCommand(
           nodeId: widget.composer.selection!.extent.nodeId,
           newType: newType == TextType.orderedListItem
               ? ListItemType.ordered
@@ -241,7 +242,7 @@ class _EditorToolbarState extends State<EditorToolbar> {
       );
     } else if (!_isListItem(existingTextType) && _isListItem(newType)) {
       widget.editor.executeCommand(
-        ConvertParagraphToListItemCommand(
+        ConvertParagraphToListItemCustomCommand(
           nodeId: widget.composer.selection!.extent.nodeId,
           type: newType == TextType.orderedListItem
               ? ListItemType.ordered

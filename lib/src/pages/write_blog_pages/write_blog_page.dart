@@ -532,19 +532,23 @@ class _BlogPageState extends State<WriteBlogPage> {
             )
           : ValueListenableBuilder<LayoutStyler>(
               valueListenable: layoutStyler,
-              builder: (context, layoutStyle, __) {
+              builder: (context, layout, __) {
+                print(layout.layoutBgUri);
                 return Container(
                   decoration: BoxDecoration(
-                    image: layoutStyle.layoutBgUri.isEmpty
+                    image: layout.layoutBgUri.isEmpty
                         ? null
-                        : const DecorationImage(
-                            image: CachedNetworkImageProvider(
-                                "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"),
-                            fit: BoxFit.cover,
+                        : DecorationImage(
+                            image:
+                                CachedNetworkImageProvider(layout.layoutBgUri),
+                            invertColors: true,
+                            isAntiAlias: true,
+                            matchTextDirection: true,
+                            fit: BoxFit.fill,
                           ),
                   ),
                   child: ColoredBox(
-                    color: layoutStyle.layoutColor,
+                    color: layout.layoutColor ?? Colors.black.withOpacity(0.0),
                     child: DropViewerWidget(
                       onDrop: _onDropImage,
                       child: ValueListenableBuilder<StyleRules>(

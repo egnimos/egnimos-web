@@ -25,9 +25,10 @@ const checkboxTextStyle = TextStyle(
 );
 
 const listitemTextStyle = TextStyle(
-  color: textColor,
-  fontSize: 18,
+  color: Colors.green,
+  fontSize: 20,
   height: 1.4,
+  fontWeight: FontWeight.w600,
 );
 
 const blockquoteTextStyle = TextStyle(

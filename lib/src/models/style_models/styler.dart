@@ -12,12 +12,12 @@ const layoutStylerId = "layout_styler";
 
 class LayoutStyler {
   final String layoutId;
-  final Color layoutColor;
+  final Color? layoutColor;
   final String layoutBgUri;
 
   LayoutStyler({
     required this.layoutId,
-    this.layoutColor = Colors.white,
+    this.layoutColor,
     required this.layoutBgUri,
   });
 

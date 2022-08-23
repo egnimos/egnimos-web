@@ -39,7 +39,7 @@ class _LayoutBgColorWidgetState extends State<LayoutBgColorWidget> {
 
   @override
   Widget build(BuildContext context) {
-    layoutColor.value = layoutStyler.value.layoutColor;
+    layoutColor.value = layoutStyler.value.layoutColor ?? Colors.white;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
