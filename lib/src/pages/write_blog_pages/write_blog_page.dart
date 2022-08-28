@@ -24,12 +24,14 @@ import 'package:egnimos/src/providers/blog_provider.dart';
 import 'package:egnimos/src/providers/upload_provider.dart';
 import 'package:egnimos/src/theme/color_theme.dart';
 import 'package:egnimos/src/utility/enum.dart';
+import 'package:egnimos/src/utility/font_manager/font_handler.dart';
 import 'package:egnimos/src/utility/prefs_keys.dart';
 import 'package:egnimos/src/widgets/create_blog_widgets/layout_option_widget.dart';
 import 'package:egnimos/src/widgets/create_pop_up_modal_widget.dart';
 import 'package:egnimos/src/widgets/drop_viewer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:super_editor/super_editor.dart';
@@ -97,54 +99,19 @@ class _BlogPageState extends State<WriteBlogPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    // FontHandler.fetchAndDownload();
+    GoogleFonts.cabinSketch();
+    print(GoogleFonts.cabinSketch().fontFamily);
+  }
+
+  @override
   void didChangeDependencies() {
     loadTheDoc().then((doc) {
       //create  the initial document content
       _doc = doc
         ..addListener(() async {
-          // print(doc.nodes.last.copyMetadata());
-          // if (doc.nodes.last is ParagraphNode) {
-          //   final value = doc.nodes.last as ParagraphNode;
-          //   print(value.metadata);
-          //   final start = value.beginningPosition.offset;
-          //   final end = value.endPosition.offset;
-          //   final attributions =
-          //       value.text.getAllAttributionsThroughout(SpanRange(
-          //     start: start,
-          //     end: end,
-          //   ));
-          //   final spanRanges = value.text.getAttributionSpansInRange(
-          //       attributionFilter: (_) => true,
-          //       range: SpanRange(
-          //         start: start,
-          //         end: end,
-          //       ));
-          //   print("SPAN RANGES WITH ATTRIBUTIONS:: $spanRanges");
-          //   print("SPaN MARKER:: $attributions");
-          // }
-
-          // if (doc.nodes.last is ListItemNode) {
-          //   final value = doc.nodes.last as ListItemNode;
-          //   print(value.metadata);
-          //   final start = value.beginningPosition.offset;
-          //   final end = value.endPosition.offset;
-          //   final attributions =
-          //       value.text.getAllAttributionsThroughout(SpanRange(
-          //     start: start,
-          //     end: end,
-          //   ));
-          //   final spanRanges = value.text.getAttributionSpansInRange(
-          //       attributionFilter: (_) => true,
-          //       range: SpanRange(
-          //         start: start,
-          //         end: end,
-          //       ));
-          //   print("SPAN RANGES WITH FOR LISTITEM ATTRIBUTIONS:: $spanRanges");
-          //   print("SPAN MARKER FOR LISTITEM:: $attributions");
-          // }
-
-          // print("JSON DECORATION HOLDER ${AttributionHolder.toJsonList()}");
-          // _documentEditor.document.nodes.last.
           //update the tool bar display
           _updateToolbarDisplay();
           //set the command

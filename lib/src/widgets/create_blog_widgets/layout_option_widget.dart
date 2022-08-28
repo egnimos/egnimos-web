@@ -152,8 +152,15 @@ class LayoutOptionWidget extends StatelessWidget {
           alignment: Alignment.bottomRight,
           child: FloatingActionButton(
             onPressed: () {
-              updatedStyleRules.value = layoutStyler.value
+              updatedStyleRules.value = LayoutStyler
                   .fromStylerToStyleRules([layoutStyler, ...stylers.value]);
+              final json = LayoutStyler
+                  .stylerToJson([layoutStyler, ...stylers.value]);
+              print("STYLER JSON $json");
+              final stylerList = LayoutStyler.fromJsonToStylers(json);
+              print(stylerList);
+              updatedStyleRules.value = LayoutStyler
+                  .fromStylerToStyleRules([layoutStyler, ...stylerList]);
               print(updatedStyleRules.value);
             },
             child: const Icon(

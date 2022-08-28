@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:super_editor/super_editor.dart';
 import '../../../utility/enum.dart';
+import '../../../utility/font_manager/font_handler.dart';
+import 'text_style_widgets/font_families_widget.dart';
 import 'text_style_widgets/font_weight_widget.dart';
 
 class TextLayoutSetter extends StatelessWidget {
@@ -52,6 +54,13 @@ class TextLayoutSetter extends StatelessWidget {
       fontStyle: textStyle.value.fontStyle,
       fontColor: textStyle.value.color,
       backgroundColor: textStyle.value.backgroundColor,
+      fontFamilyInfo:
+          // textStyle.value.fontFamily == null
+          fontFamilyInfo,
+      // : FontFamily(
+      //     fontFamilyName: textStyle.value.fontFamily!,
+      //     selectedFontFamily: textStyle.value.fontFamily!,
+      //   ),
       textDecorationStyle: textStyle.value.decorationStyle,
       textDecorationThickness: textStyle.value.decorationThickness,
       textDecorationColor: textStyle.value.decorationColor,
@@ -99,6 +108,15 @@ class TextLayoutSetter extends StatelessWidget {
                     // );
                     // final initialTextStyleMode =
                     //     values.isEmpty ? textStyle : values.first;
+                    // FontFamily(
+                    //     fontFamilyName: textStyle.value.fontFamily ?? "Raleway",
+                    //     selectedFontFamily:
+                    //         textStyle.value.fontFamily ?? "Raleway",
+                    //   ),
+                    final values =
+                        stylers.value.where((e) => e.blockId == blockId);
+                    FontFamily? fontFamInf =
+                        values.isEmpty ? null : values.first.fontFamilyInfo;
                     // textStyleModel
                     textStyle.value = getTextStyleBasedOnTextType(value);
                     textStyleModel = TextStyleModel(
@@ -110,6 +128,7 @@ class TextLayoutSetter extends StatelessWidget {
                       textDecorationStyle: textStyle.value.decorationStyle,
                       textDecorationThickness:
                           textStyle.value.decorationThickness,
+                      fontFamilyInfo: fontFamInf ?? fontFamilyInfo,
                       textDecorationColor: textStyle.value.decorationColor,
                       letterSpacing: textStyle.value.letterSpacing,
                       fontWeight: textStyle.value.fontWeight,
@@ -137,6 +156,7 @@ class TextLayoutSetter extends StatelessWidget {
                     fontSize: size,
                     fontStyle: textStyleModel.fontStyle,
                     fontColor: textStyleModel.fontColor,
+                    fontFamilyInfo: textStyleModel.fontFamilyInfo,
                     backgroundColor: textStyleModel.backgroundColor,
                     textDecorationStyle: textStyleModel.textDecorationStyle,
                     textDecorationThickness:
@@ -152,35 +172,68 @@ class TextLayoutSetter extends StatelessWidget {
               );
             }),
 
+        spaceWidget(),
+
+        //FontFamily
+        ValueListenableBuilder<TextStyle>(
+          valueListenable: textStyle,
+          builder: (context, textStyle, __) {
+            return FontFamilyWidget(
+              fntFamily: textStyleModel.fontFamilyInfo!,
+              output: (fontFamily) {
+                textStyleModel = TextStyleModel(
+                  blockId: textStyleModel.blockId,
+                  fontSize: textStyleModel.fontSize,
+                  fontStyle: textStyleModel.fontStyle,
+                  fontColor: textStyleModel.fontColor,
+                  backgroundColor: textStyleModel.backgroundColor,
+                  textDecorationStyle: textStyleModel.textDecorationStyle,
+                  fontFamilyInfo: fontFamily,
+                  textDecorationThickness:
+                      textStyleModel.textDecorationThickness,
+                  textDecorationColor: textStyleModel.textDecorationColor,
+                  letterSpacing: textStyleModel.letterSpacing,
+                  fontWeight: textStyleModel.fontWeight,
+                  wordSpacing: textStyleModel.wordSpacing,
+                  textDecoration: textStyleModel.textDecoration,
+                );
+                styleModel(textStyleModel);
+              },
+            );
+          },
+        ),
+
         //space widget
         spaceWidget(),
 
         //font Size widget
         ValueListenableBuilder<TextStyle>(
-            valueListenable: textStyle,
-            builder: (context, textStyle, __) {
-              return FontWeightWidget(
-                textStyle: textStyle,
-                output: (weight) {
-                  textStyleModel = TextStyleModel(
-                    blockId: textStyleModel.blockId,
-                    fontSize: textStyleModel.fontSize,
-                    fontStyle: textStyleModel.fontStyle,
-                    fontColor: textStyleModel.fontColor,
-                    backgroundColor: textStyleModel.backgroundColor,
-                    textDecorationStyle: textStyleModel.textDecorationStyle,
-                    textDecorationThickness:
-                        textStyleModel.textDecorationThickness,
-                    textDecorationColor: textStyleModel.textDecorationColor,
-                    letterSpacing: textStyleModel.letterSpacing,
-                    fontWeight: weight,
-                    wordSpacing: textStyleModel.wordSpacing,
-                    textDecoration: textStyleModel.textDecoration,
-                  );
-                  styleModel(textStyleModel);
-                },
-              );
-            }),
+          valueListenable: textStyle,
+          builder: (context, textStyle, __) {
+            return FontWeightWidget(
+              textStyle: textStyle,
+              output: (weight) {
+                textStyleModel = TextStyleModel(
+                  blockId: textStyleModel.blockId,
+                  fontSize: textStyleModel.fontSize,
+                  fontStyle: textStyleModel.fontStyle,
+                  fontColor: textStyleModel.fontColor,
+                  fontFamilyInfo: textStyleModel.fontFamilyInfo,
+                  backgroundColor: textStyleModel.backgroundColor,
+                  textDecorationStyle: textStyleModel.textDecorationStyle,
+                  textDecorationThickness:
+                      textStyleModel.textDecorationThickness,
+                  textDecorationColor: textStyleModel.textDecorationColor,
+                  letterSpacing: textStyleModel.letterSpacing,
+                  fontWeight: weight,
+                  wordSpacing: textStyleModel.wordSpacing,
+                  textDecoration: textStyleModel.textDecoration,
+                );
+                styleModel(textStyleModel);
+              },
+            );
+          },
+        ),
 
         //space widget
         spaceWidget(),
@@ -198,6 +251,7 @@ class TextLayoutSetter extends StatelessWidget {
                     fontStyle: style,
                     fontColor: textStyleModel.fontColor,
                     backgroundColor: textStyleModel.backgroundColor,
+                    fontFamilyInfo: textStyleModel.fontFamilyInfo,
                     textDecorationStyle: textStyleModel.textDecorationStyle,
                     textDecorationThickness:
                         textStyleModel.textDecorationThickness,
@@ -226,6 +280,7 @@ class TextLayoutSetter extends StatelessWidget {
                     blockId: textStyleModel.blockId,
                     fontSize: textStyleModel.fontSize,
                     fontStyle: textStyleModel.fontStyle,
+                    fontFamilyInfo: textStyleModel.fontFamilyInfo,
                     fontColor: fontColor,
                     backgroundColor: backgroundColor,
                     textDecorationStyle: textStyleModel.textDecorationStyle,
@@ -263,6 +318,7 @@ class TextLayoutSetter extends StatelessWidget {
                     fontStyle: textStyleModel.fontStyle,
                     fontColor: textStyleModel.fontColor,
                     backgroundColor: textStyleModel.backgroundColor,
+                    fontFamilyInfo: textStyleModel.fontFamilyInfo,
                     textDecorationStyle: decorationStyle,
                     textDecorationThickness: decorationThickness,
                     textDecorationColor: decorationColor,

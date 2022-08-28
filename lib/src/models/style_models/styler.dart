@@ -36,7 +36,7 @@ class LayoutStyler {
       );
 
   //stylertoJson
-  Map<String, dynamic> stylerToJson(List stylers) {
+  static Map<String, dynamic> stylerToJson(List stylers) {
     Map<String, dynamic> data = {};
     for (var style in stylers) {
       //layout styler
@@ -58,7 +58,7 @@ class LayoutStyler {
   }
 
   //fromJsonToStylers
-  List fromJsonToStylers(Map<String, dynamic> data) {
+  static List fromJsonToStylers(Map<String, dynamic> data) {
     final stylers = [];
     for (var key in data.keys) {
       //if the key is layout styler
@@ -114,7 +114,7 @@ class LayoutStyler {
   }
 
   //fromStylerToStyleRules
-  StyleRules fromStylerToStyleRules(List styleRules) {
+  static StyleRules fromStylerToStyleRules(List styleRules) {
     StyleRules rules = <StyleRule>[];
     for (var style in styleRules) {
       //if the image style model
@@ -244,7 +244,7 @@ class LayoutStyler {
     return rules;
   }
 
-  StyleRule getStyleRule({
+  static StyleRule getStyleRule({
     required CascadingPadding padding,
     required TextStyleModel style,
     required TextStyle textStyle,
@@ -259,6 +259,7 @@ class LayoutStyler {
             color: style.fontColor,
             backgroundColor: style.backgroundColor,
             decorationColor: style.textDecorationColor,
+            fontFamily: style.fontFamilyInfo?.selectedFontFamily,
             fontSize: style.fontSize,
             fontStyle: style.fontStyle,
             decoration: style.textDecoration,

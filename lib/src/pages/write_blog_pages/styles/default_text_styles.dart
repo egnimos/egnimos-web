@@ -2,6 +2,7 @@ import 'package:egnimos/src/widgets/create_blog_widgets/layout_option_widget.dar
 import 'package:flutter/material.dart';
 import 'package:super_editor/super_editor.dart';
 import '../../../utility/enum.dart';
+import '../../../widgets/create_blog_widgets/layout_widgets/text_style_widgets/font_families_widget.dart';
 import '../named_attributions.dart';
 import 'header_styles.dart';
 
@@ -12,49 +13,56 @@ const textStyleKey = "textStyle";
 ///these text styles is set for each different attribution
 
 ///[defaultTextStyle] text style for all the [TextNode]
-const defaultTextStyle = TextStyle(
+final defaultTextStyle = TextStyle(
   color: textColor,
+  fontFamily: fontFamilyInfo.selectedFontFamily,
   fontSize: 18,
   height: 1.4,
 );
 
-const checkboxTextStyle = TextStyle(
+final checkboxTextStyle = TextStyle(
   color: textColor,
+  fontFamily: fontFamilyInfo.selectedFontFamily,
   fontSize: 18,
   height: 1.4,
 );
 
-const listitemTextStyle = TextStyle(
+final listitemTextStyle = TextStyle(
   color: Colors.green,
+  fontFamily: fontFamilyInfo.selectedFontFamily,
   fontSize: 20,
   height: 1.4,
   fontWeight: FontWeight.w600,
 );
 
-const blockquoteTextStyle = TextStyle(
+final blockquoteTextStyle = TextStyle(
   color: textColor,
+  fontFamily: fontFamilyInfo.selectedFontFamily,
   fontSize: 18,
   height: 1.4,
 );
 
 ///[h1TextStyle] text style for all the [header1Attribution]
-const h1TextStyle = TextStyle(
+final h1TextStyle = TextStyle(
   color: textColor,
+  fontFamily: fontFamilyInfo.selectedFontFamily,
   fontSize: 60.0,
   fontWeight: FontWeight.w800,
 );
 
 ///[h2TextStyle] text style for all the [header2Attribution]
 // Theme.of(context).textTheme.headline2!.
-const h2TextStyle = TextStyle(
+final h2TextStyle = TextStyle(
   color: textColor,
+  fontFamily: fontFamilyInfo.selectedFontFamily,
   fontSize: 50.0,
   fontWeight: FontWeight.bold,
 );
 
 ///[h3TextStyle] text style for all the [header3Attribution]
-const h3TextStyle = TextStyle(
+final h3TextStyle = TextStyle(
   color: textColor,
+  fontFamily: fontFamilyInfo.selectedFontFamily,
   fontSize: 40.0,
   fontWeight: FontWeight.bold,
 );
@@ -67,15 +75,17 @@ const h4TextStyle = TextStyle(
 );
 
 ///[h5TextStyle] text style for all the [header5Attribution]
-const h5TextStyle = TextStyle(
+final h5TextStyle = TextStyle(
   color: textColor,
+  fontFamily: fontFamilyInfo.selectedFontFamily,
   fontSize: 26.0,
   fontWeight: FontWeight.w700,
 );
 
 ///[h6TextStyle] text style for all the [header6Attribution]
-const h6TextStyle = TextStyle(
+final h6TextStyle = TextStyle(
   color: textColor,
+  fontFamily: fontFamilyInfo.selectedFontFamily,
   fontSize: 18.0,
   fontWeight: FontWeight.w700,
 );
@@ -141,6 +151,7 @@ TextStyle getTextStyle(TextStyle textStyle, TextTypes type) {
     color: style.fontColor,
     backgroundColor: style.backgroundColor,
     decorationColor: style.textDecorationColor,
+    fontFamily: style.fontFamilyInfo?.selectedFontFamily,
     fontSize: style.fontSize,
     fontStyle: style.fontStyle,
     decoration: style.textDecoration,

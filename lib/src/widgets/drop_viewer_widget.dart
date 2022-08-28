@@ -10,6 +10,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_dropzone/flutter_dropzone.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'side_indicator_message_widget.dart';
+
 class DropViewerWidget extends StatefulWidget {
   final Widget child;
   final void Function(String uri) onDrop;
@@ -81,6 +83,9 @@ class _DropViewerWidgetState extends State<DropViewerWidget> {
         ),
         //options
         const BlogOptionsWidget(),
+
+        //message indicator
+        const SideIndicatorMessage(),
 
         //show indicator
         if (_highlight)

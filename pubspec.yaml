@@ -33,6 +33,7 @@ dependencies:
   cross_file: ^0.3.3+1
   cupertino_icons: ^1.0.2
   dotted_border: ^2.0.0+2
+  dynamic_cached_fonts: ^1.0.0
   file_picker: ^4.6.1
   firebase_auth: ^3.4.0
   firebase_core: ^1.19.0
@@ -46,9 +47,12 @@ dependencies:
   flutter_markdown: ^0.6.9
   font_awesome_flutter: ^10.1.0
   google_fonts: ^2.3.1
+  http: ^0.13.5
   intl: ^0.17.0
   lottie: ^1.2.2
+  matrix4_transform: ^2.0.1
   mime: ^1.0.2
+  photo_view: ^0.14.0
   provider: ^6.0.2
   shared_preferences: ^2.0.15
   super_editor:
@@ -57,8 +61,8 @@ dependencies:
       path: super_editor
   super_text_layout: ^0.1.0
   url_launcher: ^6.0.20
-  matrix4_transform: ^2.0.1
-  photo_view: ^0.14.0
+  uuid: ^3.0.6
+  dropdown_search: ^5.0.2
 
 dependency_overrides:
   # Override to local mono-repo path so devs can test this repo
