@@ -9,7 +9,8 @@ final selectedOptionNotifier =
     ValueNotifier<CreateBlogOptions>(CreateBlogOptions.unknown);
 
 class BlogOptionsWidget extends StatelessWidget {
-  const BlogOptionsWidget({Key? key}) : super(key: key);
+  final Future Function() saveBlog;
+  const BlogOptionsWidget({Key? key, required this.saveBlog,}) : super(key: key);
 
   void onOptionSelected(CreateBlogOptions option) {
     if (toolBoxHandler?.value != toolBoxHandler?.lowerBound) {
@@ -116,7 +117,7 @@ class BlogOptionsWidget extends StatelessWidget {
                     ),
                     //save
                     IconButton(
-                      onPressed: () {},
+                      onPressed: saveBlog,
                       icon: Icon(
                         Icons.save,
                         color: Colors.grey.shade800,

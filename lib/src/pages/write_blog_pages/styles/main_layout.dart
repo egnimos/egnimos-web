@@ -10,7 +10,7 @@ StyleRules initialLayout() => [
         BlockSelector.all,
         (doc, docNode) {
           return {
-            "maxWidth": double.infinity,
+            "maxWidth": 1000,
             "width": Responsive.widthMultiplier * 100.0,
             "textStyle": defaultTextStyle,
           };

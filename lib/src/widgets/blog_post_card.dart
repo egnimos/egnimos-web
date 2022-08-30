@@ -10,10 +10,12 @@ import 'package:egnimos/src/utility/enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dropzone/flutter_dropzone.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../main.dart';
 import '../providers/auth_provider.dart';
+import '../providers/style_provider.dart';
 import '../theme/color_theme.dart';
 import '../utility/prefs_keys.dart';
 
@@ -34,6 +36,8 @@ class BlogPostCard extends StatelessWidget {
     final isDeleting = ValueNotifier<bool>(false);
     final isTransfering = ValueNotifier<bool>(false);
     final selectedTag = ValueNotifier<String>("");
+    final dateTime =
+        DateFormat('EEE, MMM d, yyyy').format(blog.updatedAt.toDate());
     final user = Provider.of<AuthProvider>(context, listen: false).user;
     print(user);
     return Container(
@@ -96,7 +100,7 @@ class BlogPostCard extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (contex) => ViewBlogPage(
-                          blogId: blog.id,
+                          blogSnap: blog,
                           blogType: blogType,
                         ),
                       ),
@@ -134,7 +138,7 @@ class BlogPostCard extends StatelessWidget {
                 vertical: 10.0,
               ),
               child: Text(
-                "Feburary 1st, 2022 . 10 min read",
+                dateTime,
                 style: GoogleFonts.openSans(
                   color: Colors.grey.shade800,
                 ),
@@ -330,6 +334,8 @@ class BlogPostCard extends StatelessWidget {
                     builder: (context, value, child) => optionWidget(
                       onClick: () async {
                         isDeleting.value = true;
+                        await Provider.of<StyleProvider>(context, listen: false)
+                            .deleteStyle(blog.id);
                         await Provider.of<BlogProvider>(context, listen: false)
                             .deleteBlog(blogType, blogId: blog.id);
                         isDeleting.value = false;

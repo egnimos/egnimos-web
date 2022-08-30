@@ -5,6 +5,7 @@ import 'package:egnimos/src/pages/write_blog_pages/styles/header_styles.dart';
 import 'package:super_editor/super_editor.dart';
 
 import '../custom_document_nodes/checkbox_node.dart';
+import '../custom_document_nodes/user_node.dart';
 
 StyleRules nodeStyles() => [
       StyleRule(
@@ -17,6 +18,20 @@ StyleRules nodeStyles() => [
           return {
             paddingKey: checkboxPadding,
             textStyleKey: checkboxTextStyle,
+          };
+        },
+      ),
+
+      StyleRule(
+        BlockSelector(userNodeAttribution.name),
+        (document, node) {
+          if (node is! UserNode) {
+            return {};
+          }
+
+          return {
+            paddingKey: userPadding,
+            textStyleKey: userNameTextStyle,
           };
         },
       ),

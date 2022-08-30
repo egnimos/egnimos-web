@@ -48,13 +48,16 @@ class TextLayoutSetter extends StatelessWidget {
     final textStyle = ValueNotifier<TextStyle>(h1TextStyle);
     textStyle.value = getTextStyleBasedOnTextType(textType.value);
     //get the text style model if it is there
+    final vals = stylers.value.where((v) => v.blockId == "header1");
     TextStyleModel textStyleModel = TextStyleModel(
       blockId: getId(textType.value),
       fontSize: textStyle.value.fontSize,
       fontStyle: textStyle.value.fontStyle,
       fontColor: textStyle.value.color,
       backgroundColor: textStyle.value.backgroundColor,
-      fontFamilyInfo:
+      fontFamilyInfo: vals.isNotEmpty
+          ? vals.first.fontFamilyInfo
+          :
           // textStyle.value.fontFamily == null
           fontFamilyInfo,
       // : FontFamily(

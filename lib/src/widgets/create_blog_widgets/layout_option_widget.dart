@@ -14,6 +14,7 @@ import '../../config/responsive.dart';
 import '../../theme/color_theme.dart';
 
 final updatedStyleRules = ValueNotifier<StyleRules>([]);
+Map<String, dynamic> stylerJson = {};
 
 final stylers = ValueNotifier<List<TextStyleModel>>([]);
 final layoutStyler = ValueNotifier<LayoutStyler>(
@@ -152,15 +153,15 @@ class LayoutOptionWidget extends StatelessWidget {
           alignment: Alignment.bottomRight,
           child: FloatingActionButton(
             onPressed: () {
-              updatedStyleRules.value = LayoutStyler
-                  .fromStylerToStyleRules([layoutStyler, ...stylers.value]);
-              final json = LayoutStyler
-                  .stylerToJson([layoutStyler, ...stylers.value]);
-              print("STYLER JSON $json");
-              final stylerList = LayoutStyler.fromJsonToStylers(json);
+              updatedStyleRules.value = LayoutStyler.fromStylerToStyleRules(
+                  [layoutStyler, ...stylers.value]);
+              stylerJson =
+                  LayoutStyler.stylerToJson([layoutStyler, ...stylers.value]);
+              print("STYLER JSON $stylerJson");
+              final stylerList = LayoutStyler.fromJsonToStylers(stylerJson);
               print(stylerList);
-              updatedStyleRules.value = LayoutStyler
-                  .fromStylerToStyleRules([layoutStyler, ...stylerList]);
+              updatedStyleRules.value = LayoutStyler.fromStylerToStyleRules(
+                  [layoutStyler, ...stylerList]);
               print(updatedStyleRules.value);
             },
             child: const Icon(

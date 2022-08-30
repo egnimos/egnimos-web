@@ -14,7 +14,7 @@ class CheckboxNode extends TextNode {
   })  : _isComplete = isComplete,
         _indent = indent,
         super(id: id, text: text, metadata: metadata) {
-    // Set a block type so that TaskNode's can be styled by
+    // Set a block type so that CheckBoxNode's can be styled by
     // StyleRule's.
     putMetadataValue("blockType", checkboxAttribution);
   }

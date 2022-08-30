@@ -1,9 +1,12 @@
+import 'package:egnimos/src/models/category.dart';
 import 'package:egnimos/src/widgets/category_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../config/responsive.dart';
 import '../../theme/color_theme.dart';
+
+final selectedCategory = ValueNotifier<Category?>(null);
 
 class CategoryOptionWidget extends StatelessWidget {
   const CategoryOptionWidget({Key? key}) : super(key: key);
@@ -54,8 +57,9 @@ class CategoryOptionWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: CategoryListWidget(
               disableActions: true,
-              selectedCategories: (categories) {
-                print(categories);
+              selectedCategories: (category) {
+                print(category);
+                selectedCategory.value = category;
               },
               constraints: BoxConstraints(
                 maxWidth: Responsive.widthMultiplier * 100.0,

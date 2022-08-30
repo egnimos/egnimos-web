@@ -172,6 +172,47 @@ class BlogProvider with ChangeNotifier {
     }
   }
 
+  //get the user blogs
+  Future<List<Blog>> getUserBlogSnaps(Cat catType, String userId) async {
+    try {
+      List<Blog> results = [];
+      QuerySnapshot<Map<String, dynamic>> response;
+      switch (catType) {
+        case Cat.all:
+          response = await firestoreInstance
+              .collection(publishedArticleSnapsCollection)
+              .where(
+                "user_id",
+                isEqualTo: userId,
+              )
+              .orderBy("created_at", descending: true)
+              .get();
+          break;
+        default:
+          response = await firestoreInstance
+              .collection(publishedArticleSnapsCollection)
+              .where(
+                "category.cat_enum",
+                isEqualTo:
+                    Convert.enumTostring(Cat.values, catType, () => null),
+              )
+              .where(
+                "user_id",
+                isEqualTo: userId,
+              )
+              .orderBy("created_at", descending: true)
+              .get();
+      }
+      for (var blog in response.docs) {
+        final data = blog.data();
+        results.add(Blog.fromJson(data));
+      }
+      return results;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   //get the complete article
   Future<MutableDocument> getBlog(BlogType blogType, String blogId) async {
     try {

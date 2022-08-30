@@ -4,6 +4,10 @@ import 'package:egnimos/src/widgets/file_collection_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../models/collection_file.dart';
+
+final selectedFiles = ValueNotifier<List<CollectionFile>>([]);
+
 class CollectionOptionWidget extends StatelessWidget {
   const CollectionOptionWidget({Key? key}) : super(key: key);
 
@@ -55,6 +59,7 @@ class CollectionOptionWidget extends StatelessWidget {
               disableActions: true,
               selectedFiles: (files) {
                 print(files);
+                selectedFiles.value = files;
               },
             ),
           ),

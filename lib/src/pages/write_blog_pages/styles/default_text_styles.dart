@@ -1,5 +1,6 @@
 import 'package:egnimos/src/widgets/create_blog_widgets/layout_option_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:super_editor/super_editor.dart';
 import '../../../utility/enum.dart';
 import '../../../widgets/create_blog_widgets/layout_widgets/text_style_widgets/font_families_widget.dart';
@@ -23,6 +24,12 @@ final defaultTextStyle = TextStyle(
 final checkboxTextStyle = TextStyle(
   color: textColor,
   fontFamily: fontFamilyInfo.selectedFontFamily,
+  fontSize: 18,
+  height: 1.4,
+);
+
+final userNameTextStyle = GoogleFonts.rubik(
+  color: textColor,
   fontSize: 18,
   height: 1.4,
 );

@@ -14,10 +14,12 @@ import 'side_indicator_message_widget.dart';
 
 class DropViewerWidget extends StatefulWidget {
   final Widget child;
+  final Future Function() saveBlog;
   final void Function(String uri) onDrop;
   const DropViewerWidget({
     required this.child,
     required this.onDrop,
+    required this.saveBlog,
     Key? key,
   }) : super(key: key);
 
@@ -82,7 +84,7 @@ class _DropViewerWidgetState extends State<DropViewerWidget> {
           child: OptionToolBox(),
         ),
         //options
-        const BlogOptionsWidget(),
+        BlogOptionsWidget(saveBlog: widget.saveBlog,),
 
         //message indicator
         const SideIndicatorMessage(),

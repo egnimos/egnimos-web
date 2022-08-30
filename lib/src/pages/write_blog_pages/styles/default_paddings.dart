@@ -27,5 +27,10 @@ const h6Padding = CascadingPadding.only(top: 14);
 ///[Padding] for [CheckboxNode]
 const checkboxPadding = CascadingPadding.only(top: 24);
 
+const userPadding = CascadingPadding.only(
+  top: 24,
+  bottom: 24,
+);
+
 ///[Padding] for [ListItem]
 const listitemPadding = CascadingPadding.only(top: 24);

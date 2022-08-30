@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:egnimos/src/models/category.dart';
 import 'package:egnimos/src/theme/color_theme.dart';
 import 'package:egnimos/src/utility/enum.dart';
+import 'package:egnimos/src/widgets/create_blog_widgets/category_option_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
@@ -18,7 +19,7 @@ class CategoryListWidget extends StatefulWidget {
   final BoxConstraints constraints;
   final bool disableActions;
   final void Function(Category? categories)? selectedCategories;
-  CategoryListWidget({
+  const CategoryListWidget({
     Key? key,
     required this.constraints,
     this.disableActions = false,
@@ -51,6 +52,7 @@ class _CategoryListWidgetState extends State<CategoryListWidget> {
   @override
   Widget build(BuildContext context) {
     loadInfo(context);
+    selectedCategories = selectedCategory.value;
     return ValueListenableBuilder<bool>(
       valueListenable: isLoading,
       builder: (context, loading, child) {

@@ -139,6 +139,19 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
+  //get the user info
+  Future<User> getUserInfo(String userId) async {
+    try {
+      final docRef = await firestoreInstance
+          .collection(Collections.users)
+          .doc(userId)
+          .get();
+      return User.fromJson(docRef.data()!);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<void> _verifyUser(String userId, String email, User? userInfo,
       XFile? file, AuthType authType, MimeModel mime) async {
     try {

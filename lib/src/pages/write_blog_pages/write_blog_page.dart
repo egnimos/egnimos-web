@@ -6,6 +6,7 @@ import 'package:egnimos/main.dart';
 import 'package:egnimos/src/models/blog.dart';
 import 'package:egnimos/src/models/category.dart';
 import 'package:egnimos/src/models/style_models/styler.dart';
+import 'package:egnimos/src/models/style_models/text_style_model.dart';
 import 'package:egnimos/src/pages/profile_page.dart';
 import 'package:egnimos/src/pages/write_blog_pages/command_based_actions/execute_command.dart';
 import 'package:egnimos/src/pages/write_blog_pages/custom_attribution/attribution_holder.dart';
@@ -26,6 +27,8 @@ import 'package:egnimos/src/theme/color_theme.dart';
 import 'package:egnimos/src/utility/enum.dart';
 import 'package:egnimos/src/utility/font_manager/font_handler.dart';
 import 'package:egnimos/src/utility/prefs_keys.dart';
+import 'package:egnimos/src/widgets/create_blog_widgets/category_option_widget.dart';
+import 'package:egnimos/src/widgets/create_blog_widgets/collection_option_widget.dart';
 import 'package:egnimos/src/widgets/create_blog_widgets/layout_option_widget.dart';
 import 'package:egnimos/src/widgets/create_pop_up_modal_widget.dart';
 import 'package:egnimos/src/widgets/drop_viewer_widget.dart';
@@ -37,6 +40,7 @@ import 'package:provider/provider.dart';
 import 'package:super_editor/super_editor.dart';
 
 import '../../models/user.dart';
+import '../../providers/style_provider.dart';
 import '../../widgets/indicator_widget.dart';
 import 'toolbar/editor_tool_bar.dart';
 
@@ -75,20 +79,34 @@ class _BlogPageState extends State<WriteBlogPage> {
 
   Future<MutableDocument> loadTheDoc() async {
     try {
+      //if the action is update
+      if (widget.blog != null) {
+        final doc = await Provider.of<BlogProvider>(context, listen: false)
+            .getBlog(widget.blogType!, widget.blog!.id);
+        selectedCategory.value = widget.blog!.category;
+        //get the style info
+        final styleMap =
+            await Provider.of<StyleProvider>(context, listen: false)
+                .getStyle(widget.blog!.id);
+        layoutStyler.value = styleMap["layout_styler"] ??
+            LayoutStyler(
+              layoutId: DocumentEditor.createNodeId(),
+              layoutColor: Colors.white,
+              layoutBgUri: "",
+            );
+        stylers.value = (styleMap["stylers"] ?? []) as List<TextStyleModel>;
+        updatedStyleRules.value = (styleMap["style_rules"] ?? []) as StyleRules;
+        //cache the data
+        await prefs?.setString(PrefsKey.docData,
+            jsonEncode(DocumentJsonParser(doc).toJson(doc.nodes)));
+        return doc;
+      }
       //to json
       final isExist = prefs?.containsKey(PrefsKey.docData) ?? false;
       if (isExist) {
         final docJson = prefs?.getString(PrefsKey.docData) ?? "";
         final doc = jsonDecode(docJson);
         return DocumentJsonParser.fromJson(doc);
-      }
-      //if the action is update
-      if (widget.blog != null) {
-        final doc = await Provider.of<BlogProvider>(context, listen: false)
-            .getBlog(widget.blogType!, widget.blog!.id);
-        await prefs?.setString(PrefsKey.docData,
-            jsonEncode(DocumentJsonParser(doc).toJson(doc.nodes)));
-        return doc;
       }
       final docData = DocumentJsonParser(doc).toJson(doc.nodes);
       return DocumentJsonParser.fromJson(docData);
@@ -169,6 +187,10 @@ class _BlogPageState extends State<WriteBlogPage> {
         documentLayoutResolver: () =>
             _docLayoutKey.currentState as DocumentLayout,
       );
+
+      selectedFiles.addListener(() {
+        _onDropImage(selectedFiles.value.last.uri);
+      });
 
       if (_isLoading) {
         setState(() {
@@ -411,26 +433,27 @@ class _BlogPageState extends State<WriteBlogPage> {
 
   Future<void> saveTheBlog(BlogType type, User user) async {
     try {
+      //check if the category is provided or not
+      if (selectedCategory.value == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("catgeory shgould not be empty"),
+          ),
+        );
+        return;
+      }
       _isSaving.value = true;
       final json = DocumentJsonParser(_doc).toJson(_doc.nodes);
       final blogjson = DocumentJsonParser(_doc).getTitleDescription(_doc.nodes);
+      final newBlogId = DocumentEditor.createNodeId();
       await Provider.of<BlogProvider>(context, listen: false).saveBlog(
         type,
         blogInfo: Blog(
-          id: widget.blog != null
-              ? widget.blog!.id
-              : DocumentEditor.createNodeId(),
+          id: widget.blog != null ? widget.blog!.id : newBlogId,
           userId: widget.blog != null ? widget.blog!.userId : user.id,
-          category: Category(
-            id: "",
-            label: "Article",
-            description: "",
-            image: UploadOutput(
-              fileName: "",
-              generatedUri: "",
-            ),
-            catEnum: Cat.books,
-          ),
+          category: widget.blog != null
+              ? widget.blog!.category
+              : selectedCategory.value!,
           title: blogjson["title"],
           description: blogjson["description"],
           coverImage: blogjson["image_uri"],
@@ -441,6 +464,11 @@ class _BlogPageState extends State<WriteBlogPage> {
         ),
         json: json,
       );
+      //save the style of the given blog
+      if (stylerJson.keys.isNotEmpty) {
+        Provider.of<StyleProvider>(context, listen: false).saveStyle(
+            widget.blog != null ? widget.blog!.id : newBlogId, stylerJson);
+      }
       Navigator.of(context).pushReplacementNamed(ProfilePage.routeName);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -462,6 +490,7 @@ class _BlogPageState extends State<WriteBlogPage> {
       floatingActionButton: ValueListenableBuilder<bool>(
         valueListenable: _isSaving,
         builder: (context, value, child) => FloatingActionButton(
+          heroTag: "save_indicator",
           onPressed: () async {
             //if the blog is available
             if (widget.blog != null) {
@@ -508,9 +537,9 @@ class _BlogPageState extends State<WriteBlogPage> {
                         : DecorationImage(
                             image:
                                 CachedNetworkImageProvider(layout.layoutBgUri),
-                            invertColors: true,
-                            isAntiAlias: true,
-                            matchTextDirection: true,
+                            // invertColors: true,
+                            // isAntiAlias: true,
+                            // matchTextDirection: true,
                             fit: BoxFit.fill,
                           ),
                   ),
@@ -518,6 +547,22 @@ class _BlogPageState extends State<WriteBlogPage> {
                     color: layout.layoutColor ?? Colors.black.withOpacity(0.0),
                     child: DropViewerWidget(
                       onDrop: _onDropImage,
+                      saveBlog: () async {
+                        //if the blog is available
+                        if (widget.blog != null) {
+                          await saveTheBlog(widget.blogType!, user!);
+                          return;
+                        }
+                        IndicatorWidget.showCreateBlogModal(
+                          context,
+                          child: SaveBlogPopUpModalWidget(
+                            onSave: (type) async {
+                              Navigator.pop;
+                              saveTheBlog(type, user!);
+                            },
+                          ),
+                        );
+                      },
                       child: ValueListenableBuilder<StyleRules>(
                         valueListenable: updatedStyleRules,
                         builder: (context, values, __) => SuperEditor(
