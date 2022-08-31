@@ -3,6 +3,7 @@ import 'package:egnimos/src/models/style_models/text_style_model.dart';
 import 'package:egnimos/src/pages/write_blog_pages/named_attributions.dart';
 import 'package:egnimos/src/pages/write_blog_pages/styles/header_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:super_editor/super_editor.dart';
 
 import '../../pages/write_blog_pages/styles/default_paddings.dart';
@@ -250,6 +251,9 @@ class LayoutStyler {
     required TextStyle textStyle,
     String? blockId,
   }) {
+    if (style.fontFamilyInfo != null) {
+      GoogleFonts.asMap()[style.fontFamilyInfo!.fontFamilyName]?.call();
+    }
     return StyleRule(
       BlockSelector(blockId ?? style.blockId),
       (doc, docNode) {

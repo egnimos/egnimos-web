@@ -5,12 +5,14 @@ import 'package:super_editor/super_editor.dart';
 import 'custom_attribution/font_decoration_attribution.dart';
 import 'custom_attribution/font_size_attribution.dart';
 import 'custom_document_nodes/checkbox_node.dart';
+import 'custom_document_nodes/html_node.dart';
 
 const imageNode = "image_node";
 const paragraphNode = "paragraph_node";
 const listItemNode = "listitem_node";
 const horizontalRuleNode = "horizontal_rule_node";
 const checkboxNode = "checkbox_node";
+const htmlNode = "html_node";
 
 ///[ImageNodeJsonParser] Json Parser For [ImageNode]
 ///[toJson] to convert into json object
@@ -37,6 +39,44 @@ extension ImageNodeJsonParser on ImageNode {
       id: data["id"],
       imageUrl: data["uri"] ?? "",
       altText: data["alt_text"] ?? "",
+      metadata: {
+        'blockType': NamedAttribution(data["metadata"]['blockType']),
+      },
+    );
+    final currentStyles = SingleColumnLayoutComponentStyles.fromMetadata(node);
+    SingleColumnLayoutComponentStyles(
+      width: data["is_infinity"] ?? false
+          ? Responsive.widthMultiplier * 100.0
+          : currentStyles.width,
+      padding: currentStyles.padding,
+    ).applyTo(node);
+    return node;
+  }
+}
+
+///[HtmlNodeJsonParser] Json Parser For [HtmlNode]
+///[toJson] to convert into json object
+///[fromJson] to rewind back to the [HtmlNode] object
+extension HtmlNodeJsonParser on HtmlNode {
+  Map<String, dynamic> toJson(HtmlNode node) {
+    print(double.infinity);
+    final currentStyles = SingleColumnLayoutComponentStyles.fromMetadata(node);
+    return {
+      "id": node.id,
+      "width": currentStyles.width,
+      "is_infinity": node.metadata["is_infinity"] ?? false,
+      "node": htmlNode,
+      "html": node.html,
+      "metadata": {
+        'blockType': (node.metadata['blockType'] as NamedAttribution).id,
+      },
+    };
+  }
+
+  static HtmlNode fromJson(Map<String, dynamic> data) {
+    final node = HtmlNode(
+      id: data["id"],
+      html: data["html"] ?? "",
       metadata: {
         'blockType': NamedAttribution(data["metadata"]['blockType']),
       },
@@ -332,6 +372,9 @@ extension DocumentJsonParser on MutableDocument {
       if (node is CheckboxNode) {
         data = node.toJson(node);
       }
+      if (node is HtmlNode) {
+        data = node.toJson(node);
+      }
       if (node is ParagraphNode) {
         data = node.toJson(node);
       }
@@ -349,18 +392,28 @@ extension DocumentJsonParser on MutableDocument {
   }
 
   //get the title description
-  Map<String, dynamic> getTitleDescription(List<DocumentNode> nodes) {
+  Map<String, dynamic> getBlogSnaps(List<DocumentNode> nodes) {
     String? title;
     String? description;
     String? imageUri;
     List<String> tags = [];
+    List<String> searchChars = [];
+    num readingTime = 0;
+    int wordCount = 0;
     for (var node in nodes) {
+      //get the word count
+      if (node is TextNode) {
+        //get the length
+        wordCount += node.text.text.split(" ").length;
+      }
+      //get the image
       if (node is ImageNode) {
         if (imageUri != null) {
           continue;
         }
         imageUri = node.imageUrl;
       }
+      //get the description info
       if (node is ParagraphNode) {
         //get the tags value
         final rex = RegExp(r'\B(\#[a-zA-Z]+\b)(?!;)');
@@ -389,11 +442,27 @@ extension DocumentJsonParser on MutableDocument {
         }
       }
     }
+    //get the reading time in minutes
+    readingTime = (wordCount / 200);
+    print("READING TIME :: $readingTime");
+    //get the search chars
+    if (title != null) {
+      for (int i = 1; i <= title.length; i++) {
+        // if (i <= 1) {
+        //   searchChars.add(title.substring(0));
+        //   continue;
+        // }
+        searchChars.add(title.substring(0, i).toLowerCase());
+      }
+      print("SEARCH CHARS :: $searchChars");
+    }
     return {
       "title": title,
       "description": description,
       "tags": tags,
       "image_uri": imageUri,
+      "reading_time": readingTime,
+      "search_chars": searchChars,
     };
   }
 
@@ -414,6 +483,9 @@ extension DocumentJsonParser on MutableDocument {
           break;
         case imageNode:
           nodes.add(ImageNodeJsonParser.fromJson(doc));
+          break;
+        case htmlNode:
+          nodes.add(HtmlNodeJsonParser.fromJson(doc));
           break;
         case horizontalRuleNode:
           nodes.add(HorizontalRuleNodeJsonParser.fromJson(doc));

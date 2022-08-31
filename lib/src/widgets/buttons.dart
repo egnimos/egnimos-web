@@ -113,8 +113,10 @@ class _MenuSwitchButtonState extends State<MenuSwitchButton> {
 class NavButtons extends StatelessWidget {
   final NavOptions selectedOption;
   final BoxConstraints constraints;
+  final bool isBlogNav;
 
   const NavButtons({
+    this.isBlogNav = false,
     required this.selectedOption,
     required this.constraints,
     Key? key,
@@ -134,6 +136,14 @@ class NavButtons extends StatelessWidget {
                 },
                 icon: const Icon(Icons.menu),
               ),
+              //open right nav
+              if (isBlogNav)
+                IconButton(
+                  onPressed: () {
+                    Scaffold.of(context).openEndDrawer();
+                  },
+                  icon: const Icon(Icons.info),
+                ),
             ]
           : <Widget>[
               MenuSwitchButton(

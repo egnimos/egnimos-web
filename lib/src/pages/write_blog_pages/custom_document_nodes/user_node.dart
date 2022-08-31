@@ -5,8 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:super_editor/super_editor.dart';
 
-import '../../../models/category.dart';
+import '../../../models/blog.dart';
 import '../../../theme/color_theme.dart';
+import '../../blog_page.dart';
 
 const userNodeAttribution = NamedAttribution("user_node");
 
@@ -16,20 +17,20 @@ class UserNode extends TextNode {
     required AttributedText text,
     required User userInfo,
     required DateTime blogUpdatedAt,
-    required Category category,
+    required Blog blogInfo,
     Map<String, dynamic>? metadata,
   })  : _userInfo = userInfo,
         _blogUpdatedAt = blogUpdatedAt,
-        _category = category,
+        _blogInfo = blogInfo,
         super(id: id, text: text, metadata: metadata) {
     putMetadataValue("blockType", userNodeAttribution);
   }
 
   User get userInfo => _userInfo;
-  Category get category => _category;
+  Blog get blogInfo => _blogInfo;
   DateTime get blogUpdatedAt => _blogUpdatedAt;
   final User _userInfo;
-  final Category _category;
+  final Blog _blogInfo;
   final DateTime _blogUpdatedAt;
 
   //has equivalent content
@@ -39,7 +40,7 @@ class UserNode extends TextNode {
         userInfo == other.userInfo &&
         text == other.text &&
         blogUpdatedAt == other.blogUpdatedAt &&
-        category == other.category;
+        blogInfo == other.blogInfo;
   }
 
   @override
@@ -50,14 +51,14 @@ class UserNode extends TextNode {
           runtimeType == other.runtimeType &&
           _userInfo == other.userInfo &&
           _blogUpdatedAt == other.blogUpdatedAt &&
-          _category == other.category;
+          _blogInfo == other.blogInfo;
 
   @override
   int get hashCode =>
       super.hashCode ^
       _userInfo.hashCode ^
       _blogUpdatedAt.hashCode ^
-      _category.hashCode;
+      _blogInfo.hashCode;
 }
 
 /// Builds [UserNodeViewModel]s and
@@ -78,7 +79,7 @@ class UserComponentBuilder implements ComponentBuilder {
       nodeId: node.id,
       padding: EdgeInsets.zero,
       userInfo: node.userInfo,
-      category: node.category,
+      blogInfo: node.blogInfo,
       blogUpdatedAt: node.blogUpdatedAt,
       text: node.text,
       textStyleBuilder: noStyleBuilder,
@@ -110,7 +111,7 @@ class UserComponentViewModel extends SingleColumnLayoutComponentViewModel
   UserComponentViewModel({
     required String nodeId,
     double? maxWidth,
-    required this.category,
+    required this.blogInfo,
     required this.blogUpdatedAt,
     required this.userInfo,
     required EdgeInsetsGeometry padding,
@@ -129,7 +130,7 @@ class UserComponentViewModel extends SingleColumnLayoutComponentViewModel
 
   User userInfo;
   DateTime blogUpdatedAt;
-  Category category;
+  Blog blogInfo;
   AttributedText text;
 
   @override
@@ -158,7 +159,7 @@ class UserComponentViewModel extends SingleColumnLayoutComponentViewModel
       padding: padding,
       userInfo: userInfo,
       blogUpdatedAt: blogUpdatedAt,
-      category: category,
+      blogInfo: blogInfo,
       text: text,
       textStyleBuilder: textStyleBuilder,
       textDirection: textDirection,
@@ -176,7 +177,7 @@ class UserComponentViewModel extends SingleColumnLayoutComponentViewModel
           runtimeType == other.runtimeType &&
           userInfo == other.userInfo &&
           blogUpdatedAt == other.blogUpdatedAt &&
-          category == other.category &&
+          blogInfo == other.blogInfo &&
           text == other.text &&
           textStyleBuilder == other.textStyleBuilder &&
           textDirection == other.textDirection &&
@@ -190,7 +191,7 @@ class UserComponentViewModel extends SingleColumnLayoutComponentViewModel
       super.hashCode ^
       blogUpdatedAt.hashCode ^
       text.hashCode ^
-      category.hashCode ^
+      blogInfo.hashCode ^
       userInfo.hashCode ^
       textStyleBuilder.hashCode ^
       textDirection.hashCode ^
@@ -221,26 +222,34 @@ class UserComponent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         //category info
-        IntrinsicWidth(
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                width: 1.4,
-                color: ColorTheme.bgColor14,
+        GestureDetector(
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return CategoriesBlogPage(
+                  categoryInfo: viewModel.blogInfo.category);
+            }));
+          },
+          child: IntrinsicWidth(
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  width: 1.4,
+                  color: ColorTheme.bgColor14,
+                ),
+                borderRadius: BorderRadius.circular(20.0),
               ),
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-            alignment: Alignment.center,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20.0,
-              vertical: 10.0,
-            ),
-            child: Text(
-              viewModel.category.label,
-              style: GoogleFonts.rubik(
-                fontSize: 18.0,
-                fontWeight: FontWeight.w600,
-                color: ColorTheme.bgColor8,
+              alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20.0,
+                vertical: 10.0,
+              ),
+              child: Text(
+                viewModel.blogInfo.category.label,
+                style: GoogleFonts.rubik(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w600,
+                  color: ColorTheme.bgColor10,
+                ),
               ),
             ),
           ),
@@ -277,6 +286,7 @@ class UserComponent extends StatelessWidget {
 
             //cat name
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 //user name
                 TextComponent(
@@ -288,17 +298,49 @@ class UserComponent extends StatelessWidget {
                   showDebugPaint: showDebugPaint,
                 ),
 
+                const SizedBox(
+                  height: 5.0,
+                ),
+
                 //date of published
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 5.0,
+                TextComponent(
+                  text: AttributedText(
+                    text: dateTime,
                   ),
-                  child: Text(
-                    dateTime,
-                    style: GoogleFonts.openSans(
+                  textStyleBuilder: (attributions) {
+                    return GoogleFonts.openSans(
                       color: Colors.grey.shade800,
-                    ),
+                      fontWeight: FontWeight.w500,
+                    );
+                  },
+                  textSelection: viewModel.selection,
+                  selectionColor: viewModel.selectionColor,
+                  highlightWhenEmpty: viewModel.highlightWhenEmpty,
+                  showDebugPaint: showDebugPaint,
+                ),
+
+                const SizedBox(
+                  height: 5.0,
+                ),
+
+                TextComponent(
+                  text: AttributedText(
+                    text:
+                        "Reading time ${viewModel.blogInfo.readingTime.roundToDouble()} min",
                   ),
+                  textStyleBuilder: (attributions) {
+                    return GoogleFonts.openSans(
+                      color: Colors.grey.shade800,
+                      fontWeight: FontWeight.w500,
+                    );
+                  },
+                  textSelection: viewModel.selection,
+                  selectionColor: viewModel.selectionColor,
+                  highlightWhenEmpty: viewModel.highlightWhenEmpty,
+                  showDebugPaint: showDebugPaint,
+                ),
+                const SizedBox(
+                  height: 5.0,
                 ),
               ],
             ),

@@ -156,6 +156,9 @@ class OverlayActions {
             hideEditorToolbar(restoreFocus!);
             // docOps?.insertBlockLevelNewline();
           },
+          closeToolbar: () {
+            hideEditorToolbar(restoreFocus!);
+          },
           mutableDoc: mutableDoc,
           cmdNode: cmdNode,
           displayHiglight: true,

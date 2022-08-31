@@ -33,6 +33,7 @@ dependencies:
   cross_file: ^0.3.3+1
   cupertino_icons: ^1.0.2
   dotted_border: ^2.0.0+2
+  dropdown_search: ^5.0.2
   dynamic_cached_fonts: ^1.0.0
   file_picker: ^4.6.1
   firebase_auth: ^3.4.0
@@ -62,7 +63,8 @@ dependencies:
   super_text_layout: ^0.1.0
   url_launcher: ^6.0.20
   uuid: ^3.0.6
-  dropdown_search: ^5.0.2
+  visibility_detector: ^0.3.3
+  flutter_widget_from_html: ^0.8.5
 
 dependency_overrides:
   # Override to local mono-repo path so devs can test this repo

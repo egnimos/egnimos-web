@@ -11,6 +11,7 @@ import 'package:egnimos/src/pages/profile_page.dart';
 import 'package:egnimos/src/pages/write_blog_pages/command_based_actions/execute_command.dart';
 import 'package:egnimos/src/pages/write_blog_pages/custom_attribution/attribution_holder.dart';
 import 'package:egnimos/src/pages/write_blog_pages/custom_document_nodes/checkbox_node.dart';
+import 'package:egnimos/src/pages/write_blog_pages/custom_document_nodes/html_node.dart';
 import 'package:egnimos/src/pages/write_blog_pages/custom_editor_comands/checkbox_list_commands.dart';
 import 'package:egnimos/src/pages/write_blog_pages/custom_editor_comands/shift_to_newline.dart';
 import 'package:egnimos/src/pages/write_blog_pages/mutuable_doc_exmp.dart';
@@ -130,6 +131,7 @@ class _BlogPageState extends State<WriteBlogPage> {
       //create  the initial document content
       _doc = doc
         ..addListener(() async {
+          // (doc.nodes.first as TextNode).text
           //update the tool bar display
           _updateToolbarDisplay();
           //set the command
@@ -444,7 +446,7 @@ class _BlogPageState extends State<WriteBlogPage> {
       }
       _isSaving.value = true;
       final json = DocumentJsonParser(_doc).toJson(_doc.nodes);
-      final blogjson = DocumentJsonParser(_doc).getTitleDescription(_doc.nodes);
+      final blogjson = DocumentJsonParser(_doc).getBlogSnaps(_doc.nodes);
       final newBlogId = DocumentEditor.createNodeId();
       await Provider.of<BlogProvider>(context, listen: false).saveBlog(
         type,
@@ -458,6 +460,8 @@ class _BlogPageState extends State<WriteBlogPage> {
           description: blogjson["description"],
           coverImage: blogjson["image_uri"],
           tags: blogjson["tags"],
+          searchChars: blogjson["search_chars"],
+          readingTime: blogjson["reading_time"],
           createdAt:
               widget.blog != null ? widget.blog!.createdAt : Timestamp.now(),
           updatedAt: Timestamp.now(),
@@ -585,6 +589,7 @@ class _BlogPageState extends State<WriteBlogPage> {
                           componentBuilders: [
                             ...defaultComponentBuilders,
                             CheckBoxComponentBuilder(_documentEditor),
+                            HtmlComponentBuilder(_documentEditor),
                           ],
                           stylesheet: defaultStylesheet.copyWith(
                             addRulesAfter: [

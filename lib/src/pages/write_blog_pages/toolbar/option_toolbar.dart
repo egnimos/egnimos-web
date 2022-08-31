@@ -3,8 +3,12 @@ import 'package:egnimos/src/pages/write_blog_pages/command_based_actions/command
 import 'package:egnimos/src/pages/write_blog_pages/command_based_actions/command_suggestion_constants.dart';
 import 'package:egnimos/src/pages/write_blog_pages/custom_editor_comands/convert_command_img_node.dart';
 import 'package:egnimos/src/services/picker_service.dart';
+import 'package:egnimos/src/widgets/indicator_widget.dart';
+import 'package:egnimos/src/widgets/nav.dart';
+import 'package:egnimos/src/widgets/write_html_widget.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:super_editor/super_editor.dart';
 import '../custom_editor_comands/convert_command_blockquote_node.dart';
@@ -12,6 +16,7 @@ import '../custom_editor_comands/convert_command_checkbox_node.dart';
 import '../custom_editor_comands/convert_command_header_node.dart';
 import '../custom_editor_comands/convert_command_hr_node.dart';
 import '../custom_editor_comands/convert_command_list_node.dart';
+import '../custom_editor_comands/convert_command_to_html_node.dart';
 
 class OptionToolbar extends StatefulWidget {
   final ValueNotifier<Offset?> anchor;
@@ -22,6 +27,7 @@ class OptionToolbar extends StatefulWidget {
   final List<String> suggestion;
   final DocumentComposer composer;
   final Function() runAfterExecution;
+  final Function() closeToolbar;
 
   const OptionToolbar({
     Key? key,
@@ -33,6 +39,7 @@ class OptionToolbar extends StatefulWidget {
     required this.suggestion,
     required this.displayHiglight,
     required this.composer,
+    required this.closeToolbar,
   }) : super(key: key);
 
   @override
@@ -205,6 +212,28 @@ class _OptionToolbarState extends State<OptionToolbar> {
         ),
       );
       widget.runAfterExecution();
+    }
+
+    //html
+    if (cmdText == html) {
+      //activate the pop up modal
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        IndicatorWidget.showPopUpModalWidget(
+          context,
+          child: WriteHtmlWidget(
+            onClick: (value) {
+              widget.editor.executeCommand(
+                ConvertCommandToHtmlNode(
+                  nodeId: widget.cmdNode.id,
+                  doc: value,
+                ),
+              );
+              widget.runAfterExecution();
+            },
+          ),
+        );
+      });
+      widget.closeToolbar();
     }
 
     //Horizontal Image

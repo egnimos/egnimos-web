@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:egnimos/src/models/blog.dart';
+import 'package:egnimos/src/pages/blog_page.dart';
 import 'package:egnimos/src/pages/view_blog_page.dart';
 import 'package:egnimos/src/pages/write_blog_pages/write_blog_page.dart';
 import 'package:egnimos/src/providers/blog_provider.dart';
@@ -69,28 +70,36 @@ class BlogPostCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 18.0,
-                    vertical: 10.0,
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 5.0,
-                    horizontal: 16.0,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(22.0),
-                    border: Border.all(
-                      color: ColorTheme.bgColor2,
-                      width: 1.2,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return CategoriesBlogPage(categoryInfo: blog.category);
+                    }));
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 18.0,
+                      vertical: 10.0,
                     ),
-                  ),
-                  child: Text(
-                    blog.category.label,
-                    style: GoogleFonts.openSans(
-                      fontSize: 17.0,
-                      fontWeight: FontWeight.w500,
-                      color: ColorTheme.bgColor2,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 5.0,
+                      horizontal: 16.0,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(22.0),
+                      border: Border.all(
+                        color: ColorTheme.bgColor2,
+                        width: 1.2,
+                      ),
+                    ),
+                    child: Text(
+                      blog.category.label,
+                      style: GoogleFonts.openSans(
+                        fontSize: 17.0,
+                        fontWeight: FontWeight.w500,
+                        color: ColorTheme.bgColor2,
+                      ),
                     ),
                   ),
                 ),
@@ -167,13 +176,19 @@ class BlogPostCard extends StatelessWidget {
                           child: GestureDetector(
                             onTap: () {
                               print(tag);
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return TagsBlogPage(
+                                  tag: tag,
+                                );
+                              }));
                             },
                             child: ValueListenableBuilder<String>(
                               valueListenable: selectedTag,
                               builder: (context, value, child) => Text(
-                                tag + " ",
-                                style: GoogleFonts.openSans(
-                                  fontSize: 18.0,
+                                "$tag ",
+                                style: GoogleFonts.handlee(
+                                  fontSize: 22.0,
                                   decoration: tag == value
                                       ? TextDecoration.underline
                                       : null,

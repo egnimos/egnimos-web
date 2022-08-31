@@ -1,18 +1,24 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:egnimos/src/config/responsive.dart';
 import 'package:egnimos/src/models/blog.dart';
 import 'package:egnimos/src/models/style_models/styler.dart';
 import 'package:egnimos/src/pages/profile_page.dart';
+import 'package:egnimos/src/pages/search_delegate_page.dart';
 import 'package:egnimos/src/pages/write_blog_pages/custom_document_nodes/user_node.dart';
 import 'package:egnimos/src/providers/blog_provider.dart';
 import 'package:egnimos/src/theme/color_theme.dart';
 import 'package:egnimos/src/utility/enum.dart';
+import 'package:egnimos/src/widgets/nav.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:super_editor/super_editor.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../main.dart';
 import '../config/k.dart';
@@ -21,10 +27,13 @@ import '../providers/auth_provider.dart';
 import '../providers/style_provider.dart';
 import '../widgets/buttons.dart';
 import '../widgets/egnimos_nav.dart';
+import '../widgets/menu.dart';
+import 'about_page.dart';
 import 'auth_pages/auth_page.dart';
 import 'blog_page.dart';
 import 'home.dart';
 import 'write_blog_pages/custom_document_nodes/checkbox_node.dart';
+import 'write_blog_pages/custom_document_nodes/html_node.dart';
 import 'write_blog_pages/styles/header_styles.dart';
 import 'write_blog_pages/styles/inlinetext_styles.dart';
 import 'write_blog_pages/styles/main_layout.dart';
@@ -45,6 +54,7 @@ class ViewBlogPage extends StatefulWidget {
 
 class _ViewBlogPageState extends State<ViewBlogPage> {
   final GlobalKey _docLayoutKey = GlobalKey();
+  final GlobalKey _visibilityKey = GlobalKey();
 
   late Document _doc;
   late DocumentEditor _docEditor;
@@ -55,10 +65,12 @@ class _ViewBlogPageState extends State<ViewBlogPage> {
 
   ScrollController? _scrollController;
   User? userInfo;
+  User? currentUserInfo;
   bool _isLoading = true;
   bool _isInit = true;
   LayoutStyler? layoutStyler;
   StyleRules styleRules = [];
+  Timer? timer;
 
   // final _darkBackground = const Color(0xFF222222);
   // final _lightBackground = Colors.white;
@@ -66,6 +78,19 @@ class _ViewBlogPageState extends State<ViewBlogPage> {
 
   // OverlayEntry? _textFormatBarOverlayEntry;
   // final _textSelectionAnchor = ValueNotifier<Offset?>(null);
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      currentUserInfo = Provider.of<AuthProvider>(context, listen: false).user;
+      //redirect to login screen if you are not login
+      if (currentUserInfo == null) {
+        Navigator.of(context).pushNamed(AuthPage.routeName);
+      }
+      Provider.of<BlogProvider>(context, listen: false)
+          .saveActiveUser(widget.blogSnap, currentUserInfo!);
+    });
+  }
 
   @override
   void didChangeDependencies() {
@@ -81,6 +106,8 @@ class _ViewBlogPageState extends State<ViewBlogPage> {
     _scrollController?.dispose();
     _editorFocusNode.dispose();
     _composer.dispose();
+    timer!.cancel();
+    BlogProvider.deleteActiveUser(widget.blogSnap, currentUserInfo!);
     super.dispose();
   }
 
@@ -103,7 +130,7 @@ class _ViewBlogPageState extends State<ViewBlogPage> {
           text: AttributedText(text: userInfo?.name ?? "no-name"),
           userInfo: userInfo!,
           blogUpdatedAt: widget.blogSnap.updatedAt.toDate(),
-          category: widget.blogSnap.category,
+          blogInfo: widget.blogSnap,
         ),
       );
       //get the style info
@@ -143,25 +170,47 @@ class _ViewBlogPageState extends State<ViewBlogPage> {
 
   Widget blogWidget(BoxConstraints constraints) {
     return Expanded(
-      child: SuperEditor(
-        scrollController: _scrollController,
-        editor: _docEditor,
-        focusNode: _editorFocusNode,
-        composer: _composer,
-        documentLayoutKey: _docLayoutKey,
-        componentBuilders: [
-          ...defaultComponentBuilders,
-          CheckBoxComponentBuilder(_docEditor),
-          UserComponentBuilder(_docEditor),
-        ],
-        stylesheet: defaultStylesheet.copyWith(
-          addRulesAfter: [
-            ...initialLayout(),
-            ...defaultHeaders(context),
-            ...nodeStyles(),
+      child: VisibilityDetector(
+        key: _visibilityKey,
+        onVisibilityChanged: (value) {
+          try {
+            final visiblePercen = value.visibleFraction * 100.0;
+            print(visiblePercen);
+            if (visiblePercen >= 50.0) {
+              print(visiblePercen);
+              final minutes = widget.blogSnap.readingTime.round();
+              timer ??= Timer(Duration(minutes: minutes), () {
+                //update the view count
+                print("sdkjhgsdjsadjsdjksdkja::: kjdhakdksaskdaskdasd");
+                Provider.of<BlogProvider>(context, listen: false)
+                    .saveViewCount(widget.blogSnap, currentUserInfo!);
+              });
+            }
+          } catch (e) {
+            print(e);
+          }
+        },
+        child: SuperEditor(
+          scrollController: _scrollController,
+          editor: _docEditor,
+          focusNode: _editorFocusNode,
+          composer: _composer,
+          documentLayoutKey: _docLayoutKey,
+          componentBuilders: [
+            ...defaultComponentBuilders,
+            CheckBoxComponentBuilder(_docEditor),
+            HtmlComponentBuilder(_docEditor),
+            UserComponentBuilder(_docEditor),
           ],
-          inlineTextStyler: inlinetextStyle,
-        ).copyWith(addRulesAfter: [...styleRules]),
+          stylesheet: defaultStylesheet.copyWith(
+            addRulesAfter: [
+              ...initialLayout(),
+              ...defaultHeaders(context),
+              ...nodeStyles(),
+            ],
+            inlineTextStyler: inlinetextStyle,
+          ).copyWith(addRulesAfter: [...styleRules]),
+        ),
       ),
     );
   }
@@ -192,22 +241,47 @@ class _ViewBlogPageState extends State<ViewBlogPage> {
               color: layoutStyler?.layoutColor ?? Colors.black.withOpacity(0.0),
               child: LayoutBuilder(builder: (context, constraints) {
                 return Scaffold(
-                  body: Row(
-                    children: [
-                      //web app info
-                      SidePanelWidget(
-                        constraints: constraints,
-                      ),
-                      //blog
-                      blogWidget(constraints),
-                      //User Info with blogs written by user
-                      //list of active user
-                      UserProfileInfoWidget(
-                        constraints: constraints,
-                        userInfo: userInfo!,
-                      ),
-                    ],
+                  drawer: const Menu(selectedOption: NavOptions.unknown),
+                  endDrawer: Drawer(
+                    width: Responsive.widthMultiplier * 50.0,
+                    backgroundColor: Colors.grey.shade50,
+                    child: UserProfileInfoWidget(
+                      constraints: constraints,
+                      userInfo: userInfo!,
+                      blogInfo: widget.blogSnap,
+                      isDrawer: true,
+                    ),
                   ),
+                  body: constraints.maxWidth < K.kTableteWidth
+                      ? Column(
+                          children: [
+                            //nav
+                            const Nav(
+                              selectedOption: NavOptions.unknown,
+                              isBlogNav: true,
+                            ),
+
+                            //blog
+                            blogWidget(constraints),
+                          ],
+                        )
+                      : Row(
+                          children: [
+                            //web app info
+                            SidePanelWidget(
+                              constraints: constraints,
+                            ),
+                            //blog
+                            blogWidget(constraints),
+                            //User Info with blogs written by user
+                            //list of active user
+                            UserProfileInfoWidget(
+                              constraints: constraints,
+                              userInfo: userInfo!,
+                              blogInfo: widget.blogSnap,
+                            ),
+                          ],
+                        ),
                 );
               }),
             ),
@@ -217,12 +291,16 @@ class _ViewBlogPageState extends State<ViewBlogPage> {
 
 class UserProfileInfoWidget extends StatelessWidget {
   final User userInfo;
+  final Blog blogInfo;
   final BoxConstraints constraints;
-  UserProfileInfoWidget({
-    Key? key,
-    required this.userInfo,
-    required this.constraints,
-  }) : super(key: key);
+  final bool isDrawer;
+  UserProfileInfoWidget(
+      {Key? key,
+      required this.blogInfo,
+      required this.userInfo,
+      required this.constraints,
+      this.isDrawer = false})
+      : super(key: key);
 
   void loadInfo(BuildContext context) async {
     try {
@@ -241,12 +319,15 @@ class UserProfileInfoWidget extends StatelessWidget {
 
   final isLoading = ValueNotifier<bool>(true);
   final blogs = ValueNotifier<List<Blog>>([]);
+  final focusNode = FocusNode();
 
-  Widget blogInfo(Blog blogInfo) {
+  Widget blogInfoWidget(Blog blogInfo) {
     final dateTime =
         DateFormat('EEE, MMM d, yyyy').format(blogInfo.updatedAt.toDate());
     return SizedBox(
-      width: Responsive.widthMultiplier * 20.0,
+      width: isDrawer
+          ? Responsive.widthMultiplier * 35.0
+          : Responsive.widthMultiplier * 20.0,
       // height: 40.0,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -346,6 +427,8 @@ class UserProfileInfoWidget extends StatelessWidget {
     );
   }
 
+  final selectedTag = ValueNotifier<String>("");
+
   // Stream<User?>? user() {
   //   return firebaseAuth.authStateChanges().;
   // }
@@ -372,63 +455,127 @@ class UserProfileInfoWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //blogs & profile
-              Row(
-                children: [
-                  SizedBox(
-                    width: (constraints.maxWidth / 100) * 1.5,
+              // search
+              SizedBox(
+                width: isDrawer
+                    ? Responsive.widthMultiplier * 40.0
+                    : Responsive.widthMultiplier * 26.0,
+                child: TextField(
+                  focusNode: focusNode,
+                  onTap: () {
+                    showSearch(
+                      context: context,
+                      delegate: SearchScreen(),
+                    );
+                    focusNode.unfocus();
+                  },
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: Colors.grey.shade600,
+                    ),
+                    hintText: "search...",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(22.0),
+                      borderSide: BorderSide(
+                        width: 1.2,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(22.0),
+                      borderSide: BorderSide(
+                        width: 1.2,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey.shade50,
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(22.0),
+                      borderSide: BorderSide(
+                        width: 1.2,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
                   ),
-                  MenuSwitchButton(
-                    label: "Blog",
-                    option: NavOptions.blog.name,
-                    selectedOption: NavOptions.home.name,
-                    onTap: () {
-                      Navigator.of(context).pushNamed(BlogPage.routeName);
-                    },
-                  ),
-                  SizedBox(
-                    width: (constraints.maxWidth / 100) * 1.5,
-                  ),
-                  const ContactButton(),
-                  SizedBox(
-                    width: (constraints.maxWidth / 100) * 1.5,
-                  ),
-                  //auth button
-                  StreamBuilder(
-                      stream: firebaseAuth.authStateChanges(),
-                      builder: (context, snapshot) {
-                        // WebAppAuthState().checkAuthState().then((value) {
-                        //   // print(value);
-                        // });
-                        if (snapshot.data == null) {
-                          return MenuSwitchButton(
-                            label: "Login",
-                            option: NavOptions.loginregister.name,
-                            selectedOption: NavOptions.home.name,
-                            onTap: () {
-                              //navigate to the login page
-                              Navigator.of(context)
-                                  .pushNamed(AuthPage.routeName);
-                            },
-                          );
-                        } else {
-                          return MenuSwitchButton(
-                            label: "Profile",
-                            option: NavOptions.profile.name,
-                            selectedOption: NavOptions.home.name,
-                            onTap: () {
-                              //navigate to the login page
-                              Navigator.of(context)
-                                  .pushNamed(ProfilePage.routeName);
-                            },
-                          );
-                        }
-                      })
-                ],
+                ),
               ),
 
               const SizedBox(
-                height: 180.0,
+                height: 50.0,
+              ),
+
+              //Blog Tags
+
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  // horizontal: 16.0,
+                  vertical: 5.0,
+                ),
+                child: Text(
+                  "#hashTags",
+                  style: GoogleFonts.handlee(
+                    fontSize: 26.0,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.grey.shade900,
+                  ),
+                ),
+              ),
+
+              if (blogInfo.tags.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    // horizontal: 16.0,
+                    vertical: 5.0,
+                  ),
+                  child: Wrap(
+                    children: blogInfo.tags
+                        .map(
+                          (tag) => //tag
+                              MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            onEnter: (val) {
+                              selectedTag.value = tag;
+                            },
+                            onExit: (val) {
+                              selectedTag.value = "";
+                            },
+                            child: GestureDetector(
+                              onTap: () {
+                                print(tag);
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return TagsBlogPage(
+                                    tag: tag,
+                                  );
+                                }));
+                              },
+                              child: ValueListenableBuilder<String>(
+                                valueListenable: selectedTag,
+                                builder: (context, value, child) => Text(
+                                  "$tag ",
+                                  style: GoogleFonts.handlee(
+                                    fontSize: 22.0,
+                                    decoration: tag == value
+                                        ? TextDecoration.underline
+                                        : null,
+                                    decorationThickness: 2.0,
+                                    decorationColor: Colors.blue.shade600,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.blue.shade600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
+
+              const SizedBox(
+                height: 30.0,
               ),
 
               //user image
@@ -467,8 +614,37 @@ class UserProfileInfoWidget extends StatelessWidget {
                 ),
               ),
 
+              //const
+              const SizedBox(height: 16.0),
+
+              //views
+              StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: firestoreInstance
+                    .collection(BlogProvider.viewUserCollection)
+                    .doc(blogInfo.userId)
+                    .collection(BlogProvider.viewCounts)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    final data = snapshot.data?.docs ?? [];
+                    //get the blog id
+                    if (data.isNotEmpty) {
+                      final viewInfo =
+                          data.firstWhere((d) => d.id == blogInfo.id);
+                      return Text(
+                        "${viewInfo.data()["view_count"]} Views",
+                        style: GoogleFonts.rubik(
+                          fontSize: 18.0,
+                        ),
+                      );
+                    }
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
+
               const SizedBox(
-                height: 60.0,
+                height: 40.0,
               ),
 
               Column(
@@ -485,15 +661,62 @@ class UserProfileInfoWidget extends StatelessWidget {
                   ),
 
                   const SizedBox(
-                    height: 40.0,
+                    height: 15.0,
                   ),
 
                   //visiting active users
+                  StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                      stream: firestoreInstance
+                          .collection(BlogProvider.activeUsers)
+                          .doc(blogInfo.id)
+                          .collection(BlogProvider.users)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          final data = snapshot.data?.docs ?? [];
+                          return SizedBox(
+                            width: isDrawer
+                                ? Responsive.widthMultiplier * 35.0
+                                : Responsive.widthMultiplier * 20.0,
+                            height: 70.0,
+                            child: ListView.builder(
+                                itemCount: data.length,
+                                itemBuilder: (context, i) {
+                                  final info = data[i].data();
+                                  final image = info["image"];
+                                  return Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Container(
+                                      margin:
+                                          const EdgeInsets.only(right: 10.0),
+                                      constraints: BoxConstraints.tight(
+                                        const Size.square(60.0),
+                                      ),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          width: 1.2,
+                                          color: ColorTheme.bgColor18,
+                                        ),
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                          image:
+                                              CachedNetworkImageProvider(image),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }),
+                          );
+                        }
+
+                        return const SizedBox.shrink();
+                      }),
                 ],
               ),
 
               const SizedBox(
-                height: 60.0,
+                height: 30.0,
               ),
 
               //more from user
@@ -526,7 +749,7 @@ class UserProfileInfoWidget extends StatelessWidget {
                               children: [
                                 ...values
                                     .map(
-                                      (b) => blogInfo(b),
+                                      (b) => blogInfoWidget(b),
                                     )
                                     .toList()
                               ],
@@ -563,38 +786,148 @@ class SidePanelWidget extends StatelessWidget {
       ),
       height: Responsive.heightMultiplier * 100.0,
       width: Responsive.widthMultiplier * 19.0,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          //web app name & icon
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              //icon
-              Flexible(
-                child: Image.asset(
-                  "assets/images/png/Group_392-4.png",
-                  width: 40.0,
-                  height: 40.0,
-                  fit: BoxFit.contain,
-                ),
-              ),
-              //app name
-              Expanded(
-                child: GestureDetector(
-                  onTap: () async {
-                    await Navigator.of(context)
-                        .pushReplacementNamed(Home.routeName);
-                  },
-                  child: EgnimosNav(
-                    height: 70.0,
-                    constraints: constraints,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            //web app name & icon
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                //icon
+                Flexible(
+                  child: Image.asset(
+                    "assets/images/png/Group_392-4.png",
+                    width: 40.0,
+                    height: 40.0,
+                    fit: BoxFit.contain,
                   ),
                 ),
-              ),
-            ],
-          ),
-        ],
+                //app name
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () async {
+                      await Navigator.of(context)
+                          .pushReplacementNamed(Home.routeName);
+                    },
+                    child: EgnimosNav(
+                      height: 70.0,
+                      constraints: constraints,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 180.0),
+
+            //options
+            // IconButton(
+            //   onPressed: () {},
+            //   icon: Icon(
+            //     Icons.home,
+            //     size: 40.0,
+            //     color: Colors.grey.shade600,
+            //   ),
+            // ),
+            // //blogs
+            // IconButton(
+            //   onPressed: () {},
+            //   icon: Icon(
+            //     Icons.article,
+            //     size: 40.0,
+            //     color: Colors.grey.shade600,
+            //   ),
+            // ),
+            // //contacts
+            // IconButton(
+            //   onPressed: () {},
+            //   icon: Icon(
+            //     Icons.contact_page,
+            //     size: 40.0,
+            //     color: Colors.grey.shade600,
+            //   ),
+            // ),
+            // //profile
+            // IconButton(
+            //   onPressed: () {},
+            //   icon: Icon(
+            //     Icons.person,
+            //     size: 40.0,
+            //     color: Colors.grey.shade600,
+            //   ),
+            // ),
+
+            MenuSwitchButton(
+              label: "Home",
+              option: NavOptions.home.name,
+              selectedOption: NavOptions.unknown.name,
+              onTap: () {
+                Navigator.of(context).pushReplacementNamed(Home.routeName);
+              },
+            ),
+            SizedBox(
+              height: (constraints.maxWidth / 100) * 1.5,
+            ),
+            MenuSwitchButton(
+              label: "About",
+              option: NavOptions.about.name,
+              selectedOption: NavOptions.unknown.name,
+              onTap: () {
+                Navigator.of(context).pushReplacementNamed(AboutPage.routeName);
+              },
+            ),
+            SizedBox(
+              height: (constraints.maxWidth / 100) * 1.5,
+            ),
+            MenuSwitchButton(
+              label: "Blog",
+              option: NavOptions.blog.name,
+              selectedOption: NavOptions.unknown.name,
+              onTap: () {
+                Navigator.of(context).pushReplacementNamed(BlogPage.routeName);
+              },
+            ),
+            SizedBox(
+              height: (constraints.maxWidth / 100) * 1.5,
+            ),
+            const ContactButton(),
+            SizedBox(
+              height: (constraints.maxWidth / 100) * 1.5,
+            ),
+            //auth button
+            StreamBuilder(
+                stream: firebaseAuth.authStateChanges(),
+                builder: (context, snapshot) {
+                  WebAppAuthState().checkAuthState().then((value) {
+                    // print(value);
+                  });
+                  if (snapshot.data == null) {
+                    return MenuSwitchButton(
+                      label: "Login",
+                      option: NavOptions.loginregister.name,
+                      selectedOption: NavOptions.unknown.name,
+                      onTap: () {
+                        //navigate to the login page
+                        Navigator.of(context)
+                            .pushReplacementNamed(AuthPage.routeName);
+                      },
+                    );
+                  } else {
+                    return MenuSwitchButton(
+                      label: "Profile",
+                      option: NavOptions.profile.name,
+                      selectedOption: NavOptions.unknown.name,
+                      onTap: () {
+                        //navigate to the login page
+                        Navigator.of(context)
+                            .pushReplacementNamed(ProfilePage.routeName);
+                      },
+                    );
+                  }
+                })
+          ],
+        ),
       ),
     );
   }

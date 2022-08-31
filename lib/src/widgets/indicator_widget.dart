@@ -54,6 +54,19 @@ class IndicatorWidget {
     );
   }
 
+  IndicatorWidget.showPopUpModalWidget(BuildContext context, {Widget? child, bool barrierDismissible = true,}) {
+    showDialog(
+      context: context,
+      barrierDismissible: barrierDismissible,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+        child: child ?? const CreatePopUpModalWidget(), 
+      ),
+    );
+  }
+
   IndicatorWidget.callLoadingAlert(BuildContext context, String message) {
     showDialog(
       barrierDismissible: false,

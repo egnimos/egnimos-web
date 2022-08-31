@@ -4,6 +4,7 @@ enum NavOptions {
   blog,
   loginregister,
   profile,
+  unknown,
 }
 
 enum LegalType { terms, privacy, cookies, unknown }

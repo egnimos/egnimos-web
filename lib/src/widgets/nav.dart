@@ -6,9 +6,11 @@ import 'buttons.dart';
 
 class Nav extends StatelessWidget with PreferredSizeWidget {
   final NavOptions selectedOption;
+  final bool isBlogNav;
 
   const Nav({
     required this.selectedOption,
+    this.isBlogNav = false,
     Key? key,
   }) : super(key: key);
 
@@ -38,6 +40,7 @@ class Nav extends StatelessWidget with PreferredSizeWidget {
               NavButtons(
                 selectedOption: selectedOption,
                 constraints: constraints,
+                isBlogNav: isBlogNav,
               ),
 
               if (constraints.maxWidth > K.kTableteWidth)
