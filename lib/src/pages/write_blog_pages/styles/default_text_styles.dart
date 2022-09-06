@@ -147,6 +147,19 @@ String getId(TextTypes type) {
   }
 }
 
+Map<NamedAttribution, TextTypes> getTextType() => {
+      header1Attribution: TextTypes.header1,
+      header2Attribution: TextTypes.header2,
+      header3Attribution: TextTypes.header3,
+      header4Attribution: TextTypes.header4,
+      header5Attribution: TextTypes.header5,
+      header6Attribution: TextTypes.header6,
+      blockquoteAttribution: TextTypes.blockquote,
+      listItemAttribution: TextTypes.listItem,
+      checkboxAttribution: TextTypes.checkbox,
+      paragraphAttribution: TextTypes.paragraph,
+    };
+
 TextStyle getTextStyle(TextStyle textStyle, TextTypes type) {
   final blockId = getId(type);
   final values = stylers.value.where((e) => e.blockId == blockId);

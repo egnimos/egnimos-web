@@ -46,10 +46,12 @@ dependencies:
   flutter_dotenv: ^5.0.2
   flutter_dropzone: ^3.0.5
   flutter_markdown: ^0.6.9
+  flutter_widget_from_html: ^0.8.5
   font_awesome_flutter: ^10.1.0
   google_fonts: ^2.3.1
   http: ^0.13.5
   intl: ^0.17.0
+  json_annotation: ^4.6.0
   lottie: ^1.2.2
   matrix4_transform: ^2.0.1
   mime: ^1.0.2
@@ -61,10 +63,9 @@ dependencies:
       url: https://github.com/superlistapp/super_editor.git
       path: super_editor
   super_text_layout: ^0.1.0
-  url_launcher: ^6.0.20
+  url_launcher: ^6.1.5
   uuid: ^3.0.6
   visibility_detector: ^0.3.3
-  flutter_widget_from_html: ^0.8.5
 
 dependency_overrides:
   # Override to local mono-repo path so devs can test this repo
@@ -78,8 +79,10 @@ dependency_overrides:
 
 dev_dependencies:
   flutter_lints: ^1.0.0
+  build_runner:
   flutter_test:
     sdk: flutter
+  json_serializable: ^6.3.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

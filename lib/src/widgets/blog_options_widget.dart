@@ -1,5 +1,7 @@
+import 'package:egnimos/src/pages/write_blog_pages/write_blog_page.dart';
 import 'package:egnimos/src/utility/enum.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../config/responsive.dart';
 import '../theme/color_theme.dart';
@@ -10,7 +12,10 @@ final selectedOptionNotifier =
 
 class BlogOptionsWidget extends StatelessWidget {
   final Future Function() saveBlog;
-  const BlogOptionsWidget({Key? key, required this.saveBlog,}) : super(key: key);
+  const BlogOptionsWidget({
+    Key? key,
+    required this.saveBlog,
+  }) : super(key: key);
 
   void onOptionSelected(CreateBlogOptions option) {
     if (toolBoxHandler?.value != toolBoxHandler?.lowerBound) {
@@ -30,10 +35,10 @@ class BlogOptionsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       right: 0.0,
-      top: (Responsive.heightMultiplier * 50.0) - 150.0,
+      top: (Responsive.heightMultiplier * 50.0) - (350.0 / 2),
       child: Container(
           width: 80.0,
-          height: 300.0,
+          height: 350.0,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(20.0),
@@ -110,6 +115,31 @@ class BlogOptionsWidget extends StatelessWidget {
 
                     const SizedBox(
                       height: 18.0,
+                    ),
+                    Divider(
+                      height: 10.0,
+                      color: Colors.grey.shade800,
+                    ),
+                    //save
+                    ValueListenableBuilder<bool>(
+                        valueListenable: isView,
+                        builder: (context, value, child) {
+                          return IconButton(
+                            onPressed: () {
+                              isView.value = !isView.value;
+                            },
+                            icon: Icon(
+                              value
+                                  ? FontAwesomeIcons.eyeSlash
+                                  : FontAwesomeIcons.eye,
+                              color: Colors.grey.shade800,
+                              size: 30.0,
+                            ),
+                          );
+                        }),
+
+                    const SizedBox(
+                      height: 12.0,
                     ),
                     Divider(
                       height: 10.0,

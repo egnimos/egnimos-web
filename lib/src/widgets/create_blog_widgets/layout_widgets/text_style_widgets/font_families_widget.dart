@@ -57,6 +57,10 @@ class _FontFamilyWidgetState extends State<FontFamilyWidget> {
             valueListenable: selectedFonFamily,
             builder: (context, value, __) {
               return DropdownSearch<String>(
+                clearButtonProps: const ClearButtonProps(isVisible: true),
+                popupProps: const PopupProps.menu(
+                  showSearchBox: true,
+                ),
                 items: GoogleFonts.asMap().keys.toList(),
                 onChanged: (val) {
                   final styleInfo = GoogleFonts.asMap()[val]?.call();

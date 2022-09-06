@@ -126,31 +126,6 @@ class BlogProvider with ChangeNotifier {
               .orderBy("created_at", descending: true)
               .limit(40)
               .get();
-      // break;
-      // default:
-      //   response = lastDoc != null
-      //       ? await firestoreInstance
-      //           .collection(publishedArticleSnapsCollection)
-      //           .where(
-      //             "category.cat_enum",
-      //             isEqualTo:
-      //                 Convert.enumTostring(Cat.values, catType, () => null),
-      //           )
-      //           .orderBy("created_at", descending: true)
-      //           .startAfterDocument(lastDoc)
-      //           .limit(40)
-      //           .get()
-      //       : await firestoreInstance
-      //           .collection(publishedArticleSnapsCollection)
-      //           .where(
-      //             "category.cat_enum",
-      //             isEqualTo:
-      //                 Convert.enumTostring(Cat.values, catType, () => null),
-      //           )
-      //           .orderBy("created_at", descending: true)
-      //           .limit(40)
-      //           .get();
-      // }
       if (response.docs.isEmpty) {
         throw Exception("Nothing to load");
       }

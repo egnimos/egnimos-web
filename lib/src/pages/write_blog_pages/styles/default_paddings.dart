@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:super_editor/super_editor.dart';
+
+import '../named_attributions.dart';
 
 ///[Padding] Key
 const paddingKey = "padding";
@@ -34,3 +37,16 @@ const userPadding = CascadingPadding.only(
 
 ///[Padding] for [ListItem]
 const listitemPadding = CascadingPadding.only(top: 24);
+
+Map<NamedAttribution, EdgeInsetsGeometry> getPadding() => {
+      header1Attribution: h1Padding.toEdgeInsets(),
+      header2Attribution: h2Padding.toEdgeInsets(),
+      header3Attribution: h3Padding.toEdgeInsets(),
+      header4Attribution: h4Padding.toEdgeInsets(),
+      header5Attribution: h5Padding.toEdgeInsets(),
+      header6Attribution: h6Padding.toEdgeInsets(),
+      blockquoteAttribution: defaultPadding.toEdgeInsets(),
+      listItemAttribution: listitemPadding.toEdgeInsets(),
+      checkboxAttribution: checkboxPadding.toEdgeInsets(),
+      paragraphAttribution: defaultPadding.toEdgeInsets(),
+    };

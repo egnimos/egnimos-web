@@ -11,6 +11,11 @@ enum LegalType { terms, privacy, cookies, unknown }
 
 enum BlogDisplayType { blogPost, updates }
 
+enum ProviderType {
+  github,
+  google,
+}
+
 enum AuthType {
   login,
   register,
@@ -42,6 +47,7 @@ enum ProfileOptions {
   edit,
   blogs,
   drafts,
+  publishedBlogs,
   category,
   messages,
   collections,
@@ -144,4 +150,14 @@ enum CreateBlogOptions {
   collection,
   layout,
   unknown,
+}
+
+enum ReportTicketType {
+  copyright,
+  spam,
+  childAbuse,
+  pornography,
+  violence,
+  fakeAccount,
+  other,
 }

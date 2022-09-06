@@ -77,6 +77,14 @@ class _ProfilePageState extends State<ProfilePage> {
             constraints: constraints,
           ),
         );
+      case ProfileOptions.publishedBlogs:
+        return Expanded(
+          child: UserBlogsWidget(
+            constraints: constraints,
+            blogType: BlogType.published,
+            isAdmin: true,
+          ),
+        );
       case ProfileOptions.messages:
         return Container();
       case ProfileOptions.collections:
@@ -245,6 +253,7 @@ class NavigationRailWide extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<AuthProvider>(context, listen: false).user;
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 20.0,
@@ -316,17 +325,35 @@ class NavigationRailWide extends StatelessWidget {
           selectedIndex: selectedOption.name,
           onTap: () => onTap(ProfileOptions.drafts),
         ),
-        const SizedBox(
-          height: 20.0,
-        ),
-        //categories,
-        ProfileMenuButton(
-          value: "Categories",
-          icon: Icons.category,
-          index: ProfileOptions.category.name,
-          selectedIndex: selectedOption.name,
-          onTap: () => onTap(ProfileOptions.category),
-        ),
+        if (user!.providerType == ProviderType.github &&
+            user.email == "egnimos25@gmail.com")
+          const SizedBox(
+            height: 20.0,
+          ),
+        if (user.providerType == ProviderType.github &&
+            user.email == "egnimos25@gmail.com")
+          ProfileMenuButton(
+            value: "Published Blogs",
+            icon: Icons.article_outlined,
+            index: ProfileOptions.publishedBlogs.name,
+            selectedIndex: selectedOption.name,
+            onTap: () => onTap(ProfileOptions.publishedBlogs),
+          ),
+        if (user.providerType == ProviderType.github &&
+            user.email == "egnimos25@gmail.com")
+          const SizedBox(
+            height: 20.0,
+          ),
+        if (user.providerType == ProviderType.github &&
+            user.email == "egnimos25@gmail.com")
+          //categories,
+          ProfileMenuButton(
+            value: "Categories",
+            icon: Icons.category,
+            index: ProfileOptions.category.name,
+            selectedIndex: selectedOption.name,
+            onTap: () => onTap(ProfileOptions.category),
+          ),
 
         const SizedBox(
           height: 20.0,
@@ -340,17 +367,17 @@ class NavigationRailWide extends StatelessWidget {
           onTap: () => onTap(ProfileOptions.collections),
         ),
 
-        const SizedBox(
-          height: 20.0,
-        ),
-        //messages,
-        ProfileMenuButton(
-          value: "Messages",
-          icon: Icons.message,
-          index: ProfileOptions.messages.name,
-          selectedIndex: selectedOption.name,
-          onTap: () => onTap(ProfileOptions.messages),
-        ),
+        // const SizedBox(
+        //   height: 20.0,
+        // ),
+        // //messages,
+        // ProfileMenuButton(
+        //   value: "Messages",
+        //   icon: Icons.message,
+        //   index: ProfileOptions.messages.name,
+        //   selectedIndex: selectedOption.name,
+        //   onTap: () => onTap(ProfileOptions.messages),
+        // ),
 
         const SizedBox(
           height: 20.0,
@@ -362,6 +389,23 @@ class NavigationRailWide extends StatelessWidget {
           index: ProfileOptions.edit.name,
           selectedIndex: selectedOption.name,
           onTap: () => onTap(ProfileOptions.edit),
+        ),
+
+        const SizedBox(
+          height: 20.0,
+        ),
+
+        //logout,
+        ProfileMenuButton(
+          value: "Logout",
+          icon: Icons.logout,
+          index: "",
+          selectedIndex: "logout",
+          onTap: () async {
+            await Provider.of<AuthProvider>(context, listen: false).logout();
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil(Home.routeName, (route) => true);
+          },
         ),
 
         //spacer

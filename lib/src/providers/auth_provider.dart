@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:cross_file/cross_file.dart';
 import 'package:egnimos/main.dart';
-import 'package:egnimos/src/app.dart';
 import 'package:egnimos/src/providers/upload_provider.dart';
 import 'package:egnimos/src/utility/collections.dart';
 import 'package:egnimos/src/utility/enum.dart';
@@ -44,6 +43,7 @@ class AuthProvider with ChangeNotifier {
         file,
         authType,
         mime,
+        ProviderType.google
       );
       notifyListeners();
     } catch (e) {
@@ -70,6 +70,7 @@ class AuthProvider with ChangeNotifier {
         file,
         authType,
         mime,
+        ProviderType.github
       );
       notifyListeners();
     } catch (e) {
@@ -81,7 +82,7 @@ class AuthProvider with ChangeNotifier {
 
   //save the user
   Future<void> saveUser(String userId, String email, User userInfo, XFile? file,
-      MimeModel mime) async {
+      MimeModel mime, ProviderType providerType) async {
     try {
       //upload the file
       UploadOutput? uri;
@@ -105,6 +106,7 @@ class AuthProvider with ChangeNotifier {
         gender: userInfo.gender,
         dob: userInfo.dob,
         ageAccountType: userInfo.ageAccountType,
+        providerType: providerType,
         createdAt: userInfo.createdAt,
         updatedAt: userInfo.updatedAt,
       );
@@ -152,8 +154,14 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  Future<void> _verifyUser(String userId, String email, User? userInfo,
-      XFile? file, AuthType authType, MimeModel mime) async {
+  Future<void> _verifyUser(
+      String userId,
+      String email,
+      User? userInfo,
+      XFile? file,
+      AuthType authType,
+      MimeModel mime,
+      ProviderType providerType) async {
     try {
       final docRef = await firestoreInstance
           .collection(Collections.users)
@@ -172,6 +180,7 @@ class AuthProvider with ChangeNotifier {
           userInfo!,
           file,
           mime,
+          providerType,
         );
       }
       await prefs!.setString(PrefsKey.userId, userId);
@@ -217,6 +226,7 @@ class AuthProvider with ChangeNotifier {
         gender: userInfo.gender,
         dob: userInfo.dob,
         ageAccountType: userInfo.ageAccountType,
+        providerType: userInfo.providerType,
         createdAt: userInfo.createdAt,
         updatedAt: userInfo.updatedAt,
       );

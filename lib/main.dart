@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:super_editor/super_editor.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'src/app.dart';
@@ -17,18 +19,17 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  whichBrowser();
   prefs = await SharedPreferences.getInstance();
   runApp(const MyApp());
 }
 
-class WebAppAuthState {
-  //check auth state
-  Future<bool> checkAuthState() async {
-    final user = await firebaseAuth.authStateChanges().first;
-    print(user);
-    if (user != null) {
-      return true;
-    }
-    return false;
-  }
+///method to detect which browser you are using
+///[Mobile Browser],[Desktop Browser]
+bool isMobileBrowser = false;
+void whichBrowser() {
+  isMobileBrowser = kIsWeb &&
+      (defaultTargetPlatform == TargetPlatform.iOS ||
+          defaultTargetPlatform == TargetPlatform.android);
+  print("MOBILE BROWSER :: $isMobileBrowser");
 }

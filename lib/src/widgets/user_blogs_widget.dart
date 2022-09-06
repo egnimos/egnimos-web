@@ -1,5 +1,6 @@
 import 'package:egnimos/src/config/responsive.dart';
 import 'package:egnimos/src/models/user.dart';
+import 'package:egnimos/src/pages/write_blog_pages/write_blog_page.dart';
 import 'package:egnimos/src/utility/enum.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -11,9 +12,11 @@ import 'blog_post_card.dart';
 
 class UserBlogsWidget extends StatefulWidget {
   final BoxConstraints constraints;
+  final bool isAdmin;
   final BlogType blogType;
   const UserBlogsWidget({
     required this.blogType,
+    this.isAdmin = false,
     Key? key,
     required this.constraints,
   }) : super(key: key);
@@ -109,6 +112,7 @@ class _UserBlogsWidgetState extends State<UserBlogsWidget> {
                                     .map((bo) => BlogPostCard(
                                           blog: bo,
                                           blogType: widget.blogType,
+                                          isForAdmin: widget.isAdmin,
                                         ))
                                     .toList()
                                 : bp.draftBlogSnaps

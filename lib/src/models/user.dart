@@ -1,5 +1,6 @@
 import 'package:egnimos/src/providers/upload_provider.dart';
 import 'package:egnimos/src/utility/enum.dart';
+import 'package:provider/provider.dart';
 
 class User {
   final String id;
@@ -9,6 +10,7 @@ class User {
   final String dob;
   final UploadOutput? image;
   final AgeAccountType ageAccountType;
+  final ProviderType providerType;
   final String createdAt;
   final String updatedAt;
 
@@ -20,6 +22,7 @@ class User {
     required this.dob,
     required this.image,
     required this.ageAccountType,
+    required this.providerType,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -39,6 +42,10 @@ class User {
           (element) => element.name == data["age_account_type"],
           orElse: () => AgeAccountType.adult,
         ),
+        providerType: ProviderType.values.firstWhere(
+          (element) => element.name == data["provider_type"],
+          orElse: () => ProviderType.github,
+        ),
         createdAt: data["created_at"],
         updatedAt: data["updated_at"],
       );
@@ -48,6 +55,7 @@ class User {
         "name": name,
         "email": email,
         "gender": gender.name,
+        "provider_type": providerType.name,
         "dob": dob,
         "uri": image?.toJson(),
         "age_account_type": ageAccountType.name,

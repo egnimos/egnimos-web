@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:egnimos/main.dart';
+import 'package:egnimos/src/config/responsive.dart';
 import 'package:egnimos/src/models/blog.dart';
 import 'package:egnimos/src/models/category.dart';
 import 'package:egnimos/src/models/style_models/styler.dart';
 import 'package:egnimos/src/models/style_models/text_style_model.dart';
+import 'package:egnimos/src/pages/message_page.dart';
 import 'package:egnimos/src/pages/profile_page.dart';
 import 'package:egnimos/src/pages/write_blog_pages/command_based_actions/execute_command.dart';
 import 'package:egnimos/src/pages/write_blog_pages/custom_attribution/attribution_holder.dart';
@@ -14,6 +16,7 @@ import 'package:egnimos/src/pages/write_blog_pages/custom_document_nodes/checkbo
 import 'package:egnimos/src/pages/write_blog_pages/custom_document_nodes/html_node.dart';
 import 'package:egnimos/src/pages/write_blog_pages/custom_editor_comands/checkbox_list_commands.dart';
 import 'package:egnimos/src/pages/write_blog_pages/custom_editor_comands/shift_to_newline.dart';
+import 'package:egnimos/src/pages/write_blog_pages/doc_to_custom_widget_generator.dart';
 import 'package:egnimos/src/pages/write_blog_pages/mutuable_doc_exmp.dart';
 import 'package:egnimos/src/pages/write_blog_pages/parser_extension.dart';
 import 'package:egnimos/src/pages/write_blog_pages/styles/header_styles.dart';
@@ -45,6 +48,8 @@ import '../../providers/style_provider.dart';
 import '../../widgets/indicator_widget.dart';
 import 'toolbar/editor_tool_bar.dart';
 
+final isView = ValueNotifier<bool>(true);
+
 class WriteBlogPage extends StatefulWidget {
   // final BlogAction action;
   final BlogType? blogType;
@@ -65,6 +70,7 @@ class _BlogPageState extends State<WriteBlogPage> {
   final _docLayoutKey = GlobalKey();
   late DocumentEditor _documentEditor;
   late MutableDocument _doc;
+  List<Widget> widgets = [];
   late DocumentComposer _composer;
   late FocusNode _editorFocusNode;
   late ScrollController _scrollController;
@@ -120,9 +126,20 @@ class _BlogPageState extends State<WriteBlogPage> {
   @override
   void initState() {
     super.initState();
-    // FontHandler.fetchAndDownload();
-    GoogleFonts.cabinSketch();
-    print(GoogleFonts.cabinSketch().fontFamily);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (isMobileBrowser) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) {
+              return const MessagePage(
+                message:
+                    "We are working on mobile web browser text editor, but you can use on desktop based web browser",
+              );
+            },
+          ),
+        );
+      }
+    });
   }
 
   @override
@@ -131,7 +148,10 @@ class _BlogPageState extends State<WriteBlogPage> {
       //create  the initial document content
       _doc = doc
         ..addListener(() async {
-          // (doc.nodes.first as TextNode).text
+          // final node = doc.nodes.first;
+          // if (node is TextNode) {
+          //   node.text.computeTextSpan((attributions) => null)
+          // }
           //update the tool bar display
           _updateToolbarDisplay();
           //set the command
@@ -535,75 +555,82 @@ class _BlogPageState extends State<WriteBlogPage> {
               builder: (context, layout, __) {
                 print(layout.layoutBgUri);
                 return Container(
-                  decoration: BoxDecoration(
-                    image: layout.layoutBgUri.isEmpty
-                        ? null
-                        : DecorationImage(
-                            image:
-                                CachedNetworkImageProvider(layout.layoutBgUri),
-                            // invertColors: true,
-                            // isAntiAlias: true,
-                            // matchTextDirection: true,
-                            fit: BoxFit.fill,
-                          ),
-                  ),
-                  child: ColoredBox(
-                    color: layout.layoutColor ?? Colors.black.withOpacity(0.0),
-                    child: DropViewerWidget(
-                      onDrop: _onDropImage,
-                      saveBlog: () async {
-                        //if the blog is available
-                        if (widget.blog != null) {
-                          await saveTheBlog(widget.blogType!, user!);
-                          return;
-                        }
-                        IndicatorWidget.showCreateBlogModal(
-                          context,
-                          child: SaveBlogPopUpModalWidget(
-                            onSave: (type) async {
-                              Navigator.pop;
-                              saveTheBlog(type, user!);
-                            },
-                          ),
-                        );
-                      },
-                      child: ValueListenableBuilder<StyleRules>(
-                        valueListenable: updatedStyleRules,
-                        builder: (context, values, __) => SuperEditor(
-                          composer: _composer,
-                          focusNode: _editorFocusNode,
-                          documentLayoutKey: _docLayoutKey,
-                          editor: _documentEditor,
-                          selectionStyle: SelectionStyles(
-                            selectionColor: ColorTheme.primaryColor.shade200,
-                          ),
-                          keyboardActions: <DocumentKeyboardAction>[
-                            backspaceToUnIndentCheckboxItem,
-                            ...defaultKeyboardActions,
-                            tabToIndentCheckboxItem,
-                            shiftTabToUnIndentCheckbox,
-                            splitCheckboxItemWhenEnterPressed,
-                            enterToInsertBlockNewlineForCheckbox,
-                            saveDocument,
-                          ],
-                          componentBuilders: [
-                            ...defaultComponentBuilders,
-                            CheckBoxComponentBuilder(_documentEditor),
-                            HtmlComponentBuilder(_documentEditor),
-                          ],
-                          stylesheet: defaultStylesheet.copyWith(
-                            addRulesAfter: [
-                              ...initialLayout(),
-                              ...defaultHeaders(context),
-                              ...nodeStyles(),
-                            ],
-                            inlineTextStyler: inlinetextStyle,
-                          ).copyWith(addRulesAfter: [...values]),
-                        ),
-                      ),
+                    decoration: BoxDecoration(
+                      image: layout.layoutBgUri.isEmpty
+                          ? null
+                          : DecorationImage(
+                              image: CachedNetworkImageProvider(
+                                  layout.layoutBgUri),
+                              fit: BoxFit.fill,
+                            ),
                     ),
-                  ),
-                );
+                    child: ColoredBox(
+                      color:
+                          layout.layoutColor ?? Colors.black.withOpacity(0.0),
+                      child: DropViewerWidget(
+                        onDrop: _onDropImage,
+                        saveBlog: () async {
+                          //if the blog is available
+                          if (widget.blog != null) {
+                            await saveTheBlog(widget.blogType!, user!);
+                            return;
+                          }
+                          IndicatorWidget.showCreateBlogModal(
+                            context,
+                            child: SaveBlogPopUpModalWidget(
+                              onSave: (type) async {
+                                Navigator.pop;
+                                saveTheBlog(type, user!);
+                              },
+                            ),
+                          );
+                        },
+                        child: ValueListenableBuilder<bool>(
+                            valueListenable: isView,
+                            child: ValueListenableBuilder<StyleRules>(
+                              valueListenable: updatedStyleRules,
+                              builder: (context, values, __) => SuperEditor(
+                                composer: _composer,
+                                focusNode: _editorFocusNode,
+                                documentLayoutKey: _docLayoutKey,
+                                editor: _documentEditor,
+                                selectionStyle: SelectionStyles(
+                                  selectionColor:
+                                      ColorTheme.primaryColor.shade200,
+                                ),
+                                keyboardActions: <DocumentKeyboardAction>[
+                                  backspaceToUnIndentCheckboxItem,
+                                  ...defaultKeyboardActions,
+                                  tabToIndentCheckboxItem,
+                                  shiftTabToUnIndentCheckbox,
+                                  splitCheckboxItemWhenEnterPressed,
+                                  enterToInsertBlockNewlineForCheckbox,
+                                  saveDocument,
+                                ],
+                                componentBuilders: [
+                                  ...defaultComponentBuilders,
+                                  CheckBoxComponentBuilder(_documentEditor),
+                                  HtmlComponentBuilder(_documentEditor),
+                                ],
+                                stylesheet: defaultStylesheet.copyWith(
+                                  addRulesAfter: [
+                                    ...initialLayout(),
+                                    ...defaultHeaders(context),
+                                    ...nodeStyles(),
+                                  ],
+                                  inlineTextStyler: inlinetextStyle,
+                                ).copyWith(addRulesAfter: [...values]),
+                              ),
+                            ),
+                            builder: (context, value, child) {
+                              return value
+                                  ? ViewDocumentWidget(
+                                      doc: _doc.nodes,
+                                    )
+                                  : child!;
+                            }),
+                      ),
+                    ));
               }),
     );
   }
@@ -621,4 +648,37 @@ ExecutionInstruction saveDocument({
   return false
       ? ExecutionInstruction.haltExecution
       : ExecutionInstruction.continueExecution;
+}
+
+class ViewDocumentWidget extends StatelessWidget {
+  final List<DocumentNode> doc;
+  const ViewDocumentWidget({
+    Key? key,
+    required this.doc,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: ListView(physics: const ClampingScrollPhysics(), children: [
+        Align(
+          child: SizedBox(
+            width: Responsive.widthMultiplier * 50.0,
+            child: ListView(
+                shrinkWrap: true,
+                physics: const ClampingScrollPhysics(),
+                children: [
+                  const SizedBox(
+                    height: 50.0,
+                  ),
+                  ...DocToCustomWidgetGenerator.toWidget(doc, stylers.value),
+                  const SizedBox(
+                    height: 50.0,
+                  ),
+                ]),
+          ),
+        ),
+      ]),
+    );
+  }
 }

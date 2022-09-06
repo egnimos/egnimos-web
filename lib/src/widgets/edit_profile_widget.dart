@@ -44,6 +44,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
     gender: Gender.male,
     dob: "",
     ageAccountType: AgeAccountType.adult,
+    providerType: ProviderType.github,
     createdAt: DateTime.now().toString(),
     updatedAt: DateTime.now().toString(),
   );
@@ -69,6 +70,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
         gender: user.gender,
         dob: user.dob,
         ageAccountType: user.ageAccountType,
+        providerType: userInfo.providerType,
         createdAt: user.createdAt,
         updatedAt: DateTime.now().toString(),
       );
@@ -108,6 +110,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
               image: userInfo.image,
               gender: val!,
               dob: userInfo.dob,
+              providerType: userInfo.providerType,
               ageAccountType: userInfo.ageAccountType,
               createdAt: userInfo.createdAt,
               updatedAt: userInfo.updatedAt,
@@ -290,6 +293,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                     image: userInfo.image,
                     dob: userInfo.dob,
                     ageAccountType: userInfo.ageAccountType,
+                    providerType: userInfo.providerType,
                     createdAt: userInfo.createdAt,
                     updatedAt: userInfo.updatedAt,
                   );

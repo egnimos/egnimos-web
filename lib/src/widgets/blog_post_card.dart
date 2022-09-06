@@ -24,8 +24,10 @@ class BlogPostCard extends StatelessWidget {
   final Blog blog;
   final BlogType blogType;
   final bool showEditOptions;
+  final bool isForAdmin;
 
   const BlogPostCard({
+    this.isForAdmin = false,
     required this.blog,
     this.showEditOptions = true,
     this.blogType = BlogType.published,
@@ -288,26 +290,29 @@ class BlogPostCard extends StatelessWidget {
             if (user != null && blog.userId == user.id && showEditOptions)
               //decorator
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: isForAdmin
+                    ? MainAxisAlignment.end
+                    : MainAxisAlignment.spaceBetween,
                 children: [
                   //edit
-                  optionWidget(
-                    onClick: () async {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return WriteBlogPage(
-                          blogType: blogType,
-                          blog: blog,
-                        );
-                      }));
-                    },
-                    color: ColorTheme.bgColor10,
-                    label: "Edit",
-                    radius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(10.0),
-                      topRight: Radius.circular(10.0),
+                  if (!isForAdmin)
+                    optionWidget(
+                      onClick: () async {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return WriteBlogPage(
+                            blogType: blogType,
+                            blog: blog,
+                          );
+                        }));
+                      },
+                      color: ColorTheme.bgColor10,
+                      label: "Edit",
+                      radius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(10.0),
+                        topRight: Radius.circular(10.0),
+                      ),
                     ),
-                  ),
 
                   if (blogType == BlogType.draft)
                     //transfer

@@ -202,6 +202,7 @@ class _ViewBlogPageState extends State<ViewBlogPage> {
             HtmlComponentBuilder(_docEditor),
             UserComponentBuilder(_docEditor),
           ],
+          keyboardActions: const [],
           stylesheet: defaultStylesheet.copyWith(
             addRulesAfter: [
               ...initialLayout(),
@@ -821,43 +822,6 @@ class SidePanelWidget extends StatelessWidget {
 
             const SizedBox(height: 180.0),
 
-            //options
-            // IconButton(
-            //   onPressed: () {},
-            //   icon: Icon(
-            //     Icons.home,
-            //     size: 40.0,
-            //     color: Colors.grey.shade600,
-            //   ),
-            // ),
-            // //blogs
-            // IconButton(
-            //   onPressed: () {},
-            //   icon: Icon(
-            //     Icons.article,
-            //     size: 40.0,
-            //     color: Colors.grey.shade600,
-            //   ),
-            // ),
-            // //contacts
-            // IconButton(
-            //   onPressed: () {},
-            //   icon: Icon(
-            //     Icons.contact_page,
-            //     size: 40.0,
-            //     color: Colors.grey.shade600,
-            //   ),
-            // ),
-            // //profile
-            // IconButton(
-            //   onPressed: () {},
-            //   icon: Icon(
-            //     Icons.person,
-            //     size: 40.0,
-            //     color: Colors.grey.shade600,
-            //   ),
-            // ),
-
             MenuSwitchButton(
               label: "Home",
               option: NavOptions.home.name,
@@ -899,9 +863,6 @@ class SidePanelWidget extends StatelessWidget {
             StreamBuilder(
                 stream: firebaseAuth.authStateChanges(),
                 builder: (context, snapshot) {
-                  WebAppAuthState().checkAuthState().then((value) {
-                    // print(value);
-                  });
                   if (snapshot.data == null) {
                     return MenuSwitchButton(
                       label: "Login",

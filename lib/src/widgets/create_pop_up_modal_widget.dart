@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:super_editor/super_editor.dart';
 
 import '../config/k.dart';
+import '../pages/message_page.dart';
 import '../providers/category_provider.dart';
 import '../providers/collection_provider.dart';
 import '../providers/upload_provider.dart';
@@ -103,8 +104,16 @@ class _CreatePopUpModalWidgetState extends State<CreatePopUpModalWidget> {
 
             ListTile(
               onTap: () {
-                setState(() {
-                  selectedOptions = WriteOptions.book;
+                WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const MessagePage(
+                          message: "We are working on it & it will be good 😎",
+                        );
+                      },
+                    ),
+                  );
                 });
               },
               shape: RoundedRectangleBorder(

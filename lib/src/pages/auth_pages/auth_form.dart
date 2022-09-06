@@ -48,6 +48,7 @@ class _AuthFormState extends State<AuthForm> {
     gender: Gender.male,
     dob: "",
     ageAccountType: AgeAccountType.adult,
+    providerType: ProviderType.github,
     createdAt: DateTime.now().toString(),
     updatedAt: DateTime.now().toString(),
   );
@@ -81,6 +82,7 @@ class _AuthFormState extends State<AuthForm> {
               image: userInfo.image,
               gender: val!,
               dob: userInfo.dob,
+              providerType: userInfo.providerType,
               ageAccountType: userInfo.ageAccountType,
               createdAt: userInfo.createdAt,
               updatedAt: userInfo.updatedAt,
@@ -137,6 +139,7 @@ class _AuthFormState extends State<AuthForm> {
               ? AgeAccountType.adult
               : AgeAccountType.child,
           createdAt: userInfo.createdAt,
+          providerType: userInfo.providerType,
           updatedAt: userInfo.updatedAt,
         );
         widget.updatedUser(userInfo);
@@ -285,6 +288,7 @@ class _AuthFormState extends State<AuthForm> {
                 image: userInfo.image,
                 dob: userInfo.dob,
                 ageAccountType: userInfo.ageAccountType,
+                providerType: userInfo.providerType,
                 createdAt: userInfo.createdAt,
                 updatedAt: userInfo.updatedAt,
               );
