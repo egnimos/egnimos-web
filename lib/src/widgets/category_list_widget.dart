@@ -96,36 +96,37 @@ class _CategoryListWidgetState extends State<CategoryListWidget> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Wrap(
-                            children: cp.categories
-                                .map(
-                                  (cat) => GestureDetector(
-                                    onTap: () {
-                                      final isPresent =
-                                          selectedCategories?.id == cat.id;
-                                      if (!isPresent) {
-                                        //store to the selected file
-                                        selectedCategories = cat;
-                                        //update the function
-                                        widget.selectedCategories!(
-                                            selectedCategories);
-                                      } else {
-                                        //remove the selected file
-                                        selectedCategories = null;
-                                        //update the function
-                                        widget.selectedCategories!(
-                                            selectedCategories);
-                                      }
-                                      setState(() {});
-                                    },
-                                    child: CategoryBox(
-                                      categoryInfo: cat,
-                                      constraints: widget.constraints,
-                                      disableActions: widget.disableActions,
-                                      selectedId: selectedCategories?.id ?? "",
-                                    ),
+                          children: cp.categories
+                              .map(
+                                (cat) => GestureDetector(
+                                  onTap: () {
+                                    final isPresent =
+                                        selectedCategories?.id == cat.id;
+                                    if (!isPresent) {
+                                      //store to the selected file
+                                      selectedCategories = cat;
+                                      //update the function
+                                      widget.selectedCategories!(
+                                          selectedCategories);
+                                    } else {
+                                      //remove the selected file
+                                      selectedCategories = null;
+                                      //update the function
+                                      widget.selectedCategories!(
+                                          selectedCategories);
+                                    }
+                                    setState(() {});
+                                  },
+                                  child: CategoryBox(
+                                    categoryInfo: cat,
+                                    constraints: widget.constraints,
+                                    disableActions: widget.disableActions,
+                                    selectedId: selectedCategories?.id ?? "",
                                   ),
-                                )
-                                .toList()),
+                                ),
+                              )
+                              .toList(),
+                        ),
                       ),
                     ],
                   );
@@ -164,7 +165,7 @@ class CategoryBox extends StatelessWidget {
         ],
       ),
       width: 200.0,
-      height: 300.0,
+      // height: 300.0,
       child: Column(
         children: [
           const SizedBox(
@@ -199,6 +200,8 @@ class CategoryBox extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(
               top: 20.0,
+              left: 10.0,
+              right: 10.0,
             ),
             child: Text(
               categoryInfo.label,
@@ -214,12 +217,15 @@ class CategoryBox extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(
               top: 10.0,
+              left: 10.0,
+              right: 10.0,
+              bottom: 18.0,
             ),
             child: Text(
               categoryInfo.description,
               textAlign: TextAlign.center,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
+              // maxLines: 3,
+              // overflow: TextOverflow.ellipsis,
               style: GoogleFonts.openSans(
                 // fontWeight: FontWeight.w800,
                 fontSize: 15.0,
@@ -240,7 +246,7 @@ class CategoryBox extends StatelessWidget {
         vertical: 19.0,
       ),
       width: disableActions ? 200.0 : 300.0,
-      height: disableActions ? 300.0 : null,
+      // height: disableActions ? 300.0 : null,
       decoration: disableActions
           ? BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
@@ -350,7 +356,9 @@ class CategoryBox extends StatelessWidget {
                 ),
 
                 //Category box
-                categoryBox(),
+                Flexible(
+                  child: categoryBox(),
+                ),
               ],
             ),
     );

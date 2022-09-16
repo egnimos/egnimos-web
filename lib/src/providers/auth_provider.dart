@@ -34,19 +34,13 @@ class AuthProvider with ChangeNotifier {
       // Once signed in, return the UserCredential
       final cred = (await firebaseAuth.signInWithPopup(googleProvider));
       final userId = cred.user!.uid;
-      final email = cred.user!.email ?? "";
+      final email = cred.user!.providerData.first.email ?? "";
       //check if the doc exists then fetch the user info
       await _verifyUser(
-        userId,
-        email,
-        userInfo,
-        file,
-        authType,
-        mime,
-        ProviderType.google
-      );
+          userId, email, userInfo, file, authType, mime, ProviderType.google);
       notifyListeners();
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -61,7 +55,7 @@ class AuthProvider with ChangeNotifier {
       // Once signed in, return the UserCredential
       final cred = await firebaseAuth.signInWithPopup(githubProvider);
       final userId = cred.user!.uid;
-      final email = cred.user!.email ?? "";
+      final email = cred.user!.providerData.first.email ?? "";
       //check if the doc exists then fetch the user info
       await _verifyUser(
         userId,
@@ -70,10 +64,11 @@ class AuthProvider with ChangeNotifier {
         file,
         authType,
         mime,
-        ProviderType.github
+        ProviderType.github,
       );
       notifyListeners();
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -94,8 +89,12 @@ class AuthProvider with ChangeNotifier {
         //   type: PickerType.image,
         // );
         final mimeInf = mime;
-        uri = await _up!.uploadFile(file, mimeInf.uploadType, mimeInf.fileExt,
-            childName: "user_files");
+        uri = await _up!.uploadFile(
+          file,
+          mimeInf.uploadType,
+          mimeInf.fileExt,
+          childName: "user_files",
+        );
       }
       //else register or save the user
       final uInf = User(
@@ -134,7 +133,10 @@ class AuthProvider with ChangeNotifier {
           .get();
       _user = User.fromJson(docRef.data()!);
       //save to the local cache
-      await prefs?.setString(PrefsKey.userInfo, jsonEncode(_user!.toJson()));
+      await prefs?.setString(
+        PrefsKey.userInfo,
+        jsonEncode(_user!.toJson()),
+      );
       notifyListeners();
     } catch (e) {
       rethrow;
@@ -172,6 +174,7 @@ class AuthProvider with ChangeNotifier {
       } else {
         //if it doesn't exists then check
         if (authType == AuthType.login && userInfo == null) {
+          await logout();
           throw Exception("user dosen't exists please register");
         }
         await saveUser(

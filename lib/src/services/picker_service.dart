@@ -26,6 +26,7 @@ class PickerService {
       final xFile = await FilePicker.platform.pickFiles(
         type: fileType,
         allowedExtensions: allowedExtension,
+        allowCompression: true,
       );
 
       if (xFile == null) {

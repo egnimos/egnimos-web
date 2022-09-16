@@ -2,6 +2,7 @@ enum NavOptions {
   home,
   about,
   blog,
+  contact,
   loginregister,
   profile,
   unknown,

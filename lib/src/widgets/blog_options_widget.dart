@@ -120,7 +120,7 @@ class BlogOptionsWidget extends StatelessWidget {
                       height: 10.0,
                       color: Colors.grey.shade800,
                     ),
-                    //save
+                    //preview
                     ValueListenableBuilder<bool>(
                         valueListenable: isView,
                         builder: (context, value, child) {
@@ -129,11 +129,11 @@ class BlogOptionsWidget extends StatelessWidget {
                               isView.value = !isView.value;
                             },
                             icon: Icon(
-                              value
-                                  ? FontAwesomeIcons.eyeSlash
-                                  : FontAwesomeIcons.eye,
-                              color: Colors.grey.shade800,
-                              size: 30.0,
+                              Icons.preview,
+                              color: value
+                                  ? ColorTheme.bgColor12
+                                  : Colors.grey.shade800,
+                              size: 40.0,
                             ),
                           );
                         }),

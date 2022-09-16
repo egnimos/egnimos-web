@@ -1,10 +1,7 @@
-import 'dart:html';
+
 
 import 'package:egnimos/src/pages/write_blog_pages/custom_document_nodes/checkbox_node.dart';
-import 'package:egnimos/src/pages/write_blog_pages/parser_extension.dart';
-import 'package:egnimos/src/pages/write_blog_pages/styles/default_text_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:super_editor/super_editor.dart';
 
 import '../doc_to_custom_widget_generator.dart';
 

@@ -814,8 +814,8 @@ class _CreateCategoryPopupModelState extends State<CreateCategoryPopupModel> {
                           _isLoading = true;
                         });
                         selectionErrorText = null;
-                        final catId = DocumentEditor.createNodeId();
-                        UploadOutput? uploadOutput;
+                        final catId = widget.categoryInfo?.image?.fileName??DocumentEditor.createNodeId();
+                        UploadOutput? uploadOutput = widget.categoryInfo?.image;
                         if (file != null) {
                           uploadOutput = await Provider.of<UploadProvider>(
                                   context,

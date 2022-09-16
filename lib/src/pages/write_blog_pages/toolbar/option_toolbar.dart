@@ -215,7 +215,7 @@ class _OptionToolbarState extends State<OptionToolbar> {
     }
 
     //html
-    if (cmdText == html) {
+    if (cmdText == html || cmdText == iframe) {
       //activate the pop up modal
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         IndicatorWidget.showPopUpModalWidget(

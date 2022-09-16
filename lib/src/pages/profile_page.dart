@@ -2,6 +2,7 @@ import 'package:egnimos/src/config/k.dart';
 import 'package:egnimos/src/providers/auth_provider.dart';
 import 'package:egnimos/src/theme/color_theme.dart';
 import 'package:egnimos/src/utility/enum.dart';
+import 'package:egnimos/src/utility/verify_for_admin.dart';
 import 'package:egnimos/src/widgets/category_list_widget.dart';
 import 'package:egnimos/src/widgets/create_pop_up_modal_widget.dart';
 import 'package:egnimos/src/widgets/edit_profile_widget.dart';
@@ -101,6 +102,7 @@ class _ProfilePageState extends State<ProfilePage> {
   ProfileOptions _selectedOptions = ProfileOptions.blogs;
   @override
   Widget build(BuildContext context) {
+    // final user = Provider.of<AuthProvider>(context, listen: false).user;
     return _isLoading
         ? Scaffold(
             body: Center(
@@ -122,6 +124,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     isDrawer: true,
                     constraints: constraints,
                     onTap: (option) {
+                      if (_selectedOptions == option) return;
                       setState(() {
                         _selectedOptions = option;
                       });
@@ -139,6 +142,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               selectedOption: _selectedOptions,
                               constraints: constraints,
                               onTap: (option) {
+                                if (_selectedOptions == option) return;
                                 setState(() {
                                   _selectedOptions = option;
                                 });
@@ -196,24 +200,26 @@ class _ProfilePageState extends State<ProfilePage> {
                         },
                       ),
 
-                      const SizedBox(
-                        height: 20.0,
-                      ),
-                      //create category
-                      FloatingActionButton(
-                        backgroundColor: Colors.grey.shade900,
-                        child: const Icon(
-                          Icons.category,
-                          color: Colors.white,
+                      if (VerifyAdminForUser.isVerified(context))
+                        const SizedBox(
+                          height: 20.0,
                         ),
-                        onPressed: () {
-                          IndicatorWidget.showCreateBlogModal(
-                            context,
-                            child: CreateCategoryPopupModel(
-                                constraints: constraints),
-                          );
-                        },
-                      ),
+                      if (VerifyAdminForUser.isVerified(context))
+                        //create category
+                        FloatingActionButton(
+                          backgroundColor: Colors.grey.shade900,
+                          child: const Icon(
+                            Icons.category,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            IndicatorWidget.showCreateBlogModal(
+                              context,
+                              child: CreateCategoryPopupModel(
+                                  constraints: constraints),
+                            );
+                          },
+                        ),
 
                       const SizedBox(
                         height: 20.0,
@@ -253,7 +259,7 @@ class NavigationRailWide extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<AuthProvider>(context, listen: false).user;
+    // final user = Provider.of<AuthProvider>(context, listen: false).user;
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 20.0,
@@ -325,13 +331,11 @@ class NavigationRailWide extends StatelessWidget {
           selectedIndex: selectedOption.name,
           onTap: () => onTap(ProfileOptions.drafts),
         ),
-        if (user!.providerType == ProviderType.github &&
-            user.email == "egnimos25@gmail.com")
+        if (VerifyAdminForUser.isVerified(context))
           const SizedBox(
             height: 20.0,
           ),
-        if (user.providerType == ProviderType.github &&
-            user.email == "egnimos25@gmail.com")
+        if (VerifyAdminForUser.isVerified(context))
           ProfileMenuButton(
             value: "Published Blogs",
             icon: Icons.article_outlined,
@@ -339,13 +343,11 @@ class NavigationRailWide extends StatelessWidget {
             selectedIndex: selectedOption.name,
             onTap: () => onTap(ProfileOptions.publishedBlogs),
           ),
-        if (user.providerType == ProviderType.github &&
-            user.email == "egnimos25@gmail.com")
+        if (VerifyAdminForUser.isVerified(context))
           const SizedBox(
             height: 20.0,
           ),
-        if (user.providerType == ProviderType.github &&
-            user.email == "egnimos25@gmail.com")
+        if (VerifyAdminForUser.isVerified(context))
           //categories,
           ProfileMenuButton(
             value: "Categories",

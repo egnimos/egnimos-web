@@ -90,6 +90,10 @@ class Menu extends StatelessWidget {
                   const SizedBox(
                     height: 20.0,
                   ),
+                  const ContactButton(),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
                   //auth button
                   StreamBuilder(
                       stream: firebaseAuth.authStateChanges(),

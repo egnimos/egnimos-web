@@ -38,7 +38,6 @@ import 'package:egnimos/src/widgets/create_pop_up_modal_widget.dart';
 import 'package:egnimos/src/widgets/drop_viewer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:super_editor/super_editor.dart';
@@ -48,7 +47,7 @@ import '../../providers/style_provider.dart';
 import '../../widgets/indicator_widget.dart';
 import 'toolbar/editor_tool_bar.dart';
 
-final isView = ValueNotifier<bool>(true);
+final isView = ValueNotifier<bool>(false);
 
 class WriteBlogPage extends StatefulWidget {
   // final BlogAction action;
@@ -591,6 +590,7 @@ class _BlogPageState extends State<WriteBlogPage> {
                               valueListenable: updatedStyleRules,
                               builder: (context, values, __) => SuperEditor(
                                 composer: _composer,
+                                scrollController: _scrollController,
                                 focusNode: _editorFocusNode,
                                 documentLayoutKey: _docLayoutKey,
                                 editor: _documentEditor,

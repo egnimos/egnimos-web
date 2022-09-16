@@ -71,6 +71,22 @@ class _AuthBoxState extends State<AuthBox> {
                 color: Colors.grey.shade800,
               ),
             ),
+
+            const SizedBox(
+              height: 10.0,
+            ),
+            //note
+            Text(
+              "Sign in/up with same email address will redirect you to the same account",
+              style: GoogleFonts.rubik().copyWith(
+                fontSize: 18.0,
+                letterSpacing: 0.5,
+                fontWeight: FontWeight.w500,
+                color: Colors.redAccent,
+                decoration: TextDecoration.underline,
+              ),
+            ),
+
             const SizedBox(
               height: 50.0,
             ),
@@ -99,7 +115,8 @@ class _AuthBoxState extends State<AuthBox> {
                 onTap: () async {
                   try {
                     await Provider.of<AuthProvider>(context, listen: false)
-                        .signInWithGithub(userInfo, imgFile, _authType, mimeModel);
+                        .signInWithGithub(
+                            userInfo, imgFile, _authType, mimeModel);
                     Navigator.of(context).pushReplacementNamed(Home.routeName);
                   } catch (error) {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -124,7 +141,8 @@ class _AuthBoxState extends State<AuthBox> {
                 onTap: () async {
                   try {
                     await Provider.of<AuthProvider>(context, listen: false)
-                        .signInWithGoogle(userInfo, imgFile, _authType, mimeModel);
+                        .signInWithGoogle(
+                            userInfo, imgFile, _authType, mimeModel);
                     Navigator.of(context).pushReplacementNamed(Home.routeName);
                   } catch (error) {
                     ScaffoldMessenger.of(context).showSnackBar(

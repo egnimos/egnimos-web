@@ -30,18 +30,15 @@ class HomeHeader extends StatelessWidget {
                 children: [
                   Flexible(
                     child: Text(
-                      "We",
-                      style: GoogleFonts.rubik().copyWith(
-                        fontSize: (constraints.maxWidth / 100) * 4.5,
+                      "A Place ",
+                      style: GoogleFonts.openSans().copyWith(
+                        fontSize: (constraints.maxWidth / 100) * 4.2,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1.2,
                         color: leadingTextColor,
                       ),
                     ),
                   ),
-                  // const SizedBox(
-                  //   width: .0,
-                  // ),
                   Flexible(
                     child: DefaultTextStyle(
                       softWrap: false,
@@ -57,18 +54,52 @@ class HomeHeader extends StatelessWidget {
                       child: AnimatedTextKit(
                         repeatForever: true,
                         animatedTexts: [
-                          TypewriterAnimatedText(' Are Creative Team',
-                              speed: const Duration(milliseconds: 300),
-                              cursor: '_'),
-                          TypewriterAnimatedText(' Provide',
-                              speed: const Duration(milliseconds: 300),
-                              cursor: '_'),
-                          TypewriterAnimatedText(' Create',
-                              speed: const Duration(milliseconds: 300),
-                              cursor: '_'),
-                          TypewriterAnimatedText(' Care About You',
-                              speed: const Duration(milliseconds: 300),
-                              cursor: '_'),
+                          TypewriterAnimatedText(
+                            'To Write',
+                            textStyle: GoogleFonts.gochiHand(
+                              // decoration: TextDecoration.underline,
+                              // decorationStyle: TextDecorationStyle.wavy,
+                              fontSize: (constraints.maxWidth / 100) * 5.0,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.0,
+                              color: animatedTextColor,
+                            ),
+                            speed: const Duration(milliseconds: 300),
+                            cursor: '_',
+                          ),
+                          TypewriterAnimatedText(
+                            'To Share',
+                            textStyle: GoogleFonts.shareTech(
+                              fontSize: (constraints.maxWidth / 100) * 4.5,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.0,
+                              color: animatedTextColor,
+                            ),
+                            speed: const Duration(milliseconds: 300),
+                            cursor: '_',
+                          ),
+                          TypewriterAnimatedText(
+                            'To Learn',
+                            textStyle: GoogleFonts.raleway(
+                              fontSize: (constraints.maxWidth / 100) * 4.5,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.0,
+                              color: animatedTextColor,
+                            ),
+                            speed: const Duration(milliseconds: 300),
+                            cursor: '_',
+                          ),
+                          TypewriterAnimatedText(
+                            'To Try',
+                            textStyle: GoogleFonts.indieFlower(
+                              fontSize: (constraints.maxWidth / 100) * 5.0,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.0,
+                              color: animatedTextColor,
+                            ),
+                            speed: const Duration(milliseconds: 300),
+                            cursor: '_',
+                          ),
                         ],
                       ),
                     ),
@@ -88,7 +119,7 @@ class HomeHeader extends StatelessWidget {
                     vertical: 10.0,
                   ),
                   child: Text(
-                    "The Creativity that needs to be done for building a thoughtful process that works smoothely and makes your business grow like never before.",
+                    "The Creativity that needs to be done for building a thoughtful process that works smoothly and makes your content grow like never before.",
                     textAlign: TextAlign.center,
                     style: GoogleFonts.raleway().copyWith(
                       color: infoColor,
