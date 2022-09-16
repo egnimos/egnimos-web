@@ -134,7 +134,7 @@ class LayoutOptionWidget extends StatelessWidget {
                               .removeWhere((v) => v.blockId == model.blockId);
                           initialValues.add(model);
                           stylers.value = initialValues;
-                          print(stylers.value);
+                          //print(stylers.value);
                         },
                       ),
 
@@ -157,12 +157,12 @@ class LayoutOptionWidget extends StatelessWidget {
                   [layoutStyler, ...stylers.value]);
               stylerJson =
                   LayoutStyler.stylerToJson([layoutStyler, ...stylers.value]);
-              print("STYLER JSON $stylerJson");
+              //print("STYLER JSON $stylerJson");
               final stylerList = LayoutStyler.fromJsonToStylers(stylerJson);
-              print(stylerList);
+              //print(stylerList);
               updatedStyleRules.value = LayoutStyler.fromStylerToStyleRules(
                   [layoutStyler, ...stylerList]);
-              print(updatedStyleRules.value);
+              //print(updatedStyleRules.value);
             },
             child: const Icon(
               Icons.save,

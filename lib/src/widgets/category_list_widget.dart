@@ -40,7 +40,7 @@ class _CategoryListWidgetState extends State<CategoryListWidget> {
           .getCategories();
       isLoading.value = false;
     } catch (e) {
-      print(e);
+      //print(e);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(e.toString()),

@@ -112,7 +112,7 @@ class CollectionWidget extends StatelessWidget {
           .getCollections(user!.id);
       isLoading.value = false;
     } catch (e) {
-      print(e);
+      //print(e);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(e.toString()),
@@ -213,7 +213,7 @@ class ExtensionWidget extends StatelessWidget {
           .getExtensions(user!.id, collectionName);
       isLoading.value = false;
     } catch (e) {
-      print(e);
+      //print(e);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(e.toString()),
@@ -335,7 +335,7 @@ class _CollectionFilesState extends State<CollectionFiles> {
           .getFiles(user!.id, widget.collectionName, widget.extensionName);
       isLoading.value = false;
     } catch (e) {
-      print(e);
+      //print(e);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(e.toString()),
@@ -531,7 +531,7 @@ class _CollectionFilesState extends State<CollectionFiles> {
                             Provider.of<CollectionProvider>(context,
                                     listen: false)
                                 .saveFile(newCollectionFile);
-                            print(val);
+                            //print(val);
                             enableEditingFile.value = "";
                           },
                           textInputAction: TextInputAction.done,

@@ -30,5 +30,5 @@ void whichBrowser() {
   isMobileBrowser = kIsWeb &&
       (defaultTargetPlatform == TargetPlatform.iOS ||
           defaultTargetPlatform == TargetPlatform.android);
-  print("MOBILE BROWSER :: $isMobileBrowser");
+  //print("MOBILE BROWSER :: $isMobileBrowser");
 }

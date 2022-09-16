@@ -94,7 +94,7 @@ class _WriteHtmlWidgetState extends State<WriteHtmlWidget> {
             keyboardType: TextInputType.multiline,
             maxLines: 10,
             onChanged: (val) {
-              print(val);
+              //print(val);
             },
           ),
 

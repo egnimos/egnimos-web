@@ -188,7 +188,7 @@ class NavButtons extends StatelessWidget {
                   stream: firebaseAuth.authStateChanges(),
                   builder: (context, snapshot) {
                     // WebAppAuthState().checkAuthState().then((value) {
-                    //   // print(value);
+                    //   // //print(value);
                     // });
                     if (snapshot.data == null) {
                       return MenuSwitchButton(

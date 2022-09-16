@@ -25,7 +25,7 @@ class _LayoutWallpaperWidgetState extends State<LayoutWallpaperWidget> {
   void initState() {
     super.initState();
     // _networkUrlController.addListener(() {
-    //   print(_networkUrlController.text);
+    //   //print(_networkUrlController.text);
     //   widget.output(_networkUrlController.text);
     // });
   }
@@ -131,11 +131,11 @@ class _LayoutWallpaperWidgetState extends State<LayoutWallpaperWidget> {
           keyboardType: TextInputType.multiline,
           maxLines: 5,
           onSubmitted: (val) {
-            print(val);
+            //print(val);
             widget.output(val);
           },
           onChanged: (val) {
-            print(val);
+            //print(val);
             widget.output(val);
           },
         ),

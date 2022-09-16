@@ -155,7 +155,7 @@ class _ViewBlogPageState extends State<ViewBlogPage> {
       );
       _editorFocusNode = FocusNode();
     } catch (error) {
-      print(error);
+      //print(error);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(error.toString()),
@@ -175,19 +175,19 @@ class _ViewBlogPageState extends State<ViewBlogPage> {
         onVisibilityChanged: (value) {
           try {
             final visiblePercen = value.visibleFraction * 100.0;
-            print(visiblePercen);
+            //print(visiblePercen);
             if (visiblePercen >= 50.0) {
-              print(visiblePercen);
+              //print(visiblePercen);
               final minutes = widget.blogSnap.readingTime.round();
               timer ??= Timer(Duration(minutes: minutes), () {
                 //update the view count
-                print("sdkjhgsdjsadjsdjksdkja::: kjdhakdksaskdaskdasd");
+                //print("sdkjhgsdjsadjsdjksdkja::: kjdhakdksaskdaskdasd");
                 Provider.of<BlogProvider>(context, listen: false)
                     .saveViewCount(widget.blogSnap, currentUserInfo!);
               });
             }
           } catch (e) {
-            print(e);
+            //print(e);
           }
         },
         child: SuperEditor(
@@ -544,7 +544,7 @@ class UserProfileInfoWidget extends StatelessWidget {
                             },
                             child: GestureDetector(
                               onTap: () {
-                                print(tag);
+                                //print(tag);
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
                                   return TagsBlogPage(

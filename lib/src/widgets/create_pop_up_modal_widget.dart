@@ -528,9 +528,9 @@ class _CreateCategoryPopupModelState extends State<CreateCategoryPopupModel> {
                         context,
                         fileType: FileType.image,
                       );
-                      print(imgFile?.extension ?? "no-extension");
-                      print(imgFile?.size ?? 0);
-                      // print(imgFile.)
+                      //print(imgFile?.extension ?? "no-extension");
+                      //print(imgFile?.size ?? 0);
+                      // //print(imgFile.)
                       if (imgFile != null) {
                         setState(() {
                           file = XFile.fromData(imgFile.bytes!);
@@ -542,7 +542,7 @@ class _CreateCategoryPopupModelState extends State<CreateCategoryPopupModel> {
                         );
                       }
                     } catch (e) {
-                      print(e.toString());
+                      //print(e.toString());
                     }
                   },
                   child: Container(
@@ -814,7 +814,8 @@ class _CreateCategoryPopupModelState extends State<CreateCategoryPopupModel> {
                           _isLoading = true;
                         });
                         selectionErrorText = null;
-                        final catId = widget.categoryInfo?.image?.fileName??DocumentEditor.createNodeId();
+                        final catId = widget.categoryInfo?.image?.fileName ??
+                            DocumentEditor.createNodeId();
                         UploadOutput? uploadOutput = widget.categoryInfo?.image;
                         if (file != null) {
                           uploadOutput = await Provider.of<UploadProvider>(
@@ -967,9 +968,9 @@ class _UploadFilePopUpModelState extends State<UploadFilePopUpModel> {
             context,
             fileType: fileType,
           );
-          print(imgFile?.extension ?? "no-extension");
-          print(imgFile?.size ?? 0);
-          // print(imgFile.)
+          //print(imgFile?.extension ?? "no-extension");
+          //print(imgFile?.size ?? 0);
+          // //print(imgFile.)
           if (imgFile != null) {
             mimeModels.add(MimeModel(
               fileId: DocumentEditor.createNodeId(),
@@ -981,7 +982,7 @@ class _UploadFilePopUpModelState extends State<UploadFilePopUpModel> {
             setState(() {});
           }
         } catch (e) {
-          print(e);
+          //print(e);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(

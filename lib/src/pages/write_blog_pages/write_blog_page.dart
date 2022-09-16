@@ -117,7 +117,7 @@ class _BlogPageState extends State<WriteBlogPage> {
       final docData = DocumentJsonParser(doc).toJson(doc.nodes);
       return DocumentJsonParser.fromJson(docData);
     } catch (e) {
-      print(e);
+      //print(e);
     }
     return doc;
   }
@@ -184,7 +184,7 @@ class _BlogPageState extends State<WriteBlogPage> {
       _documentEditor = DocumentEditor(
         document: doc,
       );
-      print(_documentEditor.document.toString());
+      //print(_documentEditor.document.toString());
       // Create the DocumentComposer, which keeps track of the user's text
       // selection and the current input styles, e.g., bold or italics.
       //
@@ -552,7 +552,7 @@ class _BlogPageState extends State<WriteBlogPage> {
           : ValueListenableBuilder<LayoutStyler>(
               valueListenable: layoutStyler,
               builder: (context, layout, __) {
-                print(layout.layoutBgUri);
+                //print(layout.layoutBgUri);
                 return Container(
                     decoration: BoxDecoration(
                       image: layout.layoutBgUri.isEmpty
@@ -644,7 +644,7 @@ ExecutionInstruction saveDocument({
     return ExecutionInstruction.continueExecution;
   }
 
-  print("CTRL++SAVE");
+  //print("CTRL++SAVE");
   return false
       ? ExecutionInstruction.haltExecution
       : ExecutionInstruction.continueExecution;

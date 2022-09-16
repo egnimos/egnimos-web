@@ -92,7 +92,7 @@ class UploadProvider with ChangeNotifier {
       final mime = lookupMimeType(file.path);
       // uploadType = mime?.split("/").first ?? "files";
       // fileExt = mime?.split("/").last ?? "";
-      print(file.mimeType);
+      //print(file.mimeType);
       final fileMimieType = mime?.split("/").first == "application"
           ? mime?.split("/").last
           : mime?.split("/").first;

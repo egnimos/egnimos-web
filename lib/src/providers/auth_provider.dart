@@ -40,7 +40,7 @@ class AuthProvider with ChangeNotifier {
           userId, email, userInfo, file, authType, mime, ProviderType.google);
       notifyListeners();
     } catch (e) {
-      print(e);
+      //print(e);
       rethrow;
     }
   }
@@ -68,7 +68,7 @@ class AuthProvider with ChangeNotifier {
       );
       notifyListeners();
     } catch (e) {
-      print(e);
+      //print(e);
       rethrow;
     }
   }

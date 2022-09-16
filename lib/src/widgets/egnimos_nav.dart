@@ -63,7 +63,7 @@ class _EgnimosNavState extends State<EgnimosNav>
           AnimatedBuilder(
             animation: _animationController,
             builder: (c, child) {
-              // print(_animationController.value);
+              // //print(_animationController.value);
               return Container(
                 margin: const EdgeInsets.symmetric(horizontal: 4.0),
                 decoration: BoxDecoration(

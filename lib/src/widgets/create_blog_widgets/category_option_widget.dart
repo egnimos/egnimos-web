@@ -58,7 +58,7 @@ class CategoryOptionWidget extends StatelessWidget {
             child: CategoryListWidget(
               disableActions: true,
               selectedCategories: (category) {
-                print(category);
+                //print(category);
                 selectedCategory.value = category;
               },
               constraints: BoxConstraints(

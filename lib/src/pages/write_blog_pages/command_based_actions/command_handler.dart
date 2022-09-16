@@ -32,7 +32,7 @@ class CommandHandler {
 
   //check whether the enter command is valid or not
   bool checkValidity() {
-    // print(mutableDoc.nodes.last.metadata);
+    // //print(mutableDoc.nodes.last.metadata);
     final node = mutableDoc.getNodeById(mutableDoc.nodes.last.id);
     if (node is! TextNode) {
       return false;
@@ -54,11 +54,11 @@ class CommandHandler {
 
   //give the command highlighter statement
   void setHighlighterWithStyle() {
-    print("not text node");
+    //print("not text node");
     final nodeId = composer.selection!.extent.nodeId;
     final node = mutableDoc.getNodeById(nodeId);
     if (node is! TextNode) {
-      print("not text node");
+      //print("not text node");
       return;
     }
 
@@ -71,10 +71,10 @@ class CommandHandler {
     // final baseOffset = (selection.base.nodePosition as TextPosition).offset;
     // final selectionStart = min(baseOffset, extentOffset);
     // final selectionEnd = max(baseOffset, extentOffset);
-    print(textNode.text.text);
+    //print(textNode.text.text);
     if (textNode.text.text.contains(startCommand[0])) {
-      print(
-          "commands..........................................................");
+      //print(
+          // "commands..........................................................");
       //get the cmd text
       final cmdText = textNode.text.text;
 

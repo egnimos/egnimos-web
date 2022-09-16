@@ -11,41 +11,39 @@ class AuthPage extends StatelessWidget {
   const AuthPage({Key? key}) : super(key: key);
 
   Widget authBox(BoxConstraints constraints, BuildContext context) {
-    return Expanded(
-      child: Container(
-        height: constraints.maxHeight,
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-        ),
-        child: ListView(
-          children: [
-            //web app name & icon
-            GestureDetector(
-              onTap: () async {
-                await Navigator.of(context).pushReplacementNamed(Home.routeName);
-              },
-              child: EgnimosNav(
-                height: 90.0,
-                constraints: constraints,
-              ),
-            ),
-
-            //space
-            SizedBox(
-              height: (constraints.maxHeight / 100) * 20.0,
-            ),
-
-            //login box
-            AuthBox(
+    return Container(
+      height: constraints.maxHeight,
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+      ),
+      child: ListView(
+        children: [
+          //web app name & icon
+          GestureDetector(
+            onTap: () async {
+              await Navigator.of(context).pushReplacementNamed(Home.routeName);
+            },
+            child: EgnimosNav(
+              height: 90.0,
               constraints: constraints,
             ),
+          ),
 
-            const SizedBox(
-              height: 50.0,
-            ),
-          ],
-        ),
+          //space
+          SizedBox(
+            height: (constraints.maxHeight / 100) * 20.0,
+          ),
+
+          //login box
+          AuthBox(
+            constraints: constraints,
+          ),
+
+          const SizedBox(
+            height: 50.0,
+          ),
+        ],
       ),
     );
   }
@@ -60,7 +58,9 @@ class AuthPage extends StatelessWidget {
         }
         return Row(
           children: [
-            authBox(constraints, context),
+            Expanded(
+              child: authBox(constraints, context),
+            ),
             //egnimos logo and info
             Expanded(
               child: Container(

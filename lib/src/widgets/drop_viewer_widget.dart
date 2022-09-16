@@ -36,40 +36,40 @@ class _DropViewerWidgetState extends State<DropViewerWidget> {
       operation: DragOperation.copy,
       // cursor: CursorType.text,
       onCreated: (DropzoneViewController ctrl) => _controller = ctrl,
-      onLoaded: () => print('Zone 1 loaded'),
+      // onLoaded: () => //print('Zone 1 loaded'),
       onError: (ev) {
         setState(() => _highlight = false);
-        print('Zone 1 error: $ev');
+        //print('Zone 1 error: $ev');
       },
       onHover: () {
         setState(() => _highlight = true);
-        print('Zone 1 hovered');
+        //print('Zone 1 hovered');
       },
       onLeave: () {
         setState(() => _highlight = false);
-        print('Zone 1 left');
+        //print('Zone 1 left');
       },
       onDrop: (ev) async {
-        print('Zone 1 drop: ${ev.name}');
+        //print('Zone 1 drop: ${ev.name}');
         setState(() {
           // final message = '${ev.name} dropped';
           _highlight = false;
         });
-        print('${ev.name} dropped');
+        //print('${ev.name} dropped');
         final bytes = await _controller.getFileData(ev);
-        print(bytes.sublist(0, 20));
+        //print(bytes.sublist(0, 20));
         widget.onDrop(await _controller.createFileUrl(ev));
       },
       onDropMultiple: (ev) async {
-        print('Zone 1 drop multiple: $ev');
+        //print('Zone 1 drop multiple: $ev');
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    print(Responsive.heightMultiplier * 100.0);
-    print(Responsive.widthMultiplier * 100.0);
+    //print(Responsive.heightMultiplier * 100.0);
+    //print(Responsive.widthMultiplier * 100.0);
     return Stack(
       children: [
         //drop action widget

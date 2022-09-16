@@ -51,6 +51,7 @@ class _AuthBoxState extends State<AuthBox> {
             //heading
             Text(
               _authType == AuthType.login ? "Log in" : "Create an account",
+              textAlign: TextAlign.center,
               style: GoogleFonts.rubik().copyWith(
                 fontSize: 32.0,
                 letterSpacing: 0.5,
@@ -70,6 +71,7 @@ class _AuthBoxState extends State<AuthBox> {
                 fontWeight: FontWeight.w500,
                 color: Colors.grey.shade800,
               ),
+              textAlign: TextAlign.center,
             ),
 
             const SizedBox(
@@ -85,6 +87,7 @@ class _AuthBoxState extends State<AuthBox> {
                 color: Colors.redAccent,
                 decoration: TextDecoration.underline,
               ),
+              textAlign: TextAlign.center,
             ),
 
             const SizedBox(
@@ -165,6 +168,7 @@ class _AuthBoxState extends State<AuthBox> {
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: RichText(
+                textAlign: TextAlign.center,
                 text: TextSpan(
                   text: _authType == AuthType.login
                       ? 'Don\'t have an account? '

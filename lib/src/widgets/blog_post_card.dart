@@ -42,7 +42,7 @@ class BlogPostCard extends StatelessWidget {
     final dateTime =
         DateFormat('EEE, MMM d, yyyy').format(blog.updatedAt.toDate());
     final user = Provider.of<AuthProvider>(context, listen: false).user;
-    print(user);
+    //print(user);
     return Container(
       width: 350.0,
       margin: const EdgeInsets.symmetric(
@@ -177,7 +177,7 @@ class BlogPostCard extends StatelessWidget {
                           },
                           child: GestureDetector(
                             onTap: () {
-                              print(tag);
+                              //print(tag);
                               Navigator.push(context,
                                   MaterialPageRoute(builder: (context) {
                                 return TagsBlogPage(
@@ -327,7 +327,7 @@ class BlogPostCard extends StatelessWidget {
                                     listen: false)
                                 .publishBlog(blog);
                           } catch (e) {
-                            print(e);
+                            //print(e);
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(

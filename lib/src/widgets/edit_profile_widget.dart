@@ -159,9 +159,9 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                     context,
                     fileType: FileType.image,
                   );
-                  print(imgFile?.extension ?? "no-extension");
-                  print(imgFile?.size ?? 0);
-                  // print(imgFile.)
+                  //print(imgFile?.extension ?? "no-extension");
+                  //print(imgFile?.size ?? 0);
+                  // //print(imgFile.)
                   if (imgFile != null) {
                     setState(() {
                       file = XFile.fromData(imgFile.bytes!);
@@ -173,7 +173,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                     );
                   }
                 } catch (e) {
-                  print(e.toString());
+                  //print(e.toString());
                 }
               },
               child: Container(
@@ -297,7 +297,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                     createdAt: userInfo.createdAt,
                     updatedAt: userInfo.updatedAt,
                   );
-                  print(userInfo.toJson());
+                  //print(userInfo.toJson());
                 },
               ),
             ),

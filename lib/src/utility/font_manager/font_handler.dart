@@ -6,14 +6,12 @@ import '../../models/style_models/text_style_model.dart';
 import 'font_family_info.dart';
 import 'font_list.dart';
 
-
-
 class FontHandler {
   //fetch and download the font
   // static Future<void> fetchAndDownload({String? family}) async {
   //   final getFontFamilyInfo = fontsMap()[family ?? fontFamily];
   //   GoogleFonts.cabinSketch();
-  //   print(GoogleFonts.cabinSketch().fontFamily);
+  //   //print(GoogleFonts.cabinSketch().fontFamily);
   //   final info = getFontFamilyInfo!.call();
   //   String filename = "";
   //   if (info.fontTypes.isNotEmpty) {
@@ -29,7 +27,7 @@ class FontHandler {
 
   //   //load the font
   //   await fontLoader.load();
-  //   // print(values.toList().map((e) => e.toString()).toList());
+  //   // //print(values.toList().map((e) => e.toString()).toList());
   // }
 
   //fetch the bytes data

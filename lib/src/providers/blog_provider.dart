@@ -487,7 +487,7 @@ class BlogProvider with ChangeNotifier {
           .doc(blog.id)
           .set(data);
     } catch (e) {
-      print(e);
+      //print(e);
       rethrow;
     }
   }

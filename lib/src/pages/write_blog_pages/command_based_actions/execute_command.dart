@@ -73,11 +73,11 @@ class ExecuteCommand {
       final matches = rex.allMatches(text);
       final startIndex = matches.last.start;
       final endIndex = matches.last.end;
-      print("VALUE ==> ${matches.last.input.substring(startIndex, endIndex)}");
-      print("START INDEX ==> $startIndex");
-      print("END INDEX ==> $endIndex");
+      //print("VALUE ==> ${matches.last.input.substring(startIndex, endIndex)}");
+      //print("START INDEX ==> $startIndex");
+      //print("END INDEX ==> $endIndex");
       if (node.text.text.characters.last == " ") {
-        print("you have given the space #######HELLO");
+        //print("you have given the space #######HELLO");
         applyAttributionOfTheGivenSpanRange(
           FontColorDecorationAttribution(fontColor: Colors.red),
           node.text,

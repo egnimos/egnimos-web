@@ -58,7 +58,7 @@ class CollectionOptionWidget extends StatelessWidget {
             child: FileCollectionList(
               disableActions: true,
               selectedFiles: (files) {
-                print(files);
+                //print(files);
                 selectedFiles.value = files;
               },
             ),

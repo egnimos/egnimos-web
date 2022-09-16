@@ -61,7 +61,7 @@ class ReportTicketProvider with ChangeNotifier {
       _tickets = result;
       notifyListeners();
     } catch (e) {
-      print(e);
+      //print(e);
       rethrow;
     }
   }
@@ -98,7 +98,7 @@ class ReportTicketProvider with ChangeNotifier {
       _tickets = result;
       notifyListeners();
     } catch (e) {
-      print(e);
+      //print(e);
       rethrow;
     }
   }

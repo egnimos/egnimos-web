@@ -96,7 +96,7 @@ class _EditorToolbarState extends State<EditorToolbar> {
         getFontDecorationStyleOfSelectedNode(widget.composer, widget.editor);
     decorationColor =
         getFontDecorationColorOfSelectedNode(widget.composer, widget.editor);
-    print("FONT SIZE:: $fontSize");
+    //print("FONT SIZE:: $fontSize");
     _urlFocusNode = FocusNode();
     _urlController = TextEditingController();
     _fontSizeController.value = TextEditingValue(text: fontSize.toString());
@@ -136,7 +136,7 @@ class _EditorToolbarState extends State<EditorToolbar> {
         widget.editor.document.getNodeById(selection.extent.nodeId);
     if (selectedNode is ParagraphNode) {
       final type = selectedNode.metadata['blockType'] as NamedAttribution;
-      // print(type.name);
+      // //print(type.name);
 
       if (type == header1Attribution) {
         return TextType.header1;
@@ -173,7 +173,7 @@ class _EditorToolbarState extends State<EditorToolbar> {
         widget.editor.document.getNodeById(selection.extent.nodeId);
     if (selectedNode is ParagraphNode) {
       final align = selectedNode.metadata['textAlign'] as String?;
-      // print("SELECTED NODE ALLIGNMENT :: $align");
+      // //print("SELECTED NODE ALLIGNMENT :: $align");
       switch (align) {
         case 'left':
           return TextAlign.left;
@@ -250,7 +250,7 @@ class _EditorToolbarState extends State<EditorToolbar> {
         ),
       );
     } else {
-      // print(newType.name);
+      // //print(newType.name);
       // Apply a new block type to an existing paragraph node.
       final existingNode = widget.editor.document
           .getNodeById(widget.composer.selection!.extent.nodeId)!;
@@ -604,7 +604,7 @@ class _EditorToolbarState extends State<EditorToolbar> {
 
     // selectedNode.metadata['textAlign'] = newAlignmentValue;
     selectedNode.putMetadataValue('textAlign', newAlignmentValue);
-    // print("SET ALIGNMENT :: $newAlignmentValue");
+    // //print("SET ALIGNMENT :: $newAlignmentValue");
 
     //close the toolbar
     // widget.closeToolbar();
@@ -884,7 +884,7 @@ class _EditorToolbarState extends State<EditorToolbar> {
   }
 
   Widget _buildToolbar() {
-    // print("FONT SIZE TOOLBAR VALUE :: " + _fontSizeController.text);
+    // //print("FONT SIZE TOOLBAR VALUE :: " + _fontSizeController.text);
     return Material(
       shape: const StadiumBorder(),
       elevation: 5,
@@ -1404,8 +1404,8 @@ class _EditorToolbarState extends State<EditorToolbar> {
                 textAlign: TextAlign.left,
                 onChanged: (updatedFontSize) {
                   final initialFontSizeValue = intialFontSize;
-                  print("Initial Value :: " + initialFontSizeValue.toString());
-                  print("final Value :: " + updatedFontSize.toString());
+                  //print("Initial Value :: " + initialFontSizeValue.toString());
+                  //print("final Value :: " + updatedFontSize.toString());
                   //remove intiial attribution
                   // _removeFontSizeAttribution(
                   //   initialFontSizeValue.toDouble(),

@@ -19,7 +19,7 @@ const htmlNode = "html_node";
 ///[fromJson] to rewind back to the [ImageNode] object
 extension ImageNodeJsonParser on ImageNode {
   Map<String, dynamic> toJson(ImageNode node) {
-    print(double.infinity);
+    //print(double.infinity);
     final currentStyles = SingleColumnLayoutComponentStyles.fromMetadata(node);
     return {
       "id": node.id,
@@ -59,7 +59,7 @@ extension ImageNodeJsonParser on ImageNode {
 ///[fromJson] to rewind back to the [HtmlNode] object
 extension HtmlNodeJsonParser on HtmlNode {
   Map<String, dynamic> toJson(HtmlNode node) {
-    print(double.infinity);
+    //print(double.infinity);
     final currentStyles = SingleColumnLayoutComponentStyles.fromMetadata(node);
     return {
       "id": node.id,
@@ -444,7 +444,7 @@ extension DocumentJsonParser on MutableDocument {
     }
     //get the reading time in minutes
     readingTime = (wordCount / 200);
-    print("READING TIME :: $readingTime");
+    //print("READING TIME :: $readingTime");
     //get the search chars
     if (title != null) {
       for (int i = 1; i <= title.length; i++) {
@@ -454,7 +454,7 @@ extension DocumentJsonParser on MutableDocument {
         // }
         searchChars.add(title.substring(0, i).toLowerCase());
       }
-      print("SEARCH CHARS :: $searchChars");
+      //print("SEARCH CHARS :: $searchChars");
     }
     return {
       "title": title,

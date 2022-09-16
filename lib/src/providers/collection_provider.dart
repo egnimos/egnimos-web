@@ -130,7 +130,7 @@ class CollectionProvider with ChangeNotifier {
           .get();
       List<CollectionFile> results = [];
       for (var doc in response.docs) {
-        print(doc.id);
+        //print(doc.id);
         results.add(
           CollectionFile.fromJson(
             doc.data(),

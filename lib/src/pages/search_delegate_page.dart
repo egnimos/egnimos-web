@@ -112,7 +112,7 @@ class SearchScreen extends SearchDelegate {
       }
       return results;
     } catch (error) {
-      print(error);
+      //print(error);
       rethrow;
     }
   }

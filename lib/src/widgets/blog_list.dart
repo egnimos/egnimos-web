@@ -188,7 +188,7 @@ class _BlogCategoryListState extends State<BlogCategoryList> {
                 cat: cat,
                 selectedCat: _selectedCat,
                 onSelect: (val) {
-                  print("cat type: $val");
+                  //print("cat type: $val");
                   setState(() {
                     _selectedCat = val;
                   });

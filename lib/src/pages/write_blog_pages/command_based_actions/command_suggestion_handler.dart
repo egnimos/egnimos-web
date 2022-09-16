@@ -16,8 +16,8 @@ class CommandSuggestionHandler {
     var trimText = cmdText.trim();
     trimText = trimText.replaceAll(" ", "");
     final length = trimText.length;
-    print("TRIM TEXT: $trimText");
-    print("LENGTH: $length");
+    //print("TRIM TEXT: $trimText");
+    //print("LENGTH: $length");
 
     //check the (0 index), if the given index doesn't contains
     //the value [@] then stop the execution
@@ -33,7 +33,7 @@ class CommandSuggestionHandler {
     if (length == 2) {
       if (startCommand[0].contains(trimText[0]) &&
           startCommand[1].contains(trimText[1])) {
-        // print("SUGGESTION:: ${suggestions[trimText[0]]}");
+        // //print("SUGGESTION:: ${suggestions[trimText[0]]}");
         showOverlay(commandNames.keys.toList());
         return;
       }
@@ -41,7 +41,7 @@ class CommandSuggestionHandler {
 
     if (commands.join(", ").contains(trimText)) {
       final cmd = filterCommand(trimText);
-      print(cmd);
+      //print(cmd);
       final values =
           commandNames.keys.toList().where((e) => e.contains(cmd)).toList();
       showOverlay(values);

@@ -53,9 +53,9 @@ double getFontSizeOfSelectedNode(
     ),
   );
   for (var attribution in attributions) {
-    print("SELECTED ATTRIBUTIONS ID " + attribution.id);
+    //print("SELECTED ATTRIBUTIONS ID " + attribution.id);
     if (attribution is FontSizeDecorationAttribution) {
-      print("FONT SIZE ATTRIBUTION :: " + attribution.fontSize.toString());
+      //print("FONT SIZE ATTRIBUTION :: " + attribution.fontSize.toString());
       return attribution.fontSize.toDouble();
     }
   }
@@ -89,9 +89,9 @@ bool isStrikeThroughExistsOfSelectedNode(
     DocumentComposer composer, DocumentEditor editor) {
   final attributions = getSelectedNodeAttributions(composer, editor);
   for (var attribution in attributions) {
-    print("SELECTED ATTRIBUTIONS ID " + attribution.id);
+    //print("SELECTED ATTRIBUTIONS ID " + attribution.id);
     if (attribution == strikethroughAttribution) {
-      print("FONT COLOR ATTRIBUTION :: " + attribution.id);
+      //print("FONT COLOR ATTRIBUTION :: " + attribution.id);
       return true;
     }
   }
@@ -105,9 +105,9 @@ bool isunderlineThroughExistsOfSelectedNode(
     DocumentComposer composer, DocumentEditor editor) {
   final attributions = getSelectedNodeAttributions(composer, editor);
   for (var attribution in attributions) {
-    print("SELECTED ATTRIBUTIONS ID " + attribution.id);
+    //print("SELECTED ATTRIBUTIONS ID " + attribution.id);
     if (attribution == underlineAttribution) {
-      print("FONT COLOR ATTRIBUTION :: " + attribution.id);
+      //print("FONT COLOR ATTRIBUTION :: " + attribution.id);
       return true;
     }
   }
@@ -119,9 +119,9 @@ bool isBoldExistsOfSelectedNode(
     DocumentComposer composer, DocumentEditor editor) {
   final attributions = getSelectedNodeAttributions(composer, editor);
   for (var attribution in attributions) {
-    print("SELECTED ATTRIBUTIONS ID " + attribution.id);
+    //print("SELECTED ATTRIBUTIONS ID " + attribution.id);
     if (attribution == boldAttribution) {
-      print("FONT COLOR ATTRIBUTION :: " + attribution.id);
+      //print("FONT COLOR ATTRIBUTION :: " + attribution.id);
       return true;
     }
   }
@@ -133,9 +133,9 @@ bool isItalicExistsOfSelectedNode(
     DocumentComposer composer, DocumentEditor editor) {
   final attributions = getSelectedNodeAttributions(composer, editor);
   for (var attribution in attributions) {
-    print("SELECTED ATTRIBUTIONS ID " + attribution.id);
+    //print("SELECTED ATTRIBUTIONS ID " + attribution.id);
     if (attribution == italicsAttribution) {
-      print("FONT COLOR ATTRIBUTION :: " + attribution.id);
+      //print("FONT COLOR ATTRIBUTION :: " + attribution.id);
       return true;
     }
   }
@@ -165,9 +165,9 @@ Color getFontColorOfSelectedNode(
     ),
   );
   for (var attribution in attributions) {
-    print("SELECTED ATTRIBUTIONS ID " + attribution.id);
+    //print("SELECTED ATTRIBUTIONS ID " + attribution.id);
     if (attribution is FontColorDecorationAttribution) {
-      print("FONT COLOR ATTRIBUTION :: " + attribution.fontColor.toString());
+      //print("FONT COLOR ATTRIBUTION :: " + attribution.fontColor.toString());
       return attribution.fontColor;
     }
   }
@@ -197,10 +197,10 @@ Color getFontBackgroundColorOfSelectedNode(
     ),
   );
   for (var attribution in attributions) {
-    print("SELECTED ATTRIBUTIONS ID " + attribution.id);
+    //print("SELECTED ATTRIBUTIONS ID " + attribution.id);
     if (attribution is FontBackgroundColorDecorationAttribution) {
-      print("FONT BACKGROUND COLOR ATTRIBUTION :: " +
-          attribution.fontBackgroundColor.toString());
+      //print("FONT BACKGROUND COLOR ATTRIBUTION :: " +
+          // attribution.fontBackgroundColor.toString());
       return attribution.fontBackgroundColor;
     }
   }
@@ -230,10 +230,10 @@ Color getFontDecorationColorOfSelectedNode(
     ),
   );
   for (var attribution in attributions) {
-    print("SELECTED ATTRIBUTIONS ID " + attribution.id);
+    //print("SELECTED ATTRIBUTIONS ID " + attribution.id);
     if (attribution is FontDecorationColorDecorationAttribution) {
-      print("FONT DECORATION COLOR ATTRIBUTION :: " +
-          attribution.fontDecorationColor.toString());
+      //print("FONT DECORATION COLOR ATTRIBUTION :: " +
+          // attribution.fontDecorationColor.toString());
       return attribution.fontDecorationColor;
     }
   }
@@ -263,10 +263,10 @@ TextDecorationStyle getFontDecorationStyleOfSelectedNode(
     ),
   );
   for (var attribution in attributions) {
-    print("SELECTED ATTRIBUTIONS ID " + attribution.id);
+    //print("SELECTED ATTRIBUTIONS ID " + attribution.id);
     if (attribution is FontDecorationStyleAttribution) {
-      print("FONT DECORATION STYLE ATTRIBUTION :: " +
-          attribution.fontDecorationStyle.toString());
+      //print("FONT DECORATION STYLE ATTRIBUTION :: " +
+          // attribution.fontDecorationStyle.toString());
       return attribution.fontDecorationStyle;
     }
   }

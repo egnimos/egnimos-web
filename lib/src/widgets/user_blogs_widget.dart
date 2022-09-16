@@ -50,7 +50,7 @@ class _UserBlogsWidgetState extends State<UserBlogsWidget> {
               .getDraftBlogSnaps(Cat.all, user!.id)
               .then((value) => isLoading.value = false);
     } catch (e) {
-      print(e);
+      //print(e);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(e.toString()),

@@ -64,7 +64,7 @@ class _BlogPageState extends State<BlogPage> {
                     await Provider.of<BlogProvider>(context, listen: false)
                         .getPublishedBlogSnaps(val, lastDoc);
               } catch (error) {
-                print(error);
+                //print(error);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
@@ -173,7 +173,7 @@ class _CategoriesBlogPageState extends State<CategoriesBlogPage> {
                         .getPublishedBlogSnaps(
                             widget.categoryInfo.catEnum, lastDoc);
               } catch (error) {
-                print(error);
+                //print(error);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
@@ -268,7 +268,7 @@ class _TagsBlogPageState extends State<TagsBlogPage> {
                     await Provider.of<BlogProvider>(context, listen: false)
                         .getTagBasedPublishedBlogSnaps(widget.tag, lastDoc);
               } catch (error) {
-                print(error);
+                //print(error);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(

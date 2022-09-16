@@ -164,7 +164,7 @@ class DocToCustomWidgetGenerator {
                     .whereType<LinkAttribution>()
                     .toList();
                 if (linkAttrs.isEmpty) return;
-                print("LENGTH LINK ATTRIBUTION :: ${linkAttrs.length}");
+                //print("LENGTH LINK ATTRIBUTION :: ${linkAttrs.length}");
                 await _launchUrl(linkAttrs.first.url);
               },
             onEnter: attributedSpan.attributions
@@ -173,7 +173,7 @@ class DocToCustomWidgetGenerator {
                     .isEmpty
                 ? null
                 : (value) {
-                    print("ONENTER");
+                    //print("ONENTER");
                   },
             onExit: attributedSpan.attributions
                     .whereType<LinkAttribution>()
@@ -181,7 +181,7 @@ class DocToCustomWidgetGenerator {
                     .isEmpty
                 ? null
                 : (value) {
-                    print("ONEXIT");
+                    //print("ONEXIT");
                   },
           ),
         )
@@ -232,30 +232,30 @@ class DocToCustomWidgetGenerator {
           decoration: TextDecoration.underline,
         );
       } else if (attribution is FontSizeDecorationAttribution) {
-        print("STYLE BUILDER FONT SIZE ::" + attribution.fontSize.toString());
+        //print("STYLE BUILDER FONT SIZE ::" + attribution.fontSize.toString());
         newStyle = newStyle.copyWith(
           fontSize: attribution.fontSize.toDouble(),
         );
       } else if (attribution is FontColorDecorationAttribution) {
-        print("STYLE BUILDER FONT COLOR ::" + attribution.fontColor.toString());
+        //print("STYLE BUILDER FONT COLOR ::" + attribution.fontColor.toString());
         newStyle = newStyle.copyWith(
           color: attribution.fontColor,
         );
       } else if (attribution is FontBackgroundColorDecorationAttribution) {
-        print("STYLE BUILDER FONT BACKGROUND COLOR ::" +
-            attribution.fontBackgroundColor.toString());
+        //print("STYLE BUILDER FONT BACKGROUND COLOR ::" +
+            // attribution.fontBackgroundColor.toString());
         newStyle = newStyle.copyWith(
           backgroundColor: attribution.fontBackgroundColor,
         );
       } else if (attribution is FontDecorationColorDecorationAttribution) {
-        print("STYLE BUILDER FONT DECORATION COLOR ::" +
-            attribution.fontDecorationColor.toString());
+        //print("STYLE BUILDER FONT DECORATION COLOR ::" +
+            // attribution.fontDecorationColor.toString());
         newStyle = newStyle.copyWith(
           decorationColor: attribution.fontDecorationColor,
         );
       } else if (attribution is FontDecorationStyleAttribution) {
-        print("STYLE BUILDER FONT DECORATION style ::" +
-            attribution.fontDecorationStyle.name);
+        //print("STYLE BUILDER FONT DECORATION style ::" +
+            // attribution.fontDecorationStyle.name);
         newStyle = newStyle.copyWith(
           decorationStyle: attribution.fontDecorationStyle,
         );

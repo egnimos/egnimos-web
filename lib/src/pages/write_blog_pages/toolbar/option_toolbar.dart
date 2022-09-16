@@ -243,9 +243,9 @@ class _OptionToolbarState extends State<OptionToolbar> {
         context,
         fileType: FileType.image,
       );
-      print(imgFile?.extension ?? "no-extension");
-      print(imgFile?.size ?? 0);
-      // print(imgFile.)
+      //print(imgFile?.extension ?? "no-extension");
+      //print(imgFile?.size ?? 0);
+      // //print(imgFile.)
       if (imgFile != null) {
         final file = XFile.fromData(imgFile.bytes!);
         //set the node

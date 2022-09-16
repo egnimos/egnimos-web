@@ -163,9 +163,9 @@ class _AuthFormState extends State<AuthForm> {
                 context,
                 fileType: FileType.image,
               );
-              print(imgFile?.extension ?? "no-extension");
-              print(imgFile?.size ?? 0);
-              // print(imgFile.)
+              //print(imgFile?.extension ?? "no-extension");
+              //print(imgFile?.size ?? 0);
+              // //print(imgFile.)
               if (imgFile != null) {
                 setState(() {
                   file = XFile.fromData(imgFile.bytes!);
@@ -178,7 +178,7 @@ class _AuthFormState extends State<AuthForm> {
                 widget.getFile(file!, mimeModel);
               }
             } catch (e) {
-              print(e.toString());
+              //print(e.toString());
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(
@@ -293,7 +293,7 @@ class _AuthFormState extends State<AuthForm> {
                 updatedAt: userInfo.updatedAt,
               );
               widget.updatedUser(userInfo);
-              print(userInfo.toJson());
+              //print(userInfo.toJson());
             },
           ),
         ),
