@@ -1,8 +1,9 @@
 import 'package:egnimos/src/pages/write_blog_pages/custom_document_nodes/checkbox_node.dart';
 import 'package:egnimos/src/pages/write_blog_pages/custom_document_nodes/html_node.dart';
+import 'package:egnimos/src/pages/write_blog_pages/custom_document_nodes/user_node.dart';
 import 'package:egnimos/src/pages/write_blog_pages/custom_document_widgets/horizontalrule_node_widget.dart';
 import 'package:egnimos/src/pages/write_blog_pages/custom_document_widgets/paragraph_node_widget.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:egnimos/src/pages/write_blog_pages/custom_document_widgets/user_node_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:super_editor/super_editor.dart';
@@ -24,6 +25,18 @@ class DocToCustomWidgetGenerator {
     List<Widget> widgets = [];
     int? index;
     for (var node in nodes) {
+      //usernode
+      if (node is UserNode) {
+        final value = computeNodeForBlockStyle(node, textStyler);
+        widgets.add(
+          UserNodeWidget(
+            setTextStyle: value["t"],
+            node: node,
+            padding: value["p"],
+          ),
+        );
+        continue;
+      }
       //listitem node
       if (node is ListItemNode) {
         if (index == null) {
@@ -96,11 +109,11 @@ class DocToCustomWidgetGenerator {
   }
 
   static Map<String, dynamic> computeNodeForBlockStyle(
-      DocumentNode node, List<TextStyleModel> styler) {
+      DocumentNode node, List<TextStyleModel> stylers) {
     if (node is TextNode) {
       //get the block id
       final block = (node.metadata['blockType'] as NamedAttribution);
-      final textStyle = getTextStyleBasedOnTextType(getTextType()[block]!);
+      final textStyle = getTextStyleBasedOnTextType(getTextType()[block]!, stylers: stylers);
       return {
         "t": textStyle,
         "p": getPadding()[block]!,
@@ -243,19 +256,19 @@ class DocToCustomWidgetGenerator {
         );
       } else if (attribution is FontBackgroundColorDecorationAttribution) {
         //print("STYLE BUILDER FONT BACKGROUND COLOR ::" +
-            // attribution.fontBackgroundColor.toString());
+        // attribution.fontBackgroundColor.toString());
         newStyle = newStyle.copyWith(
           backgroundColor: attribution.fontBackgroundColor,
         );
       } else if (attribution is FontDecorationColorDecorationAttribution) {
         //print("STYLE BUILDER FONT DECORATION COLOR ::" +
-            // attribution.fontDecorationColor.toString());
+        // attribution.fontDecorationColor.toString());
         newStyle = newStyle.copyWith(
           decorationColor: attribution.fontDecorationColor,
         );
       } else if (attribution is FontDecorationStyleAttribution) {
         //print("STYLE BUILDER FONT DECORATION style ::" +
-            // attribution.fontDecorationStyle.name);
+        // attribution.fontDecorationStyle.name);
         newStyle = newStyle.copyWith(
           decorationStyle: attribution.fontDecorationStyle,
         );

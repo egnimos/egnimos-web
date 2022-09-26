@@ -97,6 +97,7 @@ class _UserBlogsWidgetState extends State<UserBlogsWidget> {
                           Text(
                             "no ${widget.blogType.name} blogs post available",
                             style: Theme.of(context).textTheme.headline5,
+                            textAlign: TextAlign.center,
                           ),
                         ],
                       ),

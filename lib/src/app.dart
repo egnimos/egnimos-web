@@ -1,6 +1,5 @@
 import 'package:egnimos/src/pages/about_page.dart';
 import 'package:egnimos/src/pages/profile_page.dart';
-import 'package:egnimos/src/pages/write_blog_pages/write_blog_page.dart';
 import 'package:egnimos/src/providers/auth_provider.dart';
 import 'package:egnimos/src/providers/blog_provider.dart';
 import 'package:egnimos/src/theme/color_theme.dart';

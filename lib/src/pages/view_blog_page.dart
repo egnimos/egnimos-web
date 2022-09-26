@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:egnimos/src/config/responsive.dart';
 import 'package:egnimos/src/models/blog.dart';
 import 'package:egnimos/src/models/style_models/styler.dart';
+import 'package:egnimos/src/models/style_models/text_style_model.dart';
 import 'package:egnimos/src/pages/profile_page.dart';
 import 'package:egnimos/src/pages/search_delegate_page.dart';
 import 'package:egnimos/src/pages/write_blog_pages/custom_document_nodes/user_node.dart';
@@ -12,6 +13,7 @@ import 'package:egnimos/src/providers/blog_provider.dart';
 import 'package:egnimos/src/theme/color_theme.dart';
 import 'package:egnimos/src/utility/enum.dart';
 import 'package:egnimos/src/widgets/nav.dart';
+import 'package:egnimos/src/widgets/view_document_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -34,6 +36,7 @@ import 'blog_page.dart';
 import 'home.dart';
 import 'write_blog_pages/custom_document_nodes/checkbox_node.dart';
 import 'write_blog_pages/custom_document_nodes/html_node.dart';
+import 'write_blog_pages/doc_to_custom_widget_generator.dart';
 import 'write_blog_pages/styles/header_styles.dart';
 import 'write_blog_pages/styles/inlinetext_styles.dart';
 import 'write_blog_pages/styles/main_layout.dart';
@@ -70,6 +73,7 @@ class _ViewBlogPageState extends State<ViewBlogPage> {
   bool _isInit = true;
   LayoutStyler? layoutStyler;
   StyleRules styleRules = [];
+  List<TextStyleModel> textStyles = [];
   Timer? timer;
 
   // final _darkBackground = const Color(0xFF222222);
@@ -142,6 +146,7 @@ class _ViewBlogPageState extends State<ViewBlogPage> {
             layoutColor: Colors.white,
             layoutBgUri: "",
           );
+      textStyles = styleMap["text_stylers"] ?? [];
       styleRules = styleMap["style_rules"] ?? [];
       _doc = mutableDoc..addListener(() {});
       _docEditor = DocumentEditor(document: _doc as MutableDocument);
@@ -155,7 +160,7 @@ class _ViewBlogPageState extends State<ViewBlogPage> {
       );
       _editorFocusNode = FocusNode();
     } catch (error) {
-      //print(error);
+      print(error);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(error.toString()),
@@ -169,8 +174,7 @@ class _ViewBlogPageState extends State<ViewBlogPage> {
   }
 
   Widget blogWidget(BoxConstraints constraints) {
-    return Expanded(
-      child: VisibilityDetector(
+    return VisibilityDetector(
         key: _visibilityKey,
         onVisibilityChanged: (value) {
           try {
@@ -190,31 +194,46 @@ class _ViewBlogPageState extends State<ViewBlogPage> {
             //print(e);
           }
         },
-        child: SuperEditor(
-          scrollController: _scrollController,
-          editor: _docEditor,
-          focusNode: _editorFocusNode,
-          composer: _composer,
-          documentLayoutKey: _docLayoutKey,
-          componentBuilders: [
-            ...defaultComponentBuilders,
-            CheckBoxComponentBuilder(_docEditor),
-            HtmlComponentBuilder(_docEditor),
-            UserComponentBuilder(_docEditor),
-          ],
-          keyboardActions: const [],
-          stylesheet: defaultStylesheet.copyWith(
-            addRulesAfter: [
-              ...initialLayout(),
-              ...defaultHeaders(context),
-              ...nodeStyles(),
+        child: Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: ListView(
+            shrinkWrap: true,
+            physics: const ClampingScrollPhysics(),
+            children: [
+              const SizedBox(
+                height: 20.0,
+              ),
+              ...DocToCustomWidgetGenerator.toWidget(_doc.nodes, textStyles),
+              const SizedBox(
+                height: 50.0,
+              ),
             ],
-            inlineTextStyler: inlinetextStyle,
-          ).copyWith(addRulesAfter: [...styleRules]),
-        ),
-      ),
-    );
+          ),
+        ));
   }
+
+  Widget superEditor() => SuperEditor(
+        scrollController: _scrollController,
+        editor: _docEditor,
+        focusNode: _editorFocusNode,
+        composer: _composer,
+        documentLayoutKey: _docLayoutKey,
+        componentBuilders: [
+          ...defaultComponentBuilders,
+          CheckBoxComponentBuilder(_docEditor),
+          HtmlComponentBuilder(_docEditor),
+          UserComponentBuilder(_docEditor),
+        ],
+        keyboardActions: const [],
+        stylesheet: defaultStylesheet.copyWith(
+          addRulesAfter: [
+            ...initialLayout(),
+            ...defaultHeaders(context),
+            ...nodeStyles(),
+          ],
+          inlineTextStyler: inlinetextStyle,
+        ).copyWith(addRulesAfter: [...styleRules]),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -255,6 +274,8 @@ class _ViewBlogPageState extends State<ViewBlogPage> {
                   ),
                   body: constraints.maxWidth < K.kTableteWidth
                       ? Column(
+                          // shrinkWrap: true,
+                          // physics: const ClampingScrollPhysics(),
                           children: [
                             //nav
                             const Nav(
@@ -263,7 +284,7 @@ class _ViewBlogPageState extends State<ViewBlogPage> {
                             ),
 
                             //blog
-                            blogWidget(constraints),
+                            Expanded(child: blogWidget(constraints)),
                           ],
                         )
                       : Row(
@@ -273,7 +294,7 @@ class _ViewBlogPageState extends State<ViewBlogPage> {
                               constraints: constraints,
                             ),
                             //blog
-                            blogWidget(constraints),
+                            Expanded(child: blogWidget(constraints)),
                             //User Info with blogs written by user
                             //list of active user
                             UserProfileInfoWidget(
@@ -681,6 +702,7 @@ class UserProfileInfoWidget extends StatelessWidget {
                                 : Responsive.widthMultiplier * 20.0,
                             height: 70.0,
                             child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
                                 itemCount: data.length,
                                 itemBuilder: (context, i) {
                                   final info = data[i].data();

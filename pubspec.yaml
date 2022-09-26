@@ -66,6 +66,7 @@ dependencies:
   url_launcher: ^6.1.5
   uuid: ^3.0.6
   visibility_detector: ^0.3.3
+  pointer_interceptor: ^0.9.3+3
 
 dependency_overrides:
   # Override to local mono-repo path so devs can test this repo

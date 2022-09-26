@@ -2,6 +2,7 @@ import 'package:egnimos/src/utility/enum.dart';
 import 'package:egnimos/src/widgets/create_pop_up_modal_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pointer_interceptor/pointer_interceptor.dart';
 
 import '../theme/color_theme.dart';
 
@@ -41,20 +42,32 @@ class IndicatorWidget {
     );
   }
 
-  IndicatorWidget.showCreateBlogModal(BuildContext context, {Widget? child, bool barrierDismissible = true,}) {
+  IndicatorWidget.showCreateBlogModal(
+    BuildContext context, {
+    Widget? child,
+    bool barrierDismissible = true,
+  }) {
     showDialog(
       context: context,
       barrierDismissible: barrierDismissible,
-      builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16.0),
+      builder: (context) => PointerInterceptor(
+        // intercepting: false,
+        // debug: true,
+        child: Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          child: child ?? const CreatePopUpModalWidget(),
         ),
-        child: child ?? const CreatePopUpModalWidget(), 
       ),
     );
   }
 
-  IndicatorWidget.showPopUpModalWidget(BuildContext context, {Widget? child, bool barrierDismissible = true,}) {
+  IndicatorWidget.showPopUpModalWidget(
+    BuildContext context, {
+    Widget? child,
+    bool barrierDismissible = true,
+  }) {
     showDialog(
       context: context,
       barrierDismissible: barrierDismissible,
@@ -62,7 +75,7 @@ class IndicatorWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16.0),
         ),
-        child: child ?? const CreatePopUpModalWidget(), 
+        child: child ?? const CreatePopUpModalWidget(),
       ),
     );
   }

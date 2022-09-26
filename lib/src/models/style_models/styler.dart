@@ -59,8 +59,11 @@ class LayoutStyler {
   }
 
   //fromJsonToStylers
-  static List fromJsonToStylers(Map<String, dynamic> data) {
+  static List fromJsonToStylers(Map<String, dynamic>? data) {
     final stylers = [];
+    if (data == null) {
+      return stylers;
+    }
     for (var key in data.keys) {
       //if the key is layout styler
       if (key == layoutStylerId) {

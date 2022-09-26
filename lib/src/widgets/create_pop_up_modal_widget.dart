@@ -34,129 +34,177 @@ class _CreatePopUpModalWidgetState extends State<CreatePopUpModalWidget> {
   WriteOptions selectedOptions = WriteOptions.blog;
   @override
   Widget build(BuildContext context) {
-    return IntrinsicHeight(
-      child: Container(
-        width: (MediaQuery.of(context).size.width / 100) * 80.0,
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //heading
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Text(
-                "Choose an Options",
-                style: GoogleFonts.rubik(
-                  fontSize: 28.0,
-                  fontWeight: FontWeight.w500,
-                ),
+    return Container(
+      width: (MediaQuery.of(context).size.width / 100) * 80.0,
+      height: 350.0,
+      padding: const EdgeInsets.all(16.0),
+      child: ListView(
+        // crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          //heading
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Text(
+              "Choose an Options",
+              style: GoogleFonts.rubik(
+                fontSize: 28.0,
+                fontWeight: FontWeight.w500,
               ),
             ),
+          ),
 
-            const SizedBox(
-              height: 18.0,
+          const SizedBox(
+            height: 18.0,
+          ),
+
+          //check box
+          ListTile(
+            onTap: () {
+              setState(() {
+                selectedOptions = WriteOptions.blog;
+              });
+            },
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 10.0,
             ),
+            shape: RoundedRectangleBorder(
+              side: BorderSide(
+                width: 1.7,
+                color: selectedOptions == WriteOptions.blog
+                    ? ColorTheme.primaryColor
+                    : Colors.grey.shade400,
+              ),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            leading: Radio<WriteOptions>(
+              hoverColor: ColorTheme.primaryColor.shade50,
+              activeColor: ColorTheme.primaryColor,
+              focusColor: ColorTheme.primaryColor,
+              value: WriteOptions.blog,
+              groupValue: selectedOptions,
+              onChanged: (__) {},
+            ),
+            title: Text(
+              "Blog",
+              style: GoogleFonts.rubik(
+                fontWeight: FontWeight.w400,
+                fontSize: 20.0,
+              ),
+            ),
+            subtitle: Text(
+              "write a blog to publish for every other user to see or save it as a draft for your self only",
+              style: GoogleFonts.rubik(),
+            ),
+          ),
 
-            //check box
-            ListTile(
-              onTap: () {
-                setState(() {
-                  selectedOptions = WriteOptions.blog;
-                });
-              },
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 10.0,
+          const SizedBox(
+            height: 18.0,
+          ),
+
+          ListTile(
+            onTap: () {
+              WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return const MessagePage(
+                        message: "We are working on it & it will be good 😎",
+                      );
+                    },
+                  ),
+                );
+              });
+            },
+            shape: RoundedRectangleBorder(
+              side: BorderSide(
+                width: 1.7,
+                color: selectedOptions == WriteOptions.book
+                    ? ColorTheme.primaryColor
+                    : Colors.grey.shade400,
               ),
-              shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  width: 1.7,
-                  color: selectedOptions == WriteOptions.blog
-                      ? ColorTheme.primaryColor
-                      : Colors.grey.shade400,
-                ),
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              leading: Radio<WriteOptions>(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 10.0,
+            ),
+            leading: Radio<WriteOptions>(
                 hoverColor: ColorTheme.primaryColor.shade50,
                 activeColor: ColorTheme.primaryColor,
                 focusColor: ColorTheme.primaryColor,
-                value: WriteOptions.blog,
+                value: WriteOptions.book,
                 groupValue: selectedOptions,
-                onChanged: (__) {},
-              ),
-              title: Text(
-                "Blog",
-                style: GoogleFonts.rubik(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 20.0,
-                ),
-              ),
-              subtitle: Text(
-                "write a blog to publish for every other user to see or save it as a draft for your self only",
-                style: GoogleFonts.rubik(),
+                onChanged: (val) {}),
+            title: Text(
+              "Book",
+              style: GoogleFonts.rubik(
+                fontWeight: FontWeight.w400,
+                fontSize: 20.0,
               ),
             ),
-
-            const SizedBox(
-              height: 18.0,
+            subtitle: Text(
+              "write a book, documentation or manual to user information regarding any tech or product",
+              style: GoogleFonts.rubik(),
             ),
+          ),
 
-            ListTile(
-              onTap: () {
-                WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return const MessagePage(
-                          message: "We are working on it & it will be good 😎",
-                        );
-                      },
+          const SizedBox(
+            height: 18.0,
+          ),
+
+          //start button
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              //cancel
+              Flexible(
+                child: OutlinedButton.icon(
+                  clipBehavior: Clip.antiAlias,
+                  style: OutlinedButton.styleFrom(
+                      primary: Colors.redAccent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(22.0),
+                      ),
+                      side: const BorderSide(
+                        width: 1.2,
+                        color: Colors.redAccent,
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0,
+                        vertical: 16.0,
+                      )),
+                  onPressed: () async {
+                    try {
+                      Navigator.pop(context);
+                    } catch (e) {
+                      print(e);
+                    }
+                  },
+                  icon: const Flexible(
+                    child: Icon(
+                      Icons.close,
+                      color: Colors.redAccent,
                     ),
-                  );
-                });
-              },
-              shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  width: 1.7,
-                  color: selectedOptions == WriteOptions.book
-                      ? ColorTheme.primaryColor
-                      : Colors.grey.shade400,
-                ),
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 10.0,
-              ),
-              leading: Radio<WriteOptions>(
-                  hoverColor: ColorTheme.primaryColor.shade50,
-                  activeColor: ColorTheme.primaryColor,
-                  focusColor: ColorTheme.primaryColor,
-                  value: WriteOptions.book,
-                  groupValue: selectedOptions,
-                  onChanged: (val) {}),
-              title: Text(
-                "Book",
-                style: GoogleFonts.rubik(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 20.0,
+                  ),
+                  label: Text(
+                    "Cancel",
+                    softWrap: false,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: GoogleFonts.rubik(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
                 ),
               ),
-              subtitle: Text(
-                "write a book, documentation or manual to user information regarding any tech or product",
-                style: GoogleFonts.rubik(),
+
+              const SizedBox(
+                width: 12.0,
               ),
-            ),
-
-            const SizedBox(
-              height: 18.0,
-            ),
-
-            //start button
-            Flexible(
-              child: Align(
-                alignment: Alignment.bottomRight,
+              Flexible(
                 child: OutlinedButton.icon(
                   style: OutlinedButton.styleFrom(
                       primary: ColorTheme.primaryColor,
@@ -192,9 +240,9 @@ class _CreatePopUpModalWidgetState extends State<CreatePopUpModalWidget> {
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -289,77 +337,127 @@ class _SaveBlogPopUpModalWidgetState extends State<SaveBlogPopUpModalWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return IntrinsicHeight(
-      child: Container(
-        width: (MediaQuery.of(context).size.width / 100) * 60.0,
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //heading
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Text(
-                "Save as/to",
-                style: GoogleFonts.rubik(
-                  fontSize: 28.0,
-                  fontWeight: FontWeight.w500,
-                ),
+    return Container(
+      width: (MediaQuery.of(context).size.width / 100) * 60.0,
+      height: 300.0,
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          //heading
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Text(
+              "Save as/to",
+              style: GoogleFonts.rubik(
+                fontSize: 28.0,
+                fontWeight: FontWeight.w500,
               ),
             ),
+          ),
 
-            const SizedBox(
-              height: 18.0,
-            ),
+          const SizedBox(
+            height: 18.0,
+          ),
 
-            Row(
-              children: [
-                //check box
-                Flexible(
-                  child: optionBox(
-                    onTap: () {
-                      setState(() {
-                        selectedOptions = BlogType.published;
-                      });
-                    },
-                    blogType: BlogType.published,
-                    titleText: "Save to publish",
-                    description: "Publish a blog for other users",
+          Row(
+            children: [
+              //check box
+              Flexible(
+                child: optionBox(
+                  onTap: () {
+                    setState(() {
+                      selectedOptions = BlogType.published;
+                    });
+                  },
+                  blogType: BlogType.published,
+                  titleText: "Save to publish",
+                  description: "Publish a blog for other users",
+                ),
+              ),
+
+              const SizedBox(
+                width: 18.0,
+              ),
+
+              //draft
+              Flexible(
+                child: optionBox(
+                  onTap: () {
+                    setState(() {
+                      selectedOptions = BlogType.draft;
+                    });
+                  },
+                  blogType: BlogType.draft,
+                  titleText: "Save to draft",
+                  description: "Draft a blog for yourself only",
+                ),
+              ),
+
+              const SizedBox(
+                width: 18.0,
+              ),
+            ],
+          ),
+
+          const SizedBox(
+            height: 34.0,
+          ),
+
+          //start button
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              //cancel
+              Flexible(
+                child: OutlinedButton.icon(
+                  clipBehavior: Clip.antiAlias,
+                  style: OutlinedButton.styleFrom(
+                      primary: Colors.redAccent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(22.0),
+                      ),
+                      side: const BorderSide(
+                        width: 1.2,
+                        color: Colors.redAccent,
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0,
+                        vertical: 16.0,
+                      )),
+                  onPressed: () async {
+                    try {
+                      Navigator.pop(context);
+                    } catch (e) {
+                      print(e);
+                    }
+                  },
+                  icon: const Flexible(
+                    child: Icon(
+                      Icons.close,
+                      color: Colors.redAccent,
+                    ),
+                  ),
+                  label: Text(
+                    "Cancel",
+                    softWrap: false,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: GoogleFonts.rubik(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ),
+              ),
 
-                const SizedBox(
-                  width: 18.0,
-                ),
+              const SizedBox(
+                width: 12.0,
+              ),
 
-                //draft
-                Flexible(
-                  child: optionBox(
-                    onTap: () {
-                      setState(() {
-                        selectedOptions = BlogType.draft;
-                      });
-                    },
-                    blogType: BlogType.draft,
-                    titleText: "Save to draft",
-                    description: "Draft a blog for yourself only",
-                  ),
-                ),
-
-                const SizedBox(
-                  width: 18.0,
-                ),
-              ],
-            ),
-
-            const SizedBox(
-              height: 34.0,
-            ),
-
-            //start button
-            Flexible(
-              child: Align(
-                alignment: Alignment.bottomRight,
+              //save
+              Flexible(
                 child: OutlinedButton.icon(
                   style: OutlinedButton.styleFrom(
                       primary: ColorTheme.primaryColor,
@@ -375,12 +473,17 @@ class _SaveBlogPopUpModalWidgetState extends State<SaveBlogPopUpModalWidget> {
                         vertical: 16.0,
                       )),
                   onPressed: () => widget.onSave(selectedOptions),
-                  icon: const Icon(
-                    Icons.save,
-                    color: ColorTheme.primaryColor,
+                  icon: const Flexible(
+                    child: Icon(
+                      Icons.save,
+                      color: ColorTheme.primaryColor,
+                    ),
                   ),
                   label: Text(
                     "Save",
+                    softWrap: false,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                     style: GoogleFonts.rubik(
                       fontSize: 18.0,
                       fontWeight: FontWeight.w400,
@@ -388,9 +491,9 @@ class _SaveBlogPopUpModalWidgetState extends State<SaveBlogPopUpModalWidget> {
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -786,87 +889,137 @@ class _CreateCategoryPopupModelState extends State<CreateCategoryPopupModel> {
               ),
 
               //start button
-              Flexible(
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: OutlinedButton.icon(
-                    style: OutlinedButton.styleFrom(
-                        primary: ColorTheme.primaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(22.0),
-                        ),
-                        side: const BorderSide(
-                          width: 1.2,
-                          color: ColorTheme.primaryColor,
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20.0,
-                          vertical: 16.0,
-                        )),
-                    onPressed: () async {
-                      //validation
-                      if (selectedCatType == null) {
-                        selectionErrorText = "select the category type";
-                        return;
-                      }
-                      try {
-                        setState(() {
-                          _isLoading = true;
-                        });
-                        selectionErrorText = null;
-                        final catId = widget.categoryInfo?.image?.fileName ??
-                            DocumentEditor.createNodeId();
-                        UploadOutput? uploadOutput = widget.categoryInfo?.image;
-                        if (file != null) {
-                          uploadOutput = await Provider.of<UploadProvider>(
-                                  context,
-                                  listen: false)
-                              .uploadFile(file!, mimeModel.uploadType,
-                                  mimeModel.fileExt,
-                                  fileN: catId, childName: "cat_files");
-                        }
-                        final newCat = Category(
-                          id: widget.categoryInfo?.id ?? catId,
-                          label: nameController.text,
-                          image: uploadOutput,
-                          description: descriptionController.text,
-                          catEnum: selectedCatType!,
-                        );
-                        await Provider.of<CategoryProvider>(context,
-                                listen: false)
-                            .saveCategory(newCat);
-                        Navigator.of(context).pushReplacementNamed(
-                            ProfilePage.routeName,
-                            arguments: {
-                              "profile_option": ProfileOptions.category,
-                            });
-                      } catch (e) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              e.toString(),
-                            ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  //cancel
+                  Flexible(
+                    child: OutlinedButton.icon(
+                      clipBehavior: Clip.antiAlias,
+                      style: OutlinedButton.styleFrom(
+                          primary: Colors.redAccent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(22.0),
                           ),
-                        );
-                      } finally {
-                        setState(() {
-                          _isLoading = false;
-                        });
-                      }
-                    },
-                    icon: const Icon(
-                      Icons.save,
-                      color: ColorTheme.primaryColor,
-                    ),
-                    label: Text(
-                      "Save",
-                      style: GoogleFonts.rubik(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w400,
+                          side: const BorderSide(
+                            width: 1.2,
+                            color: Colors.redAccent,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20.0,
+                            vertical: 16.0,
+                          )),
+                      onPressed: () async {
+                        try {
+                          Navigator.pop(context);
+                        } catch (e) {
+                          print(e);
+                        }
+                      },
+                      icon: const Flexible(
+                        child: Icon(
+                          Icons.close,
+                          color: Colors.redAccent,
+                        ),
+                      ),
+                      label: Text(
+                        "Cancel",
+                        softWrap: false,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: GoogleFonts.rubik(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
                   ),
-                ),
+
+                  const SizedBox(
+                    width: 12.0,
+                  ),
+                  Flexible(
+                    child: OutlinedButton.icon(
+                      style: OutlinedButton.styleFrom(
+                          primary: ColorTheme.primaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(22.0),
+                          ),
+                          side: const BorderSide(
+                            width: 1.2,
+                            color: ColorTheme.primaryColor,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20.0,
+                            vertical: 16.0,
+                          )),
+                      onPressed: () async {
+                        //validation
+                        if (selectedCatType == null) {
+                          selectionErrorText = "select the category type";
+                          return;
+                        }
+                        try {
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          selectionErrorText = null;
+                          final catId = widget.categoryInfo?.image?.fileName ??
+                              DocumentEditor.createNodeId();
+                          UploadOutput? uploadOutput =
+                              widget.categoryInfo?.image;
+                          if (file != null) {
+                            uploadOutput = await Provider.of<UploadProvider>(
+                                    context,
+                                    listen: false)
+                                .uploadFile(file!, mimeModel.uploadType,
+                                    mimeModel.fileExt,
+                                    fileN: catId, childName: "cat_files");
+                          }
+                          final newCat = Category(
+                            id: widget.categoryInfo?.id ?? catId,
+                            label: nameController.text,
+                            image: uploadOutput,
+                            description: descriptionController.text,
+                            catEnum: selectedCatType!,
+                          );
+                          await Provider.of<CategoryProvider>(context,
+                                  listen: false)
+                              .saveCategory(newCat);
+                          Navigator.of(context).pushReplacementNamed(
+                              ProfilePage.routeName,
+                              arguments: {
+                                "profile_option": ProfileOptions.category,
+                              });
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                e.toString(),
+                              ),
+                            ),
+                          );
+                        } finally {
+                          setState(() {
+                            _isLoading = false;
+                          });
+                        }
+                      },
+                      icon: const Icon(
+                        Icons.save,
+                        color: ColorTheme.primaryColor,
+                      ),
+                      label: Text(
+                        "Save",
+                        style: GoogleFonts.rubik(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -1087,13 +1240,16 @@ class _UploadFilePopUpModelState extends State<UploadFilePopUpModel> {
   Widget build(BuildContext context) {
     final user = Provider.of<AuthProvider>(context, listen: false).user;
     return Container(
-      width: (widget.constraints.maxWidth / 100) * 40.0,
+      width: (widget.constraints.maxWidth > K.kTableteWidth)
+          ? (widget.constraints.maxWidth / 100) * 40.0
+          : (widget.constraints.maxWidth / 100) * 80.0,
       height: (widget.constraints.maxHeight / 100) * 60.0,
       padding: const EdgeInsets.all(16.0),
       child: Stack(
         children: [
           //ListView
           ListView(
+            physics: const ClampingScrollPhysics(),
             children: [
               //heading
               Padding(
@@ -1126,6 +1282,7 @@ class _UploadFilePopUpModelState extends State<UploadFilePopUpModel> {
               ),
               //IMAGES
               ListView(
+                physics: const ClampingScrollPhysics(),
                 shrinkWrap: true,
                 children: [
                   Wrap(
@@ -1200,105 +1357,160 @@ class _UploadFilePopUpModelState extends State<UploadFilePopUpModel> {
               ),
 
               const SizedBox(
-                height: 34.0,
+                height: 54.0,
               ),
 
-              //start button
-              Flexible(
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: OutlinedButton.icon(
-                    style: OutlinedButton.styleFrom(
-                        primary: ColorTheme.primaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(22.0),
-                        ),
-                        side: const BorderSide(
-                          width: 1.2,
-                          color: ColorTheme.primaryColor,
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20.0,
-                          vertical: 16.0,
-                        )),
-                    onPressed: () async {
-                      //validation
-                      if (nameController.text.isEmpty) {
-                        fileNameErrorText = "add your file name";
-                        setState(() {});
-                        return;
-                      }
-                      try {
-                        setState(() {
-                          _isLoading = true;
-                        });
-                        fileNameErrorText = null;
-                        await Future.forEach<MimeModel>(mimeModels,
-                            (val) async {
-                          UploadOutput? uploadOutput;
-
-                          uploadOutput = await Provider.of<UploadProvider>(
-                                  context,
-                                  listen: false)
-                              .uploadFile(
-                            val.file!,
-                            val.uploadType,
-                            val.fileExt,
-                            fileN: val.fileId,
-                            childName: "blog_collections",
-                          );
-                          final newCollectionFile = CollectionFile(
-                            id: widget.file?.id ?? val.fileId,
-                            userId: widget.file?.userId ?? user!.id,
-                            fileName:
-                                "${nameController.text}-#${mimeModels.indexOf(val)}.${val.fileExt}",
-                            extensionName: val.fileExt,
-                            collectionName: PickerType.image.name,
-                            uri: uploadOutput.generatedUri,
-                            createdAt: DateTime.now().toString(),
-                          );
-                          await Provider.of<CollectionProvider>(context,
-                                  listen: false)
-                              .saveFile(newCollectionFile);
-                          uploadedFileId.value.add(newCollectionFile.id);
-                          setState(() {});
-                        });
-                      } catch (e) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              e.toString(),
-                            ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  //cancel
+                  Flexible(
+                    child: OutlinedButton.icon(
+                      clipBehavior: Clip.antiAlias,
+                      style: OutlinedButton.styleFrom(
+                          primary: Colors.redAccent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(22.0),
                           ),
-                        );
-                        //remove on the uploaded item
-                        mimeModels.removeWhere(
-                          (mm) => uploadedFileId.value.contains(mm.fileId),
-                        );
-                      } finally {
-                        setState(() {
-                          _isLoading = false;
-                        });
-                        Navigator.of(context).pushReplacementNamed(
-                            ProfilePage.routeName,
-                            arguments: {
-                              "profile_option": ProfileOptions.collections,
-                            });
-                      }
-                    },
-                    icon: const Icon(
-                      Icons.upload,
-                      color: ColorTheme.primaryColor,
-                    ),
-                    label: Text(
-                      "Upload",
-                      style: GoogleFonts.rubik(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w400,
+                          side: const BorderSide(
+                            width: 1.2,
+                            color: Colors.redAccent,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20.0,
+                            vertical: 16.0,
+                          )),
+                      onPressed: () async {
+                        try {
+                          Navigator.pop(context);
+                        } catch (e) {
+                          print(e);
+                        }
+                      },
+                      icon: const Flexible(
+                        child: Icon(
+                          Icons.close,
+                          color: Colors.redAccent,
+                        ),
+                      ),
+                      label: Text(
+                        "Cancel",
+                        softWrap: false,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: GoogleFonts.rubik(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
                   ),
-                ),
+
+                  const SizedBox(
+                    width: 12.0,
+                  ),
+                  //upload
+                  Flexible(
+                    child: OutlinedButton.icon(
+                      clipBehavior: Clip.antiAlias,
+                      style: OutlinedButton.styleFrom(
+                          primary: ColorTheme.primaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(22.0),
+                          ),
+                          side: const BorderSide(
+                            width: 1.2,
+                            color: ColorTheme.primaryColor,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20.0,
+                            vertical: 16.0,
+                          )),
+                      onPressed: () async {
+                        //validation
+                        if (nameController.text.isEmpty) {
+                          fileNameErrorText = "add your file name";
+                          setState(() {});
+                          return;
+                        }
+                        try {
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          fileNameErrorText = null;
+                          await Future.forEach<MimeModel>(mimeModels,
+                              (val) async {
+                            UploadOutput? uploadOutput;
+
+                            uploadOutput = await Provider.of<UploadProvider>(
+                                    context,
+                                    listen: false)
+                                .uploadFile(
+                              val.file!,
+                              val.uploadType,
+                              val.fileExt,
+                              fileN: val.fileId,
+                              childName: "blog_collections",
+                            );
+                            final newCollectionFile = CollectionFile(
+                              id: widget.file?.id ?? val.fileId,
+                              userId: widget.file?.userId ?? user!.id,
+                              fileName:
+                                  "${nameController.text}-#${mimeModels.indexOf(val)}.${val.fileExt}",
+                              extensionName: val.fileExt,
+                              collectionName: PickerType.image.name,
+                              uri: uploadOutput.generatedUri,
+                              createdAt: DateTime.now().toString(),
+                            );
+                            await Provider.of<CollectionProvider>(context,
+                                    listen: false)
+                                .saveFile(newCollectionFile);
+                            uploadedFileId.value.add(newCollectionFile.id);
+                            setState(() {});
+                          });
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                e.toString(),
+                              ),
+                            ),
+                          );
+                          //remove on the uploaded item
+                          mimeModels.removeWhere(
+                            (mm) => uploadedFileId.value.contains(mm.fileId),
+                          );
+                        } finally {
+                          setState(() {
+                            _isLoading = false;
+                          });
+                          Navigator.of(context).pushReplacementNamed(
+                              ProfilePage.routeName,
+                              arguments: {
+                                "profile_option": ProfileOptions.collections,
+                              });
+                        }
+                      },
+                      icon: const Flexible(
+                        child: Icon(
+                          Icons.upload,
+                          color: ColorTheme.primaryColor,
+                        ),
+                      ),
+                      label: Text(
+                        "Upload",
+                        softWrap: false,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: GoogleFonts.rubik(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

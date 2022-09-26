@@ -100,6 +100,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   ProfileOptions _selectedOptions = ProfileOptions.blogs;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     // final user = Provider.of<AuthProvider>(context, listen: false).user;
@@ -119,6 +120,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   enableEditingFile.value = "";
                 },
                 child: Scaffold(
+                  key: _scaffoldKey,
                   drawer: NavigationRailWide(
                     selectedOption: _selectedOptions,
                     isDrawer: true,
@@ -128,6 +130,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       setState(() {
                         _selectedOptions = option;
                       });
+                      if (_scaffoldKey.currentState!.isDrawerOpen) {
+                        _scaffoldKey.currentState!.closeDrawer();
+                      }
                     },
                   ),
                   body: SizedBox(

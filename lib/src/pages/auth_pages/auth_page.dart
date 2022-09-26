@@ -37,8 +37,9 @@ class AuthPage extends StatelessWidget {
 
           //login box
           AuthBox(
-            constraints: constraints,
-          ),
+              constraints: constraints,
+            ),
+        
 
           const SizedBox(
             height: 50.0,

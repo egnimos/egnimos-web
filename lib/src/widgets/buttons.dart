@@ -296,7 +296,7 @@ class SocialAuthButton extends StatelessWidget {
   final Color labelColor;
   final Color iconColor;
   final Color bgColor;
-  const SocialAuthButton({
+  const  SocialAuthButton({
     required this.constraints,
     required this.onTap,
     required this.icon,
@@ -332,22 +332,26 @@ class SocialAuthButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               //icon
-              Icon(
-                icon,
-                color: iconColor,
-                size: 28.0,
+              Flexible(
+                child: Icon(
+                  icon,
+                  color: iconColor,
+                  size: 28.0,
+                ),
               ),
               const SizedBox(
                 width: 10.0,
               ),
               //icon name
-              Text(
-                label,
-                style: GoogleFonts.rubik().copyWith(
-                  fontSize: 18.0,
-                  letterSpacing: 0.5,
-                  fontWeight: FontWeight.w500,
-                  color: labelColor,
+              Flexible(
+                child: Text(
+                  label,
+                  style: GoogleFonts.rubik().copyWith(
+                    fontSize: 18.0,
+                    letterSpacing: 0.5,
+                    fontWeight: FontWeight.w500,
+                    color: labelColor,
+                  ),
                 ),
               ),
             ],

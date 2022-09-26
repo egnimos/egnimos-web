@@ -1,3 +1,4 @@
+import 'package:egnimos/src/pages/write_blog_pages/custom_document_nodes/user_node.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:super_editor/super_editor.dart';
 
@@ -7,7 +8,7 @@ import '../named_attributions.dart';
 const paddingKey = "padding";
 
 ///[defaultPadding] for every one
-const defaultPadding = CascadingPadding.symmetric(vertical: 5.0);
+const defaultPadding = CascadingPadding.symmetric(vertical: 10.0);
 
 ///[Padding] for [h1]
 const h1Padding = CascadingPadding.only(top: 40);
@@ -49,4 +50,5 @@ Map<NamedAttribution, EdgeInsetsGeometry> getPadding() => {
       listItemAttribution: listitemPadding.toEdgeInsets(),
       checkboxAttribution: checkboxPadding.toEdgeInsets(),
       paragraphAttribution: defaultPadding.toEdgeInsets(),
+      userNodeAttribution: defaultPadding.toEdgeInsets(),
     };

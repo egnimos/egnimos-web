@@ -41,7 +41,10 @@ class _AuthBoxState extends State<AuthBox> {
     return IntrinsicHeight(
       child: Container(
         width: (widget.constraints.maxWidth / 100) * 40.0,
-        padding: const EdgeInsets.only(left: 26.0),
+        padding: EdgeInsets.only(
+          left: widget.constraints.maxWidth < K.kTableteWidth ? 18.0 : 26.0,
+          right: widget.constraints.maxWidth < K.kTableteWidth ? 18.0 : 0.0,
+        ),
         // color: Colors.green,
         child: Column(
           crossAxisAlignment: widget.constraints.maxWidth < K.kTableteWidth
@@ -71,7 +74,9 @@ class _AuthBoxState extends State<AuthBox> {
                 fontWeight: FontWeight.w500,
                 color: Colors.grey.shade800,
               ),
-              textAlign: TextAlign.center,
+              textAlign: widget.constraints.maxWidth < K.kTableteWidth
+                  ? TextAlign.center
+                  : TextAlign.left,
             ),
 
             const SizedBox(
@@ -87,7 +92,9 @@ class _AuthBoxState extends State<AuthBox> {
                 color: Colors.redAccent,
                 decoration: TextDecoration.underline,
               ),
-              textAlign: TextAlign.center,
+              textAlign: widget.constraints.maxWidth < K.kTableteWidth
+                  ? TextAlign.center
+                  : TextAlign.left,
             ),
 
             const SizedBox(

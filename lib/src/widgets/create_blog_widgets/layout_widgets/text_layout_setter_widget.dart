@@ -1,5 +1,4 @@
 import 'package:egnimos/src/models/style_models/text_style_model.dart';
-import 'package:egnimos/src/pages/write_blog_pages/named_attributions.dart';
 import 'package:egnimos/src/pages/write_blog_pages/styles/default_text_styles.dart';
 import 'package:egnimos/src/widgets/create_blog_widgets/layout_option_widget.dart';
 import 'package:egnimos/src/widgets/create_blog_widgets/layout_widgets/text_style_widgets/font_color_widget.dart';
@@ -8,9 +7,7 @@ import 'package:egnimos/src/widgets/create_blog_widgets/layout_widgets/text_styl
 import 'package:egnimos/src/widgets/create_blog_widgets/layout_widgets/text_style_widgets/font_style_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:super_editor/super_editor.dart';
 import '../../../utility/enum.dart';
-import '../../../utility/font_manager/font_handler.dart';
 import 'text_style_widgets/font_families_widget.dart';
 import 'text_style_widgets/font_weight_widget.dart';
 
@@ -46,7 +43,8 @@ class TextLayoutSetter extends StatelessWidget {
   Widget build(BuildContext context) {
     final textType = ValueNotifier<TextTypes>(TextTypes.header1);
     final textStyle = ValueNotifier<TextStyle>(h1TextStyle);
-    textStyle.value = getTextStyleBasedOnTextType(textType.value);
+    textStyle.value =
+        getTextStyleBasedOnTextType(textType.value, stylers: stylers.value);
     //get the text style model if it is there
     final vals = stylers.value.where((v) => v.blockId == "header1");
     TextStyleModel textStyleModel = TextStyleModel(
@@ -121,7 +119,8 @@ class TextLayoutSetter extends StatelessWidget {
                     FontFamily? fontFamInf =
                         values.isEmpty ? null : values.first.fontFamilyInfo;
                     // textStyleModel
-                    textStyle.value = getTextStyleBasedOnTextType(value);
+                    textStyle.value = getTextStyleBasedOnTextType(value,
+                        stylers: stylers.value);
                     textStyleModel = TextStyleModel(
                       blockId: blockId,
                       fontSize: textStyle.value.fontSize,

@@ -29,8 +29,8 @@ class StyleProvider with ChangeNotifier {
           .doc(blogId)
           .get();
       //convert it to stylers
-      //print("STYLER JSON ${response.data()}");
-      final stylerList = LayoutStyler.fromJsonToStylers(response.data()!);
+      print("STYLER JSON ${response.data()}");
+      final stylerList = LayoutStyler.fromJsonToStylers(response.data());
       List<TextStyleModel> stylers = [];
       for (var style in stylerList) {
         if (style is LayoutStyler) {
@@ -41,12 +41,13 @@ class StyleProvider with ChangeNotifier {
           stylers.add(style);
         }
       }
-      data["stylers"] = stylers;
+      data["text_stylers"] = stylers;
       final styleRules =
           LayoutStyler.fromStylerToStyleRules([layoutStyler, ...stylerList]);
       data["style_rules"] = styleRules;
       return data;
     } catch (e) {
+      print(e);
       rethrow;
     }
   }

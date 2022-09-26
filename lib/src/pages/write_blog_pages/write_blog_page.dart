@@ -45,6 +45,7 @@ import 'package:super_editor/super_editor.dart';
 import '../../models/user.dart';
 import '../../providers/style_provider.dart';
 import '../../widgets/indicator_widget.dart';
+import '../../widgets/view_document_widget.dart';
 import 'toolbar/editor_tool_bar.dart';
 
 final isView = ValueNotifier<bool>(false);
@@ -524,7 +525,7 @@ class _BlogPageState extends State<WriteBlogPage> {
               context,
               child: SaveBlogPopUpModalWidget(
                 onSave: (type) async {
-                  Navigator.pop;
+                  Navigator.pop(context);
                   saveTheBlog(type, user!);
                 },
               ),
@@ -578,7 +579,7 @@ class _BlogPageState extends State<WriteBlogPage> {
                             context,
                             child: SaveBlogPopUpModalWidget(
                               onSave: (type) async {
-                                Navigator.pop;
+                                Navigator.pop(context);
                                 saveTheBlog(type, user!);
                               },
                             ),
@@ -626,6 +627,7 @@ class _BlogPageState extends State<WriteBlogPage> {
                               return value
                                   ? ViewDocumentWidget(
                                       doc: _doc.nodes,
+                                      textStylers: stylers.value,
                                     )
                                   : child!;
                             }),
@@ -648,37 +650,4 @@ ExecutionInstruction saveDocument({
   return false
       ? ExecutionInstruction.haltExecution
       : ExecutionInstruction.continueExecution;
-}
-
-class ViewDocumentWidget extends StatelessWidget {
-  final List<DocumentNode> doc;
-  const ViewDocumentWidget({
-    Key? key,
-    required this.doc,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView(physics: const ClampingScrollPhysics(), children: [
-        Align(
-          child: SizedBox(
-            width: Responsive.widthMultiplier * 50.0,
-            child: ListView(
-                shrinkWrap: true,
-                physics: const ClampingScrollPhysics(),
-                children: [
-                  const SizedBox(
-                    height: 50.0,
-                  ),
-                  ...DocToCustomWidgetGenerator.toWidget(doc, stylers.value),
-                  const SizedBox(
-                    height: 50.0,
-                  ),
-                ]),
-          ),
-        ),
-      ]),
-    );
-  }
 }

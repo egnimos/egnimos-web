@@ -126,6 +126,7 @@ enum TextTypes {
   blockquote,
   listItem,
   checkbox,
+  user,
 }
 
 enum ColorBoxType {

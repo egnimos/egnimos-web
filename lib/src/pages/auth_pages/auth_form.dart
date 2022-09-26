@@ -225,7 +225,9 @@ class _AuthFormState extends State<AuthForm> {
           height: 30.0,
         ),
         SizedBox(
-          width: (widget.constraints.maxWidth / 100) * 30.0,
+          width: widget.constraints.maxWidth < K.kTableteWidth
+              ? (widget.constraints.maxWidth / 100) * 50.0
+              : (widget.constraints.maxWidth / 100) * 30.0,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -235,13 +237,15 @@ class _AuthFormState extends State<AuthForm> {
                 color: Colors.grey.shade800,
               ),
               const SizedBox(width: 5),
-              Text(
-                "Name",
-                style: GoogleFonts.rubik(
-                  fontSize: 20.0,
-                  letterSpacing: 0.5,
-                  // fontWeight: FontWeight.w500,
-                  color: Colors.grey.shade800,
+              Flexible(
+                child: Text(
+                  "Name",
+                  style: GoogleFonts.rubik(
+                    fontSize: 20.0,
+                    letterSpacing: 0.5,
+                    // fontWeight: FontWeight.w500,
+                    color: Colors.grey.shade800,
+                  ),
                 ),
               ),
             ],
@@ -253,7 +257,9 @@ class _AuthFormState extends State<AuthForm> {
         ),
 
         SizedBox(
-          width: (widget.constraints.maxWidth / 100) * 30.0,
+          width: widget.constraints.maxWidth < K.kTableteWidth
+              ? (widget.constraints.maxWidth / 100) * 50.0
+              : (widget.constraints.maxWidth / 100) * 30.0,
           child: TextField(
             controller: nameController,
             decoration: InputDecoration(
@@ -303,7 +309,9 @@ class _AuthFormState extends State<AuthForm> {
           height: 40.0,
         ),
         SizedBox(
-          width: (widget.constraints.maxWidth / 100) * 30.0,
+          width: widget.constraints.maxWidth < K.kTableteWidth
+              ? (widget.constraints.maxWidth / 100) * 50.0
+              : (widget.constraints.maxWidth / 100) * 30.0,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -313,13 +321,15 @@ class _AuthFormState extends State<AuthForm> {
                 color: Colors.grey.shade800,
               ),
               const SizedBox(width: 5),
-              Text(
-                "Gender",
-                style: GoogleFonts.rubik(
-                  fontSize: 20.0,
-                  letterSpacing: 0.5,
-                  // fontWeight: FontWeight.w500,
-                  color: Colors.grey.shade800,
+              Flexible(
+                child: Text(
+                  "Gender",
+                  style: GoogleFonts.rubik(
+                    fontSize: 20.0,
+                    letterSpacing: 0.5,
+                    // fontWeight: FontWeight.w500,
+                    color: Colors.grey.shade800,
+                  ),
                 ),
               ),
             ],
@@ -351,7 +361,9 @@ class _AuthFormState extends State<AuthForm> {
           height: 40.0,
         ),
         SizedBox(
-          width: (widget.constraints.maxWidth / 100) * 30.0,
+          width: widget.constraints.maxWidth < K.kTableteWidth
+              ? (widget.constraints.maxWidth / 100) * 50.0
+              : (widget.constraints.maxWidth / 100) * 30.0,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -361,13 +373,15 @@ class _AuthFormState extends State<AuthForm> {
                 color: Colors.grey.shade800,
               ),
               const SizedBox(width: 5),
-              Text(
-                "Date Of Birth : $age",
-                style: GoogleFonts.rubik(
-                  fontSize: 20.0,
-                  letterSpacing: 0.5,
-                  // fontWeight: FontWeight.w500,
-                  color: Colors.grey.shade800,
+              Flexible(
+                child: Text(
+                  "Date Of Birth : $age",
+                  style: GoogleFonts.rubik(
+                    fontSize: 20.0,
+                    letterSpacing: 0.5,
+                    // fontWeight: FontWeight.w500,
+                    color: Colors.grey.shade800,
+                  ),
                 ),
               ),
             ],
@@ -382,26 +396,29 @@ class _AuthFormState extends State<AuthForm> {
         GestureDetector(
           onTap: () => _selectDate(context),
           child: Container(
-              height: 50.0,
-              width: (widget.constraints.maxWidth / 100) * 25.0,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.grey.shade500,
-                  width: 1.0,
-                ),
-                borderRadius: BorderRadius.circular(16.0),
+            height: 50.0,
+            width: widget.constraints.maxWidth < K.kTableteWidth
+                ? (widget.constraints.maxWidth / 100) * 45.0
+                : (widget.constraints.maxWidth / 100) * 25.0,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.grey.shade500,
+                width: 1.0,
               ),
-              padding: const EdgeInsets.all(
-                10.0,
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            padding: const EdgeInsets.all(
+              10.0,
+            ),
+            alignment: Alignment.centerLeft,
+            child: Text(
+              dob,
+              style: GoogleFonts.rubik(
+                fontSize: 15.0,
+                fontWeight: FontWeight.w400,
               ),
-              alignment: Alignment.centerLeft,
-              child: Text(
-                dob,
-                style: GoogleFonts.rubik(
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.w400,
-                ),
-              )),
+            ),
+          ),
         ),
       ],
     );
