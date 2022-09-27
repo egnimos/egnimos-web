@@ -1,14 +1,20 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:egnimos/src/config/k.dart';
+import 'package:egnimos/src/pages/write_blog_pages/styles/header_styles.dart';
+import 'package:egnimos/src/theme/color_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class EgnimosNav extends StatefulWidget {
   final double height;
   final double width;
   final BoxConstraints constraints;
+  final Color textColor;
 
   const EgnimosNav({
     this.height = 200.0,
     this.width = 300.0,
+    required this.textColor,
     required this.constraints,
     Key? key,
   }) : super(key: key);
@@ -37,25 +43,55 @@ class _EgnimosNavState extends State<EgnimosNav>
     super.dispose();
   }
 
+  final colorizeColors = [
+    ColorTheme.bgColor4,
+    ColorTheme.bgColor6,
+    ColorTheme.bgColor14,
+    ColorTheme.bgColor18,
+  ];
+
+  final colorizeTextStyle = GoogleFonts.rubik(
+    fontSize: 18.0,
+    fontWeight: FontWeight.w600,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Container(
       height: widget.height,
       width: widget.width,
-      // color: Colors.red,
       padding: const EdgeInsets.all(10.0),
       child: Row(
         children: [
           Flexible(
-            child: Text(
-              "EGNIMOS",
-              maxLines: 1,
-              softWrap: false,
-              style: TextStyle(
-                fontSize:
-                    widget.constraints.maxWidth > K.kMobileWidth ? 30.0 : 20.0,
-                color: Colors.grey.shade900,
-              ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                //version type
+                Flexible(
+                  child: AnimatedTextKit(repeatForever: true, animatedTexts: [
+                    ColorizeAnimatedText(
+                      'α alpha',
+                      textStyle: colorizeTextStyle,
+                      colors: colorizeColors,
+                    ),
+                  ]),
+                ),
+                Flexible(
+                  child: Text(
+                    "EGNIMOS",
+                    maxLines: 1,
+                    softWrap: false,
+                    style: TextStyle(
+                      fontSize: widget.constraints.maxWidth > K.kMobileWidth
+                          ? 30.0
+                          : 20.0,
+                      color: textColor,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
 
@@ -67,7 +103,7 @@ class _EgnimosNavState extends State<EgnimosNav>
               return Container(
                 margin: const EdgeInsets.symmetric(horizontal: 4.0),
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade900,
+                  color: textColor,
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 width: 3.0,

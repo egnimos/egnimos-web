@@ -834,7 +834,8 @@ class SidePanelWidget extends StatelessWidget {
                           .pushReplacementNamed(Home.routeName);
                     },
                     child: EgnimosNav(
-                      height: 70.0,
+                      height: 150.0,
+                      textColor: Colors.grey.shade900,
                       constraints: constraints,
                     ),
                   ),

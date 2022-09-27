@@ -128,7 +128,7 @@ class _BlogPageState extends State<WriteBlogPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (isMobileBrowser) {
-        Navigator.of(context).push(
+        Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (context) {
               return const MessagePage(

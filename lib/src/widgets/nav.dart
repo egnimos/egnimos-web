@@ -29,7 +29,12 @@ class Nav extends StatelessWidget with PreferredSizeWidget {
                   width: (constraints.maxWidth / 100) * 2.0,
                 ),
               //Nav Icon
-              Flexible(child: EgnimosNav(constraints: constraints)),
+              Flexible(
+                child: EgnimosNav(
+                  constraints: constraints,
+                  textColor: Colors.grey.shade900,
+                ),
+              ),
               if (constraints.maxWidth < K.kTableteWidth)
                 const Spacer()
               else

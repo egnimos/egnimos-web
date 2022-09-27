@@ -221,6 +221,7 @@ class _CreatePopUpModalWidgetState extends State<CreatePopUpModalWidget> {
                       )),
                   onPressed: () {
                     if (selectedOptions == WriteOptions.blog) {
+                      Navigator.pop(context);
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
                         return const WriteBlogPage();

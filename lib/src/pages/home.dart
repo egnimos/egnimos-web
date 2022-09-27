@@ -12,6 +12,7 @@ import 'package:lottie/lottie.dart';
 import 'package:matrix4_transform/matrix4_transform.dart';
 import 'package:provider/provider.dart';
 import '../widgets/custom_vertical_text_widget.dart';
+import '../widgets/egnimos_nav.dart';
 
 class Home extends StatelessWidget {
   static const routeName = "/home";
@@ -37,7 +38,13 @@ class Home extends StatelessWidget {
             return ListView(
               children: const [
                 //header
-                Header(),
+                Nav(
+                  selectedOption: NavOptions.home,
+                ),
+                // Header(),
+                Align(
+                  child: HomeHeader(),
+                ),
                 //footer
                 Footer(),
               ],
@@ -116,17 +123,35 @@ class _HeaderState extends State<Header> {
                 selectedOption: NavOptions.home,
               ),
               //header
-              const Align(child: HomeHeader()),
+              const Align(
+                child: HomeHeader(),
+              ),
               AnimatedContainer(
                 duration: const Duration(milliseconds: 150),
                 width: Responsive.widthMultiplier * 95.0,
                 height: Responsive.heightMultiplier * 100.0,
                 color: const Color(0xff121212),
                 transform: Matrix4Transform().left(whiteContainerWidth).m,
-                child: HomeHeader(
-                  infoColor: ColorTheme.secondaryTextColor,
-                  leadingTextColor: ColorTheme.secondaryTextColor,
-                  animatedTextColor: ColorTheme.bgColor18,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    //nav
+                    // LayoutBuilder(builder: (context, constraints) {
+                    //   return Align(
+                    //     alignment: Alignment.topRight,
+                    //     child: EgnimosNav(
+                    //       constraints: constraints,
+                    //       textColor: ColorTheme.bgColor18,
+                    //     ),
+                    //   );
+                    // }),
+                    //header
+                    HomeHeader(
+                      infoColor: ColorTheme.secondaryTextColor,
+                      leadingTextColor: ColorTheme.secondaryTextColor,
+                      animatedTextColor: ColorTheme.bgColor18,
+                    ),
+                  ],
                 ),
               ),
 

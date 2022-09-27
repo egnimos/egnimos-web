@@ -26,6 +26,7 @@ class AuthPage extends StatelessWidget {
             },
             child: EgnimosNav(
               height: 90.0,
+              textColor: Colors.grey.shade900,
               constraints: constraints,
             ),
           ),
@@ -37,9 +38,8 @@ class AuthPage extends StatelessWidget {
 
           //login box
           AuthBox(
-              constraints: constraints,
-            ),
-        
+            constraints: constraints,
+          ),
 
           const SizedBox(
             height: 50.0,
