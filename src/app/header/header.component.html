@@ -1,0 +1,50 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="padding-left: 20px;">
+    <div class="container-fluid">
+        <div class="flex-column">
+            <p class="shinny-animation">alpha</p>
+            <a class="navbar-brand" href="#">Egnimos</a>
+        </div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+            aria-expanded="false" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+            <br>
+            <div class="offcanvas-header">
+                <div class="container-fluid">
+                    <br>
+                    <div class="d-flex justify-content-between">
+                        <p class="offcanvas-title" id="offcanvasNavbarLabel">Menu</p>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <br>
+                    <hr>
+                </div>
+                <hr>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="navbar-nav justify-content-center flex-grow-1 pe-3">
+                    <li class="nav-item text-center">
+                        <a class="nav-link" routerLinkActive="nav-active" [routerLinkActiveOptions]="{exact: true}"
+                            routerLink="/">Home</a>
+                    </li>
+
+                    <li class="nav-item text-center">
+                        <a class="nav-link" routerLinkActive="nav-active" routerLink="/about">About</a>
+                    </li>
+                    <li class="nav-item text-center">
+                        <a class="nav-link" routerLinkActive="nav-active" routerLink="/articles">Articles</a>
+                    </li>
+                    <li class="nav-item text-center">
+                        <a class="nav-link" routerLinkActive="nav-active" routerLink="/auth">Login</a>
+                    </li>
+                    <li class="nav-item text-center">
+                        <a class="nav-link" routerLinkActive="nav-active" routerLink="/profile">Profile</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</nav>

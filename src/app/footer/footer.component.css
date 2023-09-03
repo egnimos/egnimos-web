@@ -1,0 +1,14 @@
+.footer-text {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    color: whitesmoke;
+}
+
+.footer-icon-text {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 400;
+    font-size: 30px;
+    color: whitesmoke;
+    letter-spacing: 1.1;
+}

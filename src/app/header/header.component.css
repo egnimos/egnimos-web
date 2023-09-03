@@ -1,0 +1,93 @@
+.navbar-brand {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 400;
+    font-size: 30px;
+    margin: 0px;
+    padding: 0px;
+    position: relative;
+    top: -20px;
+}
+
+.navbar-toggler:focus,
+.navbar-toggler:active,
+.navbar-toggler-icon:focus {
+    outline-width: 2px;
+    outline-style: solid;
+    outline-color: rgba(3, 185, 185, 0.247);
+    box-shadow: none;
+}
+
+.shinny-animation {
+    right: -50px;
+    position: relative;
+    font-family: 'Rubik', sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, #158f15, #d30a0a, #000);
+    background-repeat: no-repeat;
+    background-size: 80%;
+    animation: animate 2s infinite;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: rgba(255, 255, 255, 0);
+  }
+  
+  @keyframes animate {
+    0% {
+      background-position: -500%;
+    }
+    100% {
+      background-position: 500%;
+    }
+  }
+
+.nav-link {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 400;
+    font-size: 25px;
+    letter-spacing: 1.1px;
+}
+
+/* .nav-link {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 400;
+    font-size: 25px;
+    letter-spacing: 1.1px;
+} */
+
+/* .nav-item > .active > a {
+    color: #016e5386;
+    font-weight: 400;
+} */
+
+.nav-active {
+    color: #01795b !important;
+    font-weight: 400;
+}
+
+.nav-item {
+    margin-right: 20px;
+}
+
+.offcanvas-title {
+    color: #002018;
+    font-family: 'Rubik', sans-serif;
+    font-weight: 400;
+    font-size: 30px;
+}
+
+/* hr {
+    margin-left: 20px;
+    margin-right: 20px;
+} */
+
+.btn-close {
+    position: relative;
+    top: 14px;
+}
+
+.offcanvas {
+    padding: 0.0;
+    background-color: rgb(201, 250, 217);
+}
