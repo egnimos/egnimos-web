@@ -3,15 +3,19 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './header/header.component';
-import { FooterComponent } from './footer/footer.component';
-import { HomeComponent } from './home/home.component';
-import { AboutComponent } from './about/about.component';
-import { ContactComponent } from './contact/contact.component';
-import { AuthComponent } from './auth/auth.component';
-import { ProfileComponent } from './profile/profile.component';
-import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
-import { ArticlesComponent } from './articles/articles.component';
+
+// COMPONENTS
+import { HeaderComponent } from './components/header/header.component';
+import { FooterComponent } from './components/footer/footer.component';
+
+// PAGES
+import { HomeComponent } from './pages/home/home.component';
+import { AboutComponent } from './pages/about/about.component';
+import { ContactComponent } from './pages/contact/contact.component';
+import { AuthComponent } from './pages/auth/auth.component';
+import { ProfileComponent } from './pages/profile/profile.component';
+import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.component';
+import { ArticlesComponent } from './pages/articles/articles.component';
 
 @NgModule({
   declarations: [
