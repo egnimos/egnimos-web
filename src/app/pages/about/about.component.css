@@ -1,0 +1,27 @@
+.markdown-style {
+    margin: 50px;
+}
+
+.custom-blockquote {
+    border-left: 4px solid #adceaa;
+    /* Adjust the color and size as needed */
+    margin: 0;
+    padding: 10px 20px;
+    font-family: 'Gochi Hand', cursive;
+    font-weight: 400;
+    font-size: 30px;
+}
+
+.main-title-style {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 600;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+p {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 500;
+    font-size: 24px;
+    font-style: italic;
+}

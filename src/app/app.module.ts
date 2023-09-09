@@ -16,6 +16,9 @@ import { AuthComponent } from './pages/auth/auth.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.component';
 import { ArticlesComponent } from './pages/articles/articles.component';
+import { MarkdownModule } from 'ngx-markdown';
+import { HttpClientModule } from '@angular/common/http';
+import { LoginComponent } from './pages/auth/login/login.component';
 
 @NgModule({
   declarations: [
@@ -28,11 +31,14 @@ import { ArticlesComponent } from './pages/articles/articles.component';
     AuthComponent,
     ProfileComponent,
     PagenotfoundComponent,
-    ArticlesComponent
+    ArticlesComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    MarkdownModule.forRoot(),
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

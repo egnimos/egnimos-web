@@ -1,0 +1,5 @@
+.section-box-style {
+    height: 100vh;
+    width: 50vh;
+    display: flex;
+}

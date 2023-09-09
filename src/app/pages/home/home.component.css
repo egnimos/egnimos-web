@@ -1,0 +1,117 @@
+.centered-div {
+    display: flex;
+    /* Use flexbox */
+    justify-content: center;
+    /* Horizontally center items */
+    align-items: center;
+    /* Vertically center items */
+    height: 80vh;
+    /* background-color: aquamarine; */
+}
+
+
+.desc {
+    color: #002018;
+    font-family: 'Rubik', sans-serif;
+    font-weight: 400;
+    font-size: 27px;
+    text-align: center;
+}
+
+.title {
+    color: #002018;
+    font-family: 'Gochi Hand', cursive;
+    font-weight: 700;
+    font-size: 55px;
+    text-align: center;
+}
+
+/* .message {
+    background-color: yellow;
+    color: #333;
+    display: block;
+    overflow: hidden;
+    font-weight: 900;
+    animation: openclose 5s ease-in-out infinite;
+  } */
+
+/* .word1, .word2, .word3, .word4 {
+    font-family: 'Gochi Hand', cursive;
+  } */
+
+/* .word2 {
+    font-family: 'Share Tech', sans-serif;
+  }
+
+  .word3 {
+    font-family: 'Raleway', sans-serif;
+  }
+
+  .word4 {
+    font-family: 'Indie Flower', cursive;
+  } */
+/*   
+  @keyframes openclose {
+    0% {
+      top: 0.2rem;
+      width: 0;
+    }
+    5% {
+      width: 0;
+    }
+    15% {
+      width: 230px;
+    }
+    30% {
+      top: 0.2rem;
+      width: 230px;
+    }
+    33% {
+      top: 0.2rem;
+      width: 0;
+    }
+    35% {
+      top: 0.2rem;
+      width: 0;
+    }
+    38% {
+      top: -4.5rem;
+      
+    }
+    48% {
+      top: -4.5rem;
+      width: 190px;
+    }
+    62% {
+      top: -4.5rem;
+      width: 190px;
+    }
+    66% {
+      top: -4.5rem;
+      width: 0;
+      text-indent: 0;
+    }
+    71% {
+      top: -9rem;
+      width: 0;
+      text-indent: 5px;
+    }
+    86% {
+      top: -9rem;
+      width: 285px;
+    }
+    95% {
+      top: -9rem;
+      width: 285px;
+    }
+    98% {
+      top: -9rem;
+      width: 0;
+      text-indent: 5px;
+    }
+    100% {
+      top: 0;
+      width: 0;
+      text-indent: 0;
+    }
+  } */
