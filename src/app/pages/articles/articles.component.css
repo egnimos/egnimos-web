@@ -1,0 +1,18 @@
+.blog-title {
+    font-weight: 700;
+    font-family: 'Rubik', sans-serif;
+    font-size: 90px;
+}
+
+.blog-para {
+    font-weight: 400;
+    font-family: 'Raleway', sans-serif;
+    font-size: 40px;
+    letter-spacing: 1;
+}
+
+.section-heading {
+    font-weight: 450;
+    font-family: 'Rubik', sans-serif;
+    font-size: 40px;
+}

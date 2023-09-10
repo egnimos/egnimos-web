@@ -18,7 +18,6 @@ import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.compone
 import { ArticlesComponent } from './pages/articles/articles.component';
 import { MarkdownModule } from 'ngx-markdown';
 import { HttpClientModule } from '@angular/common/http';
-import { LoginComponent } from './pages/auth/login/login.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +31,6 @@ import { LoginComponent } from './pages/auth/login/login.component';
     ProfileComponent,
     PagenotfoundComponent,
     ArticlesComponent,
-    LoginComponent
   ],
   imports: [
     BrowserModule,

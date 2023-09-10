@@ -1,0 +1,74 @@
+.auth-heading {
+    font-weight: 500;
+    font-family: 'Rubik', sans-serif;
+    font-size: 50px;
+    color: rgb(24, 24, 24);
+}
+
+.auth-para {
+    font-family: 'Rubik', sans-serif;
+    font-size: 25px;
+    color: rgb(24, 24, 24);
+}
+
+.auth-impt-para {
+    font-family: 'Rubik', sans-serif;
+    font-size: 20px;
+    color: rgb(221, 4, 4);
+    text-decoration: underline;
+}
+
+.auth-switch-button {
+    font-family: 'Rubik', sans-serif;
+    font-size: 20px;
+    color: rgb(1, 146, 9);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+p {
+    margin-top: 0;
+}
+
+.auth-button {
+    display: inline-flex;
+    align-items: center;
+    background-color: #fff;
+    /* Button background color */
+    font-family: 'Rubik', sans-serif;
+    font-size: 20px;
+    color: rgb(34, 34, 34);
+    /* Button text color */
+    padding: 10px 20px;
+    /* Button padding */
+    border-width: 3px;
+    border-color: rgb(34, 34, 34);
+    border-radius: 6px;
+    /* Button border radius */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    margin: 16px;
+    width: 300px;
+    height: 60px;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Hover effect for the button */
+.auth-button:hover {
+    background-color: rgb(240, 239, 239);
+}
+
+.auth-button-google {
+    border-color: rgb(199, 3, 3);
+}
+
+.icon-google {
+    color: rgb(199, 3, 3);
+    margin-right: 4px;
+}
+
+.icon-github {
+    color: rgb(34, 34, 34);
+    margin-right: 4px;
+}

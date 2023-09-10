@@ -7,7 +7,6 @@ import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.compone
 import { AuthComponent } from './pages/auth/auth.component';
 import { ArticlesComponent } from './pages/articles/articles.component';
 import { ProfileComponent } from './pages/profile/profile.component';
-import { LoginComponent } from './pages/auth/login/login.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -16,11 +15,7 @@ const routes: Routes = [
   { path: "articles", component: ArticlesComponent },
   { path: "contact", component: ContactComponent },
   { path: "not-found", component: PagenotfoundComponent },
-  {
-    path: "auth", component: AuthComponent, children: [
-      { path: "", component: LoginComponent }
-    ]
-  },
+  { path: "auth", component: AuthComponent },
   { path: "**", redirectTo: "/not-found", pathMatch: 'full' }
 ];
 

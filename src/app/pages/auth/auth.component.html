@@ -1,1 +1,29 @@
-<router-outlet></router-outlet>
+<div class="container-fluid">
+    <div class="d-flex flex-column align-items-center justify-content-center" style="height: 100vh;">
+        <h2 class="auth-heading">{{heading}}</h2>
+
+        <p class="auth-para text-center">Welcome to egnimos, please {{heading}} before using the app</p>
+        <p class="auth-impt-para text-center">Sign in/up with same email address will redirect you to the same account
+        </p>
+
+        <br>
+        <!-- Auth buttons -->
+        <!-- google buttons -->
+        <button class="auth-button">
+            <i class="fab fa-github icon-github"></i>
+            Github
+        </button>
+        <!-- github buttons -->
+        <button class="auth-button auth-button-google">
+            <i class="fab fa-google icon-google"></i>
+            Google
+        </button>
+
+        <br>
+        <p class="text-center" style="font-family: 'Rubik', sans-serif; font-size: 20px;">Don't have an account?
+            <a class="auth-switch-button" (click)="switchToAuthType()">
+                {{isLogin ? "Register" : "Log In"}}
+            </a>
+        </p>
+    </div>
+</div>
