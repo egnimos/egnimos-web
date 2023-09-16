@@ -1,0 +1,44 @@
+.profile-image-style {
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+    border-width: 2;
+    border-color: rgb(24, 24, 24);
+    background-color: grey;
+    margin-top: 0px;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 0px;
+}
+
+.nav-tabs {
+    border-bottom: 1.5px solid;
+    border-color: rgb(58, 58, 58);
+}
+
+.nav-tab-active {
+    border-top: 1.5px solid;
+    border-left: 1.5px solid;
+    border-right: 1.5px solid;
+    border-color: #01795b !important;
+    ;
+    color: #01795b !important;
+}
+
+.nav-link {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    color: rgb(24, 24, 24);
+}
+
+.nav-link:hover,
+.nav-link:active,
+.nav-link:focus {
+    border-top: 1.5px solid;
+    border-left: 1.5px solid;
+    border-right: 1.5px solid;
+    border-color: #01795b !important;
+    ;
+    color: #01795b !important;
+}

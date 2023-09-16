@@ -18,6 +18,10 @@ import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.compone
 import { ArticlesComponent } from './pages/articles/articles.component';
 import { MarkdownModule } from 'ngx-markdown';
 import { HttpClientModule } from '@angular/common/http';
+import { DraftsComponent } from './pages/profile/drafts/drafts.component';
+import { CategoriesComponent } from './pages/profile/categories/categories.component';
+import { EditprofileComponent } from './pages/profile/editprofile/editprofile.component';
+import { ProfilearticlesComponent } from './pages/profile/profilearticles/profilearticles.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +35,10 @@ import { HttpClientModule } from '@angular/common/http';
     ProfileComponent,
     PagenotfoundComponent,
     ArticlesComponent,
+    DraftsComponent,
+    CategoriesComponent,
+    EditprofileComponent,
+    ProfilearticlesComponent,
   ],
   imports: [
     BrowserModule,
