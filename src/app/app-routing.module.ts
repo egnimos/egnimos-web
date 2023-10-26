@@ -11,6 +11,7 @@ import { DraftsComponent } from './pages/profile/drafts/drafts.component';
 import { CategoriesComponent } from './pages/profile/categories/categories.component';
 import { EditprofileComponent } from './pages/profile/editprofile/editprofile.component';
 import { ProfilearticlesComponent } from './pages/profile/profilearticles/profilearticles.component';
+import { EditorComponent } from './pages/editor/editor.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -23,6 +24,7 @@ const routes: Routes = [
       { path: "edit-profile", component: EditprofileComponent },
     ]
   },
+  { path: "write-article", component: EditorComponent },
   { path: "articles", component: ArticlesComponent },
   { path: "contact", component: ContactComponent },
   { path: "not-found", component: PagenotfoundComponent },

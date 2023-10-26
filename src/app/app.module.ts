@@ -22,6 +22,7 @@ import { DraftsComponent } from './pages/profile/drafts/drafts.component';
 import { CategoriesComponent } from './pages/profile/categories/categories.component';
 import { EditprofileComponent } from './pages/profile/editprofile/editprofile.component';
 import { ProfilearticlesComponent } from './pages/profile/profilearticles/profilearticles.component';
+import { EditorComponent } from './pages/editor/editor.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { ProfilearticlesComponent } from './pages/profile/profilearticles/profil
     CategoriesComponent,
     EditprofileComponent,
     ProfilearticlesComponent,
+    EditorComponent,
   ],
   imports: [
     BrowserModule,

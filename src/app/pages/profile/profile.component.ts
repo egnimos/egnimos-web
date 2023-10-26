@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -7,4 +8,9 @@ import { Component } from '@angular/core';
 })
 export class ProfileComponent {
 
+  constructor(private route: Router, private currentRoute: ActivatedRoute) { }
+
+  navToWriteBlog() {
+    this.route.navigate(['write-article']);
+  }
 }
