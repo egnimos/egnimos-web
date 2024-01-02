@@ -23,6 +23,13 @@ import { CategoriesComponent } from './pages/profile/categories/categories.compo
 import { EditprofileComponent } from './pages/profile/editprofile/editprofile.component';
 import { ProfilearticlesComponent } from './pages/profile/profilearticles/profilearticles.component';
 import { EditorComponent } from './pages/editor/editor.component';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { getAuth, provideAuth } from '@angular/fire/auth';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { getMessaging, provideMessaging } from '@angular/fire/messaging';
+import { getPerformance, providePerformance } from '@angular/fire/performance';
+import { getStorage, provideStorage } from '@angular/fire/storage';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [
@@ -47,6 +54,12 @@ import { EditorComponent } from './pages/editor/editor.component';
     AppRoutingModule,
     MarkdownModule.forRoot(),
     HttpClientModule,
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideAuth(() => getAuth()),
+    provideFirestore(() => getFirestore()),
+    provideMessaging(() => getMessaging()),
+    providePerformance(() => getPerformance()),
+    provideStorage(() => getStorage()),
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,0 +1,13 @@
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "hosting": [
+    {
+      "target": "egnimos-ang",
+      "source": ".",
+      "frameworksBackend": {}
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "egnimos-6b198"
+  },
+  "targets": {
+    "egnimos-6b198": {
+      "hosting": {
+        "egnimos-ang": [
+          "egnimos-6b198"
+        ]
+      }
+    }
+  }
+}
