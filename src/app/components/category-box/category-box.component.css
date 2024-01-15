@@ -1,0 +1,16 @@
+.circle-style {
+    border-radius: 100%;
+    width: 60px;
+    height: 60px;
+    border-width: 1.9px;
+    border-style: solid;
+    border-color: red;
+    /* background-color: rgba(255, 206, 206, 0.459); */
+    /* margin-top: 0px;
+    margin-left: 10px;
+    margin-right: 10px; */
+    padding: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { ProviderType } from 'src/app/models/user.model';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-auth',
@@ -7,8 +9,15 @@ import { Component } from '@angular/core';
 })
 export class AuthComponent {
   heading: string = "Log in"
+  error: string = null;
+  selectedProvider: ProviderType = null
   // authType: AuthType = AuthType.Login
   isLogin: boolean = true
+  isAuthInProcess = false;
+
+  constructor(private as: AuthService) {
+
+  }
 
   switchToAuthType() {
     this.isLogin = !this.isLogin
@@ -17,6 +26,32 @@ export class AuthComponent {
       return
     } else {
       this.heading = "Register"
+    }
+  }
+
+  async loginByGoogle() {
+    try {
+      this.isAuthInProcess = true;
+      this.selectedProvider = ProviderType.google;
+      await this.as.authWithGoogle(this.isLogin);
+    } catch (error) {
+      this.error = error;
+    } finally {
+      this.isAuthInProcess = false;
+      this.selectedProvider = null;
+    }
+  }
+
+  async loginByGithub() {
+    try {
+      this.isAuthInProcess = true;
+      this.selectedProvider = ProviderType.github;
+      await this.as.authWithGithub(this.isLogin);
+    } catch (error) {
+      this.error = error;
+    } finally {
+      this.isAuthInProcess = false;
+      this.selectedProvider = null;
     }
   }
 }

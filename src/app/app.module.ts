@@ -30,6 +30,9 @@ import { getMessaging, provideMessaging } from '@angular/fire/messaging';
 import { getPerformance, providePerformance } from '@angular/fire/performance';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { environment } from 'src/environments/environment';
+import { LoaderComponent } from './components/loader/loader.component';
+import { CategoryBoxComponent } from './components/category-box/category-box.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -48,12 +51,15 @@ import { environment } from 'src/environments/environment';
     EditprofileComponent,
     ProfilearticlesComponent,
     EditorComponent,
+    LoaderComponent,
+    CategoryBoxComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     MarkdownModule.forRoot(),
     HttpClientModule,
+    FormsModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),

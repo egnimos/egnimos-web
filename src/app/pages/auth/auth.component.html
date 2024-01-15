@@ -1,5 +1,14 @@
 <div class="container-fluid">
     <div class="d-flex flex-column align-items-center justify-content-center" style="height: 100vh;">
+
+        <!-- ERROR STATMENT -->
+        <div class="alert alert-danger" *ngIf="error">
+            <p>{{ error == "unverified_email" ?
+                "Your Email is not verified please verified it before login": error }}
+            </p>
+        </div>
+
+        <!-- AUTH  -->
         <h2 class="auth-heading">{{heading}}</h2>
 
         <p class="auth-para text-center">Welcome to egnimos, please {{heading}} before using the app</p>
@@ -9,13 +18,18 @@
         <br>
         <!-- Auth buttons -->
         <!-- google buttons -->
-        <button class="auth-button">
-            <i class="fab fa-github icon-github"></i>
+        <button class="auth-button" (click)="!isAuthInProcess ? loginByGithub(): null" [disabled]="isAuthInProcess">
+            <span *ngIf="isAuthInProcess && selectedProvider == 'github.com'" class="spinner-border" role="status"
+                aria-hidden="true"></span>
+            <i *ngIf="selectedProvider != 'github.com'" class="fab fa-github icon-github"></i>
             Github
         </button>
         <!-- github buttons -->
-        <button class="auth-button auth-button-google">
-            <i class="fab fa-google icon-google"></i>
+        <button class="auth-button auth-button-google" (click)="!isAuthInProcess ? loginByGoogle(): null"
+            [disabled]="isAuthInProcess">
+            <span *ngIf="isAuthInProcess && selectedProvider == 'google.com'" class="spinner-border" role="status"
+                aria-hidden="true"></span>
+            <i *ngIf="selectedProvider != 'google.com'" class="fab fa-google icon-google"></i>
             Google
         </button>
 

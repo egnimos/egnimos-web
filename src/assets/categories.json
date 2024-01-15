@@ -1,0 +1,431 @@
+{
+    "categories": [
+        {
+            "id": 1,
+            "name": "General Knowledge",
+            "description": "Quizzes covering a wide range of general topics."
+        },
+        {
+            "id": 2,
+            "name": "Science & Nature",
+            "description": "Quizzes related to scientific topics and natural phenomena."
+        },
+        {
+            "id": 3,
+            "name": "History & Geography",
+            "description": "Quizzes about historical events, world geography, and cultures."
+        },
+        {
+            "id": 4,
+            "name": "Movies & TV Shows",
+            "description": "Quizzes about films, television series, and entertainment."
+        },
+        {
+            "id": 5,
+            "name": "Sports",
+            "description": "Quizzes covering various sports and athletic events."
+        },
+        {
+            "id": 6,
+            "name": "Music",
+            "description": "Quizzes related to music genres, artists, and instruments."
+        },
+        {
+            "id": 7,
+            "name": "Art & Literature",
+            "description": "Quizzes about artistic movements, literature, and famous artworks."
+        },
+        {
+            "id": 8,
+            "name": "Technology",
+            "description": "Quizzes focusing on technological advancements and innovations."
+        },
+        {
+            "id": 9,
+            "name": "Food & Drink",
+            "description": "Quizzes about cuisines, beverages, and culinary traditions."
+        },
+        {
+            "id": 10,
+            "name": "Fashion & Style",
+            "description": "Quizzes related to fashion trends, designers, and style."
+        },
+        {
+            "id": 11,
+            "name": "Language & Linguistics",
+            "description": "Quizzes about languages, grammar, and linguistic diversity."
+        },
+        {
+            "id": 12,
+            "name": "Religion & Mythology",
+            "description": "Quizzes exploring religious beliefs and mythological stories."
+        },
+        {
+            "id": 13,
+            "name": "Health & Wellness",
+            "description": "Quizzes about physical and mental health, fitness, and well-being."
+        },
+        {
+            "id": 14,
+            "name": "Business & Finance",
+            "description": "Quizzes focusing on economics, finance, and business concepts."
+        },
+        {
+            "id": 15,
+            "name": "Nature & Wildlife",
+            "description": "Quizzes about animals, ecosystems, and wildlife conservation."
+        },
+        {
+            "id": 16,
+            "name": "Psychology",
+            "description": "Quizzes about human behavior, cognition, and mental processes."
+        },
+        {
+            "id": 17,
+            "name": "Philosophy",
+            "description": "Quizzes exploring philosophical concepts and thinkers."
+        },
+        {
+            "id": 18,
+            "name": "Travel",
+            "description": "Quizzes about destinations, travel tips, and cultural experiences."
+        },
+        {
+            "id": 19,
+            "name": "Space & Astronomy",
+            "description": "Quizzes about celestial bodies, space exploration, and the universe."
+        },
+        {
+            "id": 20,
+            "name": "Environment",
+            "description": "Quizzes focusing on environmental issues and conservation."
+        },
+        {
+            "id": 21,
+            "name": "Home & Garden",
+            "description": "Quizzes about home improvement, gardening, and interior design."
+        },
+        {
+            "id": 22,
+            "name": "Education",
+            "description": "Quizzes related to learning, educational systems, and teaching methods."
+        },
+        {
+            "id": 23,
+            "name": "Automotive",
+            "description": "Quizzes about cars, vehicles, and automotive technology."
+        },
+        {
+            "id": 24,
+            "name": "Photography",
+            "description": "Quizzes about photography techniques, equipment, and history."
+        },
+        {
+            "id": 25,
+            "name": "Mythology",
+            "description": "Quizzes exploring myths and legendary stories from various cultures."
+        },
+        {
+            "id": 26,
+            "name": "Gaming",
+            "description": "Quizzes related to video games, gaming culture, and industry."
+        },
+        {
+            "id": 27,
+            "name": "Law & Politics",
+            "description": "Quizzes about legal systems, political ideologies, and governance."
+        },
+        {
+            "id": 28,
+            "name": "Dance",
+            "description": "Quizzes about dance styles, history, and famous dancers/choreographers."
+        },
+        {
+            "id": 29,
+            "name": "Social Media",
+            "description": "Quizzes about social media platforms, trends, and influencer culture."
+        },
+        {
+            "id": 30,
+            "name": "Magic & Illusions",
+            "description": "Quizzes about magic tricks, illusions, and famous magicians."
+        },
+        {
+            "id": 31,
+            "name": "Architecture",
+            "description": "Quizzes about architectural styles, iconic buildings, and design principles."
+        },
+        {
+            "id": 32,
+            "name": "Parenting & Family",
+            "description": "Quizzes about parenting tips, family dynamics, and child development."
+        },
+        {
+            "id": 33,
+            "name": "Agriculture",
+            "description": "Quizzes about farming practices, crops, and agricultural technology."
+        },
+        {
+            "id": 34,
+            "name": "Hobbies & Crafts",
+            "description": "Quizzes about various hobbies, DIY projects, and craft techniques."
+        },
+        {
+            "id": 35,
+            "name": "Fitness & Exercise",
+            "description": "Quizzes about workout routines, fitness trends, and exercise techniques."
+        }
+    ],
+    "sessional-categories": [
+        {
+            "id": 1,
+            "name": "Christmas Traditions",
+            "description": "Test your knowledge of worldwide Christmas customs, rituals, and traditions associated with the festive season."
+        },
+        {
+            "id": 2,
+            "name": "Halloween History",
+            "description": "Explore the history, folklore, and spooky facts related to Halloween, including its origins and cultural significance."
+        },
+        {
+            "id": 3,
+            "name": "Valentine's Day Love Songs",
+            "description": "Quiz featuring famous love songs and romantic melodies associated with Valentine's Day celebrations."
+        },
+        {
+            "id": 4,
+            "name": "Easter Traditions",
+            "description": "Discover various Easter traditions, practices, and events observed around the world during the Easter season."
+        },
+        {
+            "id": 5,
+            "name": "Summer Vacation Destinations",
+            "description": "Explore popular summer vacation spots, beaches, and destinations for a perfect summer getaway."
+        },
+        {
+            "id": 6,
+            "name": "Winter Sports Trivia",
+            "description": "Test your knowledge about winter sports, athletes, events, and historical moments in the world of cold-weather sports."
+        },
+        {
+            "id": 7,
+            "name": "Back-to-School Essentials",
+            "description": "Explore quizzes related to school essentials, tips, and preparations for the back-to-school season."
+        },
+        {
+            "id": 8,
+            "name": "Springtime Flowers Quiz",
+            "description": "Learn about various flowers, their characteristics, significance, and blooming patterns during the spring season."
+        },
+        {
+            "id": 9,
+            "name": "New Year's Resolutions",
+            "description": "Discover common New Year's resolutions, their impact, and strategies for successful goal setting in the new year."
+        },
+        {
+            "id": 10,
+            "name": "Thanksgiving Feast Facts",
+            "description": "Test your knowledge about the history, traditions, and food associated with Thanksgiving celebrations."
+        },
+        {
+            "id": 11,
+            "name": "St. Patrick's Day History",
+            "description": "Explore the history, symbols, and cultural significance of St. Patrick's Day, an Irish cultural celebration."
+        },
+        {
+            "id": 12,
+            "name": "Cinco de Mayo Celebrations",
+            "description": "Learn about the historical events and celebrations surrounding Cinco de Mayo, a Mexican holiday."
+        },
+        {
+            "id": 13,
+            "name": "Festive Diwali Trivia",
+            "description": "Discover interesting facts and trivia related to Diwali, the festival of lights celebrated in various cultures."
+        },
+        {
+            "id": 14,
+            "name": "Labor Day Knowledge",
+            "description": "Explore the history, significance, and evolution of Labor Day, a holiday celebrating the achievements of workers."
+        },
+        {
+            "id": 15,
+            "name": "Fathers' Day Fun Facts",
+            "description": "Learn about the history, traditions, and celebrations honoring fathers and fatherhood."
+        },
+        {
+            "id": 16,
+            "name": "Mothers' Day Special Quiz",
+            "description": "Test your knowledge about the history, significance, and cultural celebrations of Mother's Day."
+        },
+        {
+            "id": 17,
+            "name": "Independence Day Quiz",
+            "description": "Explore trivia and historical facts related to national independence days observed in various countries."
+        },
+        {
+            "id": 18,
+            "name": "Hanukkah Traditions",
+            "description": "Learn about the traditions, rituals, and cultural significance of Hanukkah, the Jewish festival of lights."
+        },
+        {
+            "id": 19,
+            "name": "Chinese New Year Customs",
+            "description": "Discover customs, traditions, and practices associated with the Chinese New Year celebration."
+        },
+        {
+            "id": 20,
+            "name": "Oktoberfest Trivia",
+            "description": "Test your knowledge about Oktoberfest, the world's largest beer festival held in Munich, Germany."
+        },
+        {
+            "id": 21,
+            "name": "Harvest Festival Quizzes",
+            "description": "Explore quizzes related to harvest festivals celebrated around the world, highlighting agricultural traditions."
+        },
+        {
+            "id": 22,
+            "name": "Carnival Celebrations",
+            "description": "Learn about the history, traditions, and cultural significance of carnivals celebrated worldwide."
+        },
+        {
+            "id": 23,
+            "name": "Boxing Day Facts",
+            "description": "Discover the history, traditions, and significance of Boxing Day, celebrated in various countries."
+        },
+        {
+            "id": 24,
+            "name": "Mardi Gras Revelry",
+            "description": "Explore the history, traditions, and festive celebrations of Mardi Gras, also known as Fat Tuesday."
+        },
+        {
+            "id": 25,
+            "name": "Rosh Hashanah Insights",
+            "description": "Learn about Rosh Hashanah, the Jewish New Year, its customs, and traditions."
+        },
+        {
+            "id": 26,
+            "name": "Eid al-Fitr Trivia",
+            "description": "Test your knowledge about Eid al-Fitr, the Islamic holiday marking the end of Ramadan."
+        },
+        {
+            "id": 27,
+            "name": "National Day Celebrations",
+            "description": "Explore quizzes related to national day celebrations observed in different countries."
+        },
+        {
+            "id": 28,
+            "name": "Vernal Equinox Quiz",
+            "description": "Learn about the vernal equinox, its astronomical significance, and cultural associations."
+        },
+        {
+            "id": 29,
+            "name": "Autumn Leaves Knowledge",
+            "description": "Explore facts and trivia about autumn leaves, foliage, and the science behind their changing colors."
+        },
+        {
+            "id": 30,
+            "name": "Summer Solstice Quizzes",
+            "description": "Discover facts, traditions, and cultural celebrations associated with the summer solstice."
+        },
+        {
+            "id": 31,
+            "name": "Winter Holidays Around the World",
+            "description": "Learn about diverse winter holidays celebrated around the world, their traditions, and customs."
+        },
+        {
+            "id": 32,
+            "name": "Springtime Festivities",
+            "description": "Explore the festivals, celebrations, and cultural events that mark the arrival of spring."
+        },
+        {
+            "id": 33,
+            "name": "Summer Camp Adventures",
+            "description": "Test your knowledge about summer camps, activities, and adventures for children and teens."
+        },
+        {
+            "id": 34,
+            "name": "Holiday Cooking Traditions",
+            "description": "Discover traditional holiday recipes, cooking techniques, and culinary customs from around the world."
+        },
+        {
+            "id": 35,
+            "name": "Festive Lights and Decorations",
+            "description": "Explore facts and trivia about festive lights, decorations, and their cultural significance."
+        },
+        {
+            "id": 36,
+            "name": "Seasonal Weather Phenomena",
+            "description": "Learn about seasonal weather patterns, natural phenomena, and their impact on the environment."
+        },
+        {
+            "id": 37,
+            "name": "Trick-or-Treating History",
+            "description": "Explore the history and evolution of trick-or-treating, a popular Halloween tradition."
+        },
+        {
+            "id": 38,
+            "name": "Christmas Movie Classics",
+            "description": "Test your knowledge of classic Christmas movies, their plots, characters, and iconic scenes."
+        },
+        {
+            "id": 39,
+            "name": "Summer Music Festival Quiz",
+            "description": "Explore music festivals, artists, genres, and trivia related to summer music events."
+        },
+        {
+            "id": 40,
+            "name": "Winter Wildlife Insights",
+            "description": "Discover fascinating facts about wildlife, animals, and their behavior during the winter season."
+        },
+        {
+            "id": 41,
+            "name": "Spring Cleaning Tips",
+            "description": "Learn about spring cleaning tips, techniques, and strategies for decluttering and organizing."
+        },
+        {
+            "id": 42,
+            "name": "Autumn Harvest Trivia",
+            "description": "Test your knowledge about autumn harvests, crops, and agricultural practices during the fall season."
+        },
+        {
+            "id": 43,
+            "name": "Holiday Traditions Around the Globe",
+            "description": "Explore diverse holiday traditions, customs, and celebrations observed worldwide."
+        },
+        {
+            "id": 44,
+            "name": "Festive Seasonal Crafts",
+            "description": "Learn about seasonal crafts, DIY projects, and creative activities for festive celebrations."
+        },
+        {
+            "id": 45,
+            "name": "Seasonal Gardening Quiz",
+            "description": "Test your knowledge of seasonal gardening tips, plants, and landscaping techniques."
+        },
+        {
+            "id": 46,
+            "name": "Festivals of Light Knowledge",
+            "description": "Explore festivals of light celebrated across cultures, their symbolism, and historical significance."
+        },
+        {
+            "id": 47,
+            "name": "Winter Clothing and Fashion Trends",
+            "description": "Discover"
+        },
+        {
+            "id": 48,
+            "name": "Summer Reading Recommendations",
+            "description": "Discover recommended books, genres, and reading lists perfect for summer leisure and relaxation."
+        },
+        {
+            "id": 49,
+            "name": "Seasonal Allergies Quiz",
+            "description": "Learn about common allergies associated with different seasons, their symptoms, and preventive measures."
+        },
+        {
+            "id": 50,
+            "name": "Holiday Travel Tips",
+            "description": "Explore travel tips, destinations, and recommendations for a hassle-free holiday travel experience."
+        }
+    ]
+}

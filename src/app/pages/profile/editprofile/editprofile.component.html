@@ -1,1 +1,84 @@
-<p>editprofile works!</p>
+<div class="container-fluid">
+    <div class="container" style="margin-top: 5px; margin-bottom: 20px;">
+        <br>
+        <!-- HEADING  -->
+        <div class="d-flex flex-row justify-content-between" style="margin-bottom: 20px;">
+            <h3>Edit Profile</h3>
+        </div>
+        <hr>
+        <br>
+        <!-- FORM -->
+        <form class="row g-3" (ngSubmit)="submit()" #ed="ngForm">
+            <!-- NAME -->
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" placeholder="enter your name here" ngModel name="name"
+                    required>
+            </div>
+
+            <!-- GENDER TYPE -->
+            <div class="mb-3">
+                <label for="genderType" class="form-label">Select Gender</label>
+                <div class="dropup-center">
+                    <div class="input-group">
+                        <input type="text" class="form-control" readonly aria-label="select the gender type"
+                            [ngModel]="selectedGender" name="genderType" required>
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">choose</button>
+
+                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start container p-4" style="max-height: 250px;
+                                    overflow-y: auto;">
+                            <!-- results -->
+                            <ul class="list-group" style="margin-top: 10px; margin-bottom: 10px;"
+                                *ngFor="let gender of genders">
+                                <button type="button" class="list-group-item list-group-item-action"
+                                    (click)="setQuizCategory(gender)">{{gender}}</button>
+                            </ul>
+                        </div>
+                        <!-- <button type="button" class="btn btn-outline-secondary"
+                                            style="margin-top: 10px; margin-bottom: 10px;">load more</button> -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Date of Birth -->
+            <div class="mb-3">
+                <label for="dob" class="form-label">Date Of Birth</label>
+                <input type="date" class="form-control" id="dob" [(ngModel)]="dob" name="dob"
+                    (ngModelChange)="setAccountTypeandAge($event)" required>
+            </div>
+
+            <div style="margin-bottom: 10px;">
+                <div class="row g-3">
+                    <div class="col">
+                        <!-- Account Type  -->
+                        <div class="mb-3">
+                            <label for="accountType" class="form-label">Account Type</label>
+                            <input type="text" class="form-control" id="accountType" [ngModel]="accountType"
+                                name="accountType" disabled>
+                        </div>
+                    </div>
+                    <!-- Account Age  -->
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="age" class="form-label">Your Age</label>
+                            <input type="text" class="form-control" id="age" [ngModel]="age" name="age" disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+            <br>
+            <!-- ERROR STATMENT -->
+            <div class="alert alert-danger" *ngIf="errorMsg">
+                <p>{{ errorMsg }}</p>
+            </div>
+            <br>
+            <app-loader *ngIf="isLoading"></app-loader>
+            <button type="submit" class="btn btn-primary" *ngIf="!isLoading" [disabled]="!ed.valid">Submit</button>
+
+            <!-- <button type="button" class="btn btn-danger" *ngIf="!isLoading" (click)="clearForm()">clear form</button> -->
+        </form>
+    </div>
+</div>

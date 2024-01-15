@@ -1,1 +1,18 @@
-<p>categories works!</p>
+<div class="container-fluid text-center">
+    <app-loader *ngIf="isLoading"></app-loader>
+    <div class="col align-self-center">
+        <h1 style="font-family: 'Rubik', sans-serif;">Categories to Find</h1>
+        <h4 style="color: rgb(88, 88, 88); font-family: 'Rubik', sans-serif;
+        font-weight: 500;">
+            List of all the Categories
+        </h4>
+    </div>
+
+    <!-- categories list -->
+    <div class="container-fluid text-center">
+        <div class="card-group" style="margin-top: 30px; margin-bottom: 30px;">
+            <app-category-box *ngFor="let category of categories; let i=index" [category]="category"
+                style="margin: 19px;"></app-category-box>
+        </div>
+    </div>
+</div>

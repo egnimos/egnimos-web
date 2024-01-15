@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import EditorJS from '@editorjs/editorjs';
 import Header from '@editorjs/header';
 import NestedList from '@editorjs/nested-list';
@@ -20,35 +20,28 @@ import { schema } from 'prosemirror-schema-basic';
 import { addListNodes } from 'prosemirror-schema-list';
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
+import { Config } from './editor.config';
 
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.css']
 })
-export class EditorComponent implements AfterViewInit {
+export class EditorComponent implements OnInit, AfterViewInit {
   // @ViewChild("editor") editor: ElementRef;
   @ViewChild("content") content: ElementRef;
-  editor = null
+  editor: EditorJS = null
+  errorMsg = null
+  isEditorReady = false;
 
-  ngAfterViewInit(): void {
-    // const mySchema = new Schema({
-    //   nodes: addListNodes(schema.spec.nodes, "paragraph block*", "block"),
-    //   marks: schema.spec.marks
-    // })
-
-    // const view = new EditorView(this.editor.nativeElement, {
-    //   state: EditorState.create({
-    //     doc: DOMParser.fromSchema(mySchema).parse(this.content.nativeElement),
-    //     plugins: exampleSetup({ schema: mySchema })
-    //   })
-    // })
+  ngOnInit(): void {
     this.editor = new EditorJS({
       /**
        * Create a holder for the Editor and pass its ID
        */
       holder: 'editorjs',
-
+      placeholder: "Write something interesting",
+      autofocus: true,
       /**
        * Available Tools list.
        */
@@ -104,7 +97,71 @@ export class EditorComponent implements AfterViewInit {
           }
         }
       },
+      data: {
+        time: 1552744582955,
+        blocks: [
+          {
+            type: "header",
+            data: {
+              level: 1,
+              placeholder: "Title...",
+              text: "Title...",
+            }
+          },
+          {
+            type: "paragraph",
+            data: {
+              level: 1,
+              placeholder: "Your text...",
+              text: "Your text...",
+            }
+          }
+        ],
+      }
     });
+    this.checkIsEditorReady();
+    this.editor.blocks
   }
 
+  ngAfterViewInit(): void {
+
+  }
+
+  async checkIsEditorReady() {
+    try {
+      await this.editor.isReady;
+      this.isEditorReady = true;
+    } catch (error) {
+      this.errorMsg = error;
+    }
+  }
+
+
+  //save the article
+  async saveArticle() {
+    try {
+      const docData = await this.editor.save()
+      console.log('Article data: ', docData);
+    } catch (error) {
+      this.errorMsg = error;
+    }
+  }
+
+  //update the article
+  async updateArticle() {
+    try {
+
+    } catch (error) {
+      this.errorMsg = error;
+    }
+  }
+
+  //delete the article
+  async deleteArticle() {
+    try {
+
+    } catch (error) {
+      this.errorMsg = error;
+    }
+  }
 }
