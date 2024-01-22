@@ -33,6 +33,7 @@ import { environment } from 'src/environments/environment';
 import { LoaderComponent } from './components/loader/loader.component';
 import { CategoryBoxComponent } from './components/category-box/category-box.component';
 import { FormsModule } from '@angular/forms';
+import { Ng2ImgMaxModule } from 'ng2-img-max';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import { FormsModule } from '@angular/forms';
     MarkdownModule.forRoot(),
     HttpClientModule,
     FormsModule,
+    Ng2ImgMaxModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),

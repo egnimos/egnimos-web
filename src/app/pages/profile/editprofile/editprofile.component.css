@@ -1,0 +1,12 @@
+.profile-image-style {
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+    border-width: 2;
+    border-color: rgb(24, 24, 24);
+    background-color: grey;
+    margin-top: 0px;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 0px;
+}

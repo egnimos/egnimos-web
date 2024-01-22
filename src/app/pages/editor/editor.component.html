@@ -1,3 +1,28 @@
 <div class=container-fluid style="margin-top: 20px; margin-bottom: 20px;">
+    <div class="container-fluid">
+        <div class="d-flex flex-row align-items-end justify-content-end" style="height: 10vh;">
+            <div class="form-check form-switch">
+                <input class="form-check-input" (click)="showPreview()" [ngModel]="previewOn" name="previewOn"
+                    type="checkbox" role="switch" id="previewOn">
+                <label class="form-check-label" for="previewOn">Preview</label>
+            </div>
+            <div style="width: 20px;"></div>
+            <button class="btn btn-primary" (click)="saveArticle('publish')">
+                <i class="fas fa-check"></i>
+                Publish
+            </button>
+            <div style="width: 20px;"></div>
+            <button class="btn btn-danger" (click)="saveArticle('draft')">
+                <i class="fab fa-firstdraft"></i>
+                Draft
+            </button>
+        </div>
+    </div>
+    <!-- ERROR STATMENT -->
+    <div class="alert alert-danger" *ngIf="errorMsg">
+        <p>{{errorMsg}}</p>
+    </div>
+    <br>
+    <app-loader *ngIf="!isEditorReady"></app-loader>
     <div id="editorjs"></div>
 </div>

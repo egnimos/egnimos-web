@@ -20,18 +20,99 @@ import { addListNodes } from 'prosemirror-schema-list';
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 
-const editorConfig = new EditorJS({
-    /**
-     * Create a holder for the Editor and pass its ID
-     */
-    holder: 'editorjs',
-    placeholder: "Write something interesting",
-    autofocus: true,
-    /**
-     * Available Tools list.
-     */
-    tools: {
-        header: Header,
+// export const editorConfig = new EditorJS({
+//     /**
+//      * Create a holder for the Editor and pass its ID
+//      */
+//     holder: 'editorjs',
+//     placeholder: "Write something interesting",
+//     autofocus: true,
+//     /**
+//      * Available Tools list.
+//      */
+//     tools: {
+//         header: Header,
+//         list: {
+//             class: NestedList,
+//             inlineToolbar: true,
+//             // shortcut: 'CMD+SHIFT+8',
+//             config: {
+//                 defaultStyle: 'ordered',
+//                 // nested: true,
+//             },
+//         },
+//         code: {
+//             class: CodeTool,
+//         },
+//         linkTool: {
+//             class: LinkTool,
+//         },
+//         embed: {
+//             class: Embed,
+//             inlineToolbar: true,
+//             config: {
+//                 services: {
+//                     youtube: true,
+//                 }
+//             }
+//         },
+//         quote: Quote,
+//         table: Table,
+//         delimiter: Delimiter,
+//         image: {
+//             class: ImageTool,
+//             config: {
+//                 uploader: {
+//                     /**
+//                      * Upload file to the server and return an uploaded image data
+//                      * @param {File} file - file selected from the device or pasted by drag-n-drop
+//                      * @return {Promise.<{success, file: {url}}>}
+//                      */
+//                     uploadByFile(file) {
+//                         // your own uploading logic here
+//                         console.log("hello, world")
+//                     },
+//                 },
+//             }
+//         },
+//         attaches: {
+//             class: AttachesTool,
+//             config: {
+//                 endpoint: 'http://localhost:8008/uploadFile'
+//             }
+//         }
+//     },
+// });
+
+export const defaultData = {
+    time: 1552744582955,
+    blocks: [
+        {
+            type: "header",
+            data: {
+                level: 1,
+                placeholder: "Title...",
+                text: "Title...",
+            }
+        },
+        {
+            type: "paragraph",
+            data: {
+                level: 1,
+                placeholder: "Add small description...",
+                text: "Add small description...",
+            }
+        }
+    ],
+};
+
+export class Config {
+    // editorConfig: EditorJS = editorConfig;
+    editorTool = {
+        header: {
+            class: Header,
+            inlineToolbar: true
+        },
         list: {
             class: NestedList,
             inlineToolbar: true,
@@ -81,9 +162,5 @@ const editorConfig = new EditorJS({
                 endpoint: 'http://localhost:8008/uploadFile'
             }
         }
-    },
-});
-
-export class Config {
-    editorConfig: EditorJS = editorConfig;
+    };
 }

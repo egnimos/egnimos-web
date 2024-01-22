@@ -2,11 +2,10 @@
     <!-- profile info which include "Name", "Profile Photo", "Joining date" -->
     <div class="d-flex flex-row" style="height: 20vh; margin-left: 10px;">
         <!-- image  -->
-        <div class="profile-image-style">
-        </div>
+        <img class="profile-image-style" [src]="userInfo?.photoURL">
         <div class="d-flex flex-column" style="padding: 10px;">
             <h2>{{userInfo?.name}}</h2>
-            <p>Joined In: {{userInfo?.createdAt}}</p>
+            <p>Joined In: {{joinedIn}}</p>
         </div>
     </div>
     <!-- tabs in which options are provided -->

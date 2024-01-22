@@ -1,6 +1,8 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Ng2ImgMaxService } from 'ng2-img-max';
+import { Subscription } from 'rxjs';
 import { AccountType, Gender, UserModel } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { UtilityService } from 'src/app/services/utility.service';
@@ -20,8 +22,13 @@ export class EditprofileComponent implements OnInit, AfterViewInit {
   accountType = null;
   age = null;
   genders = Object.keys(Gender);
+  photoURL: String = "";
 
-  constructor(private router: Router, private route: ActivatedRoute, private as: AuthService, private us: UtilityService) { }
+  constructor(private router: Router,
+    private route: ActivatedRoute,
+    private as: AuthService,
+    private us: UtilityService,
+    private ng2ImgMaxService: Ng2ImgMaxService) { }
 
   ngAfterViewInit(): void {
     console.log("ng after view init");
@@ -40,6 +47,7 @@ export class EditprofileComponent implements OnInit, AfterViewInit {
     });
     this.dob = this.userData?.dob || '';
     this.selectedGender = this.userData?.gender;
+    this.photoURL = this.userData?.photoURL;
   }
 
   setQuizCategory(gender: Gender) {
@@ -57,6 +65,26 @@ export class EditprofileComponent implements OnInit, AfterViewInit {
     this.accountType = this.age > 17 ? AccountType.Adult : AccountType.Child;
   }
 
+  profilePhotoFile: File = null;
+  compressSub: Subscription = new Subscription();
+  async uploadPhoto() {
+    try {
+      this.errorMsg = null;
+      // const file: File = input?.target?.files[0];
+      if (!this.profilePhotoFile) return;
+      console.log("FILE:: ", this.profilePhotoFile);
+      const percentageReduction = 0.95;
+      const targetFileSize = this.profilePhotoFile.size * (1 - percentageReduction);
+      const maxSizeInMB = targetFileSize * 0.000001;
+      this.ng2ImgMaxService.compress([this.profilePhotoFile], maxSizeInMB)
+        .forEach((compressedImage) => {
+          console.log("FILE:: ", compressedImage);
+          // Do whatever you want to do with the compressed file, like send to server.
+        });
+    } catch (error) {
+      this.errorMsg = error;
+    }
+  }
 
   async submit() {
     try {

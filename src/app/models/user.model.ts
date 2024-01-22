@@ -7,9 +7,10 @@ export interface UserModel {
     nameSearch: String[];
     email: String;
     emailSearch: String[];
+    photoURL?: String;
     dob?: String;
     gender?: Gender;
-    providerType: ProviderType[];
+    providerType: ProviderType;
     ageAccountType?: AccountType;
     age?: number;
     createdAt: Timestamp;
@@ -19,6 +20,7 @@ export interface UserModel {
 export enum ProviderType {
     github = "github.com",
     google = "google.com",
+    unknown = "unknown",
 }
 
 export enum Gender {

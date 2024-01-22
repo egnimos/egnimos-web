@@ -100,8 +100,9 @@ export class AuthService {
                 name: user?.displayName,
                 nameSearch: this.us.createSearchList(user?.displayName ?? ""),
                 email: user?.email,
+                photoURL: user?.providerData[0]?.photoURL || "",
                 emailSearch: this.us.createSearchList(user?.email ?? ""),
-                providerType: ProviderType[user?.providerId],
+                providerType: this.getProviderType(user?.providerData[0]?.providerId||""),
                 createdAt: Timestamp.now(),
                 updatedAt: Timestamp.now(),
             }
@@ -110,6 +111,18 @@ export class AuthService {
             localStorage.setItem(this.storageUserKey, JSON.stringify(userInfo))
         } catch (error) {
             throw error;
+        }
+    }
+
+
+    getProviderType(type: String) {
+        switch (type) {
+            case "google.com":
+                return ProviderType.google;
+            case "github.com":
+                return ProviderType.github;
+            default:
+                return ProviderType.unknown;
         }
     }
 

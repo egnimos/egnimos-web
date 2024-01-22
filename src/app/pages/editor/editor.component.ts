@@ -20,12 +20,17 @@ import { schema } from 'prosemirror-schema-basic';
 import { addListNodes } from 'prosemirror-schema-list';
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
-import { Config } from './editor.config';
+import { Config, defaultData } from './editor.config';
+import { ArticleService } from 'src/app/services/article.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { PublishType } from 'src/app/models/article.model';
+import { UtilityService } from 'src/app/services/utility.service';
 
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
-  styleUrls: ['./editor.component.css']
+  styleUrls: ['./editor.component.css'],
+  providers: [Config]
 })
 export class EditorComponent implements OnInit, AfterViewInit {
   // @ViewChild("editor") editor: ElementRef;
@@ -33,6 +38,14 @@ export class EditorComponent implements OnInit, AfterViewInit {
   editor: EditorJS = null
   errorMsg = null
   isEditorReady = false;
+  previewOn = false;
+  editorData = defaultData;
+
+  constructor(private as: ArticleService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private us: UtilityService,
+    private config: Config) { }
 
   ngOnInit(): void {
     this.editor = new EditorJS({
@@ -45,82 +58,10 @@ export class EditorComponent implements OnInit, AfterViewInit {
       /**
        * Available Tools list.
        */
-      tools: {
-        header: Header,
-        list: {
-          class: NestedList,
-          inlineToolbar: true,
-          // shortcut: 'CMD+SHIFT+8',
-          config: {
-            defaultStyle: 'ordered',
-            // nested: true,
-          },
-        },
-        code: {
-          class: CodeTool,
-        },
-        linkTool: {
-          class: LinkTool,
-        },
-        embed: {
-          class: Embed,
-          inlineToolbar: true,
-          config: {
-            services: {
-              youtube: true,
-            }
-          }
-        },
-        quote: Quote,
-        table: Table,
-        delimiter: Delimiter,
-        image: {
-          class: ImageTool,
-          config: {
-            uploader: {
-              /**
-               * Upload file to the server and return an uploaded image data
-               * @param {File} file - file selected from the device or pasted by drag-n-drop
-               * @return {Promise.<{success, file: {url}}>}
-               */
-              uploadByFile(file) {
-                // your own uploading logic here
-                console.log("hello, world")
-              },
-            },
-          }
-        },
-        attaches: {
-          class: AttachesTool,
-          config: {
-            endpoint: 'http://localhost:8008/uploadFile'
-          }
-        }
-      },
-      data: {
-        time: 1552744582955,
-        blocks: [
-          {
-            type: "header",
-            data: {
-              level: 1,
-              placeholder: "Title...",
-              text: "Title...",
-            }
-          },
-          {
-            type: "paragraph",
-            data: {
-              level: 1,
-              placeholder: "Your text...",
-              text: "Your text...",
-            }
-          }
-        ],
-      }
+      tools: this.config.editorTool,
+      data: this.editorData
     });
     this.checkIsEditorReady();
-    this.editor.blocks
   }
 
   ngAfterViewInit(): void {
@@ -133,13 +74,20 @@ export class EditorComponent implements OnInit, AfterViewInit {
       this.isEditorReady = true;
     } catch (error) {
       this.errorMsg = error;
+      this.isEditorReady = false;
     }
+  }
+
+  async showPreview() {
+    this.previewOn = !this.previewOn;
+    await this.editor.readOnly.toggle(this.previewOn);
   }
 
 
   //save the article
-  async saveArticle() {
+  async saveArticle(publishType: string) {
     try {
+      const pubType = this.us.enumToString(PublishType, publishType);
       const docData = await this.editor.save()
       console.log('Article data: ', docData);
     } catch (error) {

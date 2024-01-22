@@ -9,7 +9,7 @@ export class UtilityService {
     }
 
     createSearchList(keyword: String) {
-        const keywordSize = keyword?.length??0
+        const keywordSize = keyword?.length ?? 0
         let result = []
         for (let i = 0; i <= keywordSize; i++) {
             if (i === 0) continue;
@@ -36,5 +36,10 @@ export class UtilityService {
         const darkerColor = `rgb(${darkerRed}, ${darkerGreen}, ${darkerBlue})`;
 
         return darkerColor;
+    }
+
+    enumToString(enumType: any, value: any): string | undefined {
+        const keys = Object.keys(enumType).filter(key => enumType[key] === value);
+        return keys.length > 0 ? keys[0] : undefined;
     }
 }
