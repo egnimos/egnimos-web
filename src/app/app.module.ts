@@ -19,7 +19,7 @@ import { ArticlesComponent } from './pages/articles/articles.component';
 import { MarkdownModule } from 'ngx-markdown';
 import { HttpClientModule } from '@angular/common/http';
 import { DraftsComponent } from './pages/profile/drafts/drafts.component';
-import { CategoriesComponent } from './pages/profile/categories/categories.component';
+import { CategoriesComponent } from './pages/categories/categories.component';
 import { EditprofileComponent } from './pages/profile/editprofile/editprofile.component';
 import { ProfilearticlesComponent } from './pages/profile/profilearticles/profilearticles.component';
 import { EditorComponent } from './pages/editor/editor.component';
@@ -34,6 +34,13 @@ import { LoaderComponent } from './components/loader/loader.component';
 import { CategoryBoxComponent } from './components/category-box/category-box.component';
 import { FormsModule } from '@angular/forms';
 import { Ng2ImgMaxModule } from 'ng2-img-max';
+import { NgCircleProgressModule } from 'ng-circle-progress';
+import { ArticleBoxComponent } from './components/article-box/article-box.component';
+import { LottieModule } from 'ngx-lottie';
+import player from 'lottie-web';
+import { NothingFoundComponent } from './components/nothing-found/nothing-found.component';
+import { EditorViewComponent } from './pages/editor/editor-view/editor-view.component';
+import { ViewallComponent } from './pages/viewall/viewall.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +61,10 @@ import { Ng2ImgMaxModule } from 'ng2-img-max';
     EditorComponent,
     LoaderComponent,
     CategoryBoxComponent,
+    ArticleBoxComponent,
+    NothingFoundComponent,
+    ViewallComponent,
+    EditorViewComponent,
   ],
   imports: [
     BrowserModule,
@@ -61,6 +72,7 @@ import { Ng2ImgMaxModule } from 'ng2-img-max';
     MarkdownModule.forRoot(),
     HttpClientModule,
     FormsModule,
+    NgCircleProgressModule.forRoot(),
     Ng2ImgMaxModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
@@ -68,8 +80,14 @@ import { Ng2ImgMaxModule } from 'ng2-img-max';
     provideMessaging(() => getMessaging()),
     providePerformance(() => getPerformance()),
     provideStorage(() => getStorage()),
+    LottieModule.forRoot({ player: playerFactory }),
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+
+export function playerFactory() {
+  return player;
+}

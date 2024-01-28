@@ -1,10 +1,11 @@
 import { Injectable, inject } from "@angular/core";
-import { Firestore, Timestamp, doc, getDoc, setDoc } from "@angular/fire/firestore";
+import { Firestore, Timestamp, doc, getDoc, setDoc, updateDoc } from "@angular/fire/firestore";
 import { Auth, getAuth, signInWithPopup, signOut, GithubAuthProvider, GoogleAuthProvider, AuthProvider, onAuthStateChanged, User } from "@angular/fire/auth";
-import { ProviderType, UserModel } from "../models/user.model";
+import { UserModel } from "../models/user.model";
 import { Router } from "@angular/router";
 import { Subject } from "rxjs";
 import { UtilityService } from "./utility.service";
+import { ProviderType } from "../enum";
 
 @Injectable({
     providedIn: 'root'
@@ -85,6 +86,7 @@ export class AuthService {
     async signout() {
         try {
             await signOut(this.fireauth);
+            localStorage.clear();
             this.router.navigate(["auth"]);
         } catch (error) {
             throw error;
@@ -102,7 +104,7 @@ export class AuthService {
                 email: user?.email,
                 photoURL: user?.providerData[0]?.photoURL || "",
                 emailSearch: this.us.createSearchList(user?.email ?? ""),
-                providerType: this.getProviderType(user?.providerData[0]?.providerId||""),
+                providerType: this.getProviderType(user?.providerData[0]?.providerId || ""),
                 createdAt: Timestamp.now(),
                 updatedAt: Timestamp.now(),
             }
@@ -144,6 +146,20 @@ export class AuthService {
         try {
             const userDoc = doc(this.firestore, "users/" + userInfo.id)
             const response = await setDoc(userDoc, userInfo, { merge: true });
+            localStorage.setItem(this.storageUserKey, JSON.stringify(userInfo))
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async updateProfileImage(userId: String, imageURI: String): Promise<void> {
+        try {
+            const userDoc = doc(this.firestore, "users/" + userId)
+            await updateDoc(userDoc, {
+                "photoURL": imageURI,
+            });
+            const userInfo = this.userInfo;
+            userInfo.photoURL = imageURI;
             localStorage.setItem(this.storageUserKey, JSON.stringify(userInfo))
         } catch (error) {
             throw error;

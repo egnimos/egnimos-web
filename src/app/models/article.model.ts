@@ -1,20 +1,23 @@
+import { Timestamp } from "@angular/fire/firestore";
+import { EditorType, PublishType } from "../enum";
 import { CategoryModel } from "./category.model";
 import { TagModel } from "./tag.model";
 
 // collection name :meta_articles
 export interface MetaArticleModel {
-    id: string,
-    articleDataId: string,
+    id: String,
+    articleDataId: String,
     authorInfo: AuthorInfo,
     category: CategoryModel,
     tags: TagModel[],
     publishType: PublishType,
-    title: string,
-    titleSearch: string[],
-    description: string,
-    descSearch: string[],
-    createdAt: string,
-    updatedAt: string,
+    title: String,
+    titleSearch: String[],
+    description: String,
+    descSearch: String[],
+    thumbnail: String;
+    createdAt: Timestamp,
+    updatedAt: Timestamp,
 }
 
 // collection name :articles
@@ -25,17 +28,8 @@ export interface ArticleModel {
 }
 
 export interface AuthorInfo {
-    id: string,
-    name: string,
-    imageUri: string,
+    id: String,
+    name: String,
+    imageUri: String,
 }
 
-export enum PublishType {
-    publish = "publish",
-    draft = "draft",
-}
-
-export enum EditorType {
-    quill = "quill",
-    editorjs = "editorjs",
-}

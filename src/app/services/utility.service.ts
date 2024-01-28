@@ -38,8 +38,56 @@ export class UtilityService {
         return darkerColor;
     }
 
-    enumToString(enumType: any, value: any): string | undefined {
+    secondsToDateTime(seconds: number): Date {
+        // Multiply seconds by 1000 to get milliseconds
+        const milliseconds = seconds * 1000;
+
+        // Create a new Date object with the milliseconds
+        const date = new Date(milliseconds);
+
+        return date;
+    }
+
+    timeAgo(date) {
+        const seconds = Math.floor((new Date().getDate() - date) / 1000);
+
+        let interval = Math.floor(seconds / 31536000);
+        if (interval > 1) {
+            return interval + ' years ago';
+        }
+
+        interval = Math.floor(seconds / 2592000);
+        if (interval > 1) {
+            return interval + ' months ago';
+        }
+
+        interval = Math.floor(seconds / 86400);
+        if (interval > 1) {
+            return interval + ' days ago';
+        }
+
+        interval = Math.floor(seconds / 3600);
+        if (interval > 1) {
+            return interval + ' hours ago';
+        }
+
+        interval = Math.floor(seconds / 60);
+        if (interval > 1) {
+            return interval + ' minutes ago';
+        }
+
+        if (seconds < 10) return 'just now';
+
+        return Math.floor(seconds) + ' seconds ago';
+    };
+
+    enumToString(enumType: any, value: any): String | undefined {
         const keys = Object.keys(enumType).filter(key => enumType[key] === value);
         return keys.length > 0 ? keys[0] : undefined;
     }
+
+    // stringToEnum(enumType: any, value: String): any {
+    //     const keys = Object.values(enumType).filter(val => enumType[val] === value);
+    //     return keys.length > 0 ? keys[0] : undefined;
+    // }
 }

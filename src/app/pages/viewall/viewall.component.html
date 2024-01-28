@@ -1,0 +1,61 @@
+<div class="container-fluid text-center" style="padding: 40px; margin-top: 20px; margin-bottom: 20px;"
+    *ngIf="(type == 'category')">
+    <div class="col align-self-center">
+        <h1 style="font-family: 'Rubik', sans-serif;">Categories to Find</h1>
+        <h4 style="color: rgb(88, 88, 88); font-family: 'Rubik', sans-serif;
+        font-weight: 500;">
+            List of all the categories related to the articles
+        </h4>
+    </div>
+
+    <!-- categories list -->
+    <div class="container-fluid text-center">
+        <div class="card-group" style="margin-top: 30px; margin-bottom: 30px;">
+            <app-category-box *ngFor="let category of categories; let i=index" [category]="category"
+                style="margin: 19px;"></app-category-box>
+        </div>
+    </div>
+</div>
+
+
+<br>
+<!-- <app-loader *ngIf="isLoading"></app-loader> -->
+<br>
+<div class="container-fluid" *ngIf="(type == 'categorybasedQuiz')" style="margin: 0px; padding: 0px;">
+    <div class="contaier-fluid text-center">
+        <div class="col align-self-center">
+            <h1 style="font-family: 'Rubik', sans-serif;">{{category?.name}} based Articles</h1>
+            <h4 style="color: rgb(88, 88, 88); font-family: 'Rubik', sans-serif;
+        font-weight: 500;">
+                List of all the articles related to the {{category?.name}}
+            </h4>
+        </div>
+    </div>
+
+    <!-- CATEGORIES LIST -->
+    <div class="container-fluid" style="background-color: rgb(252, 251, 251);">
+        <!-- NOTHING FOUND -->
+        <div *ngIf="articles.length==0 && !isLoading">
+            <app-nothing-found></app-nothing-found>
+        </div>
+        <br>
+
+        <!-- CATEGORIES -->
+        <div class="card-group" *ngIf="articles.length!=0">
+            <app-article-box *ngFor="let aInf of articles" [articleInf]="aInf"></app-article-box>
+        </div>
+        <br>
+
+        <!-- LOADING -->
+        <app-loader *ngIf="isLoading"></app-loader>
+        <br>
+
+        <!-- BUTTON -->
+        <div class="d-flex justify-content-center align-items-center" style="width: 100%;" *ngIf="articles.length != 0">
+            <button type="submit" class="btn btn-outline-secondary" (click)="fetchCategoryBasedArticles()">
+                <fa-icon [icon]="addIcon"></fa-icon>
+                Load More</button>
+        </div>
+        <br>
+    </div>
+</div>

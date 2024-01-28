@@ -1,7 +1,9 @@
 import { Injectable, inject } from "@angular/core";
 import { DocumentData, Firestore, collection, deleteDoc, doc, getDoc, getDocs, limit, orderBy, query, setDoc, startAfter, where } from "@angular/fire/firestore";
-import { ArticleModel, MetaArticleModel, PublishType } from "../models/article.model";
+import { ArticleModel, MetaArticleModel } from "../models/article.model";
 import { Subject } from "rxjs";
+import { PublishType } from "../enum";
+import { CategoryModel } from "../models/category.model";
 
 @Injectable({
     providedIn: 'root'
@@ -26,7 +28,7 @@ export class ArticleService {
     async saveArticle(metaArticle: MetaArticleModel, article: ArticleModel): Promise<void> {
         try {
             const metaDocRef = doc(this.firestore, "meta_articles/" + metaArticle.id);
-            const articleDocRef = doc(this.firestore, "meta_articles/" + metaArticle.id + "article_data/" + article.id);
+            const articleDocRef = doc(this.firestore, "meta_articles/" + metaArticle.id + "/article_data/" + article.id);
             const response = await setDoc(metaDocRef, metaArticle, { merge: true });
             console.log(response);
             const resp = await setDoc(articleDocRef, article, { merge: true });
@@ -74,9 +76,9 @@ export class ArticleService {
     }
 
     //get article
-    async getArticle(metaArticleId: string, articleId: string): Promise<ArticleModel> {
+    async getArticle(metaArticleId: String, articleId: String): Promise<ArticleModel> {
         try {
-            const articleDocRef = doc(this.firestore, "meta_articles/" + metaArticleId + "article_data/" + articleId);
+            const articleDocRef = doc(this.firestore, "meta_articles/" + metaArticleId + "/article_data/" + articleId);
             const response = await getDoc(articleDocRef);
             return response?.data() as ArticleModel;
         } catch (error) {
@@ -113,17 +115,17 @@ export class ArticleService {
             if (response.docs.length != 0) {
                 lastVisibleDoc = response.docs[response.docs.length - 1]
             }
-        } catch (error) {
-            throw error;
-        } finally {
             return { data: result, lastDocData: lastVisibleDoc };
+        } catch (error) {
+            console.log(error);
+            throw error;
         }
     }
 
     //get the list of articles based on creator/user id
     async getListOfMetaArticleBasedOnCreatorId(
-        creatorId: string,
-        publishType: PublishType,
+        creatorId: String,
+        publishType: String,
         pageSize: number,
         lastVisible: DocumentData | null): Promise<{
             data: MetaArticleModel[], lastDocData: DocumentData | null
@@ -155,12 +157,51 @@ export class ArticleService {
             if (response.docs.length != 0) {
                 lastVisibleDoc = response.docs[response.docs.length - 1]
             }
-
-        } catch (error) {
-            throw error;
-        } finally {
             return { data: result, lastDocData: lastVisibleDoc };
+        } catch (error) {
+            console.log(error);
+            throw error;
         }
     }
 
+    //get the list of articles based on category name
+    async getListOfMetaArticleBasedOnCategoryName(
+        category: CategoryModel,
+        pageSize: number,
+        lastVisible: DocumentData | null): Promise<{
+            data: MetaArticleModel[], lastDocData: DocumentData | null
+        }> {
+        const result = [];
+        let lastVisibleDoc = lastVisible;
+        try {
+            const sortByCreatedAt = orderBy('createdAt', 'desc');
+            const collectionRef = lastVisibleDoc == null ? query(
+                collection(this.firestore, "meta_articles/"),
+                where("publishType", "==", "publish"),
+                where("category.name", "==", category.name),
+                sortByCreatedAt,
+                limit(pageSize)
+            ) : query(
+                collection(this.firestore, "meta_articles/"),
+                where("publishType", "==", "publish"),
+                where("category.name", "==", category.name),
+                sortByCreatedAt,
+
+                startAfter(lastVisibleDoc?.data().createdAt),
+                limit(pageSize)
+            );
+            const response = await getDocs(collectionRef)
+            response.forEach((doc) => {
+                const val = doc?.data()
+                result.push(val);
+            });
+            if (response.docs.length != 0) {
+                lastVisibleDoc = response.docs[response.docs.length - 1]
+            }
+            return { data: result, lastDocData: lastVisibleDoc };
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
 }

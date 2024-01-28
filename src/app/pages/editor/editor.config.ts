@@ -1,5 +1,5 @@
-import EditorJS from '@editorjs/editorjs';
 import Header from '@editorjs/header';
+import Paragraph from '@editorjs/paragraph';
 import NestedList from '@editorjs/nested-list';
 import ImageTool from '@editorjs/image';
 import CodeTool from '@editorjs/code';
@@ -11,78 +11,13 @@ import Embed from '@editorjs/embed';
 import Delimiter from '@editorjs/delimiter';
 import Quote from '@editorjs/quote';
 import LinkTool from '@editorjs/link';
-// import notifier from 'codex-notifier';
-// import {ConfirmNotifierOptions, NotifierOptions, PromptNotifierOptions} from 'codex-notifier';
-import { exampleSetup } from 'prosemirror-example-setup';
-import { Schema, DOMParser } from 'prosemirror-model';
-import { schema } from 'prosemirror-schema-basic';
-import { addListNodes } from 'prosemirror-schema-list';
-import { EditorState } from 'prosemirror-state';
-import { EditorView } from 'prosemirror-view';
+import AlignmentTuneTool from 'editorjs-text-alignment-blocktune';
 
-// export const editorConfig = new EditorJS({
-//     /**
-//      * Create a holder for the Editor and pass its ID
-//      */
-//     holder: 'editorjs',
-//     placeholder: "Write something interesting",
-//     autofocus: true,
-//     /**
-//      * Available Tools list.
-//      */
-//     tools: {
-//         header: Header,
-//         list: {
-//             class: NestedList,
-//             inlineToolbar: true,
-//             // shortcut: 'CMD+SHIFT+8',
-//             config: {
-//                 defaultStyle: 'ordered',
-//                 // nested: true,
-//             },
-//         },
-//         code: {
-//             class: CodeTool,
-//         },
-//         linkTool: {
-//             class: LinkTool,
-//         },
-//         embed: {
-//             class: Embed,
-//             inlineToolbar: true,
-//             config: {
-//                 services: {
-//                     youtube: true,
-//                 }
-//             }
-//         },
-//         quote: Quote,
-//         table: Table,
-//         delimiter: Delimiter,
-//         image: {
-//             class: ImageTool,
-//             config: {
-//                 uploader: {
-//                     /**
-//                      * Upload file to the server and return an uploaded image data
-//                      * @param {File} file - file selected from the device or pasted by drag-n-drop
-//                      * @return {Promise.<{success, file: {url}}>}
-//                      */
-//                     uploadByFile(file) {
-//                         // your own uploading logic here
-//                         console.log("hello, world")
-//                     },
-//                 },
-//             }
-//         },
-//         attaches: {
-//             class: AttachesTool,
-//             config: {
-//                 endpoint: 'http://localhost:8008/uploadFile'
-//             }
-//         }
-//     },
-// });
+import { Injectable, inject } from '@angular/core';
+import { v4 as uuidv4 } from 'uuid';
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "@angular/fire/storage";
+import { Ng2ImgMaxService } from 'ng2-img-max';
+import { firstValueFrom, lastValueFrom } from 'rxjs';
 
 export const defaultData = {
     time: 1552744582955,
@@ -106,16 +41,30 @@ export const defaultData = {
     ],
 };
 
+let comImg: Ng2ImgMaxService
+
+@Injectable()
 export class Config {
+
+    constructor(private ng2ImgMaxService: Ng2ImgMaxService) {
+        comImg = this.ng2ImgMaxService
+    }
     // editorConfig: EditorJS = editorConfig;
     editorTool = {
         header: {
             class: Header,
-            inlineToolbar: true
+            inlineToolbar: true,
+            tunes: ['align'],
+        },
+        paragraph: {
+            class: Paragraph,
+            inlineToolbar: true,
+            tunes: ['align'],
         },
         list: {
             class: NestedList,
             inlineToolbar: true,
+            tunes: ['align'],
             // shortcut: 'CMD+SHIFT+8',
             config: {
                 defaultStyle: 'ordered',
@@ -127,10 +76,13 @@ export class Config {
         },
         linkTool: {
             class: LinkTool,
+            inlineToolbar: true,
+            tunes: ['align'],
         },
         embed: {
             class: Embed,
             inlineToolbar: true,
+            tunes: ['align'],
             config: {
                 services: {
                     youtube: true,
@@ -142,6 +94,8 @@ export class Config {
         delimiter: Delimiter,
         image: {
             class: ImageTool,
+            inlineToolbar: true,
+            tunes: ['align'],
             config: {
                 uploader: {
                     /**
@@ -149,12 +103,31 @@ export class Config {
                      * @param {File} file - file selected from the device or pasted by drag-n-drop
                      * @return {Promise.<{success, file: {url}}>}
                      */
-                    uploadByFile(file) {
+                    async uploadByFile(file) {
                         // your own uploading logic here
-                        console.log("hello, world")
+                        console.log("hello, world", file);
+                        // const us = new UploadService();
+                        // const ng2ImgMaxService = inject(Ng2ImgMaxService)
+                        const id = uuidv4();
+                        let compressedFile = null
+                        const compSub = comImg.compress([file], 0.5)
+                        compressedFile = await firstValueFrom(compSub);
+                        const url = await uploadArticleImages(file, id);
+                        return {
+                            success: 1,
+                            file: {
+                                url: url,
+                                // any other image data you want to store, such as width, height, color, extension, etc
+                            }
+                        };
+
                     },
                 },
             }
+        },
+        align: {
+            class: AlignmentTuneTool,
+            inlineToolbar: true,
         },
         attaches: {
             class: AttachesTool,
@@ -163,4 +136,19 @@ export class Config {
             }
         }
     };
+}
+// const storageFB = () => {
+//     const storage: Storage = inject(Storage)
+//     return storage;
+// }
+async function uploadArticleImages(file: File, id: String): Promise<String> {
+    try {
+        if (!file) return;
+        const storageRef = ref(getStorage(), "users/" + "articles" + "/" + id);
+        const response = await uploadBytesResumable(storageRef, file);
+        const url = await getDownloadURL(storageRef);
+        return url;
+    } catch (error) {
+        throw error;
+    }
 }

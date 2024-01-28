@@ -8,10 +8,12 @@ import { AuthComponent } from './pages/auth/auth.component';
 import { ArticlesComponent } from './pages/articles/articles.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { DraftsComponent } from './pages/profile/drafts/drafts.component';
-import { CategoriesComponent } from './pages/profile/categories/categories.component';
+import { CategoriesComponent } from './pages/categories/categories.component';
 import { EditprofileComponent } from './pages/profile/editprofile/editprofile.component';
 import { ProfilearticlesComponent } from './pages/profile/profilearticles/profilearticles.component';
 import { EditorComponent } from './pages/editor/editor.component';
+import { EditorViewComponent } from './pages/editor/editor-view/editor-view.component';
+import { ViewallComponent } from './pages/viewall/viewall.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -20,11 +22,14 @@ const routes: Routes = [
     path: "profile", component: ProfileComponent, children: [
       { path: "", component: ProfilearticlesComponent },
       { path: "drafts", component: DraftsComponent },
-      { path: "categories", component: CategoriesComponent },
+      // { path: "categories", component: CategoriesComponent },
       { path: "edit-profile", component: EditprofileComponent },
     ]
   },
+  { path: "categories", component: CategoriesComponent },
+  { path: "view_all_category_based_articles/:type", component: ViewallComponent },
   { path: "write-article", component: EditorComponent },
+  { path: "view-article", component: EditorViewComponent },
   { path: "articles", component: ArticlesComponent },
   { path: "contact", component: ContactComponent },
   { path: "not-found", component: PagenotfoundComponent },

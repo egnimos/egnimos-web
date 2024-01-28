@@ -7,20 +7,22 @@
         </div>
         <hr>
         <br>
+        <!-- PROFILE IMAGE -->
+        <div class="">
+            <!-- image  -->
+            <circle-progress [percent]="progress" [radius]="50" [outerStrokeWidth]="10" [innerStrokeWidth]="5"
+                [outerStrokeColor]="'#00C076'" [innerStrokeColor]="'#96E5D1'" [animationDuration]="300"
+                [showSubtitle]="false" *ngIf="isUploading"></circle-progress>
+            <img class="profile-image-style" [src]="photoURL" *ngIf="!isUploading">
+            <br><br>
+            <div class="input-group mb-3">
+                <input type="file" class="form-control" id="profilePhoto" (change)="setFile($event)">
+                <button class="btn btn-outline-secondary input-group-text" for="profilePhoto" (click)="uploadPhoto()"
+                    type="button">Upload</button>
+            </div>
+        </div>
         <!-- FORM -->
         <form class="row g-3" (ngSubmit)="submit()" #ed="ngForm">
-            <!-- PROFILE IMAGE -->
-            <div class="d-flex flex-column">
-                <!-- image  -->
-                <img class="profile-image-style" [src]="photoURL">
-                <br>
-                <div class="input-group mb-3">
-                    <input type="file" class="form-control" id="profilePhoto" [(ngModel)]="profilePhotoFile"
-                        name="profilePhoto">
-                    <button class="btn btn-outline-secondary input-group-text" for="profilePhoto"
-                        (click)="uploadPhoto()" type="button">Upload</button>
-                </div>
-            </div>
             <!-- NAME -->
             <div class="mb-3">
                 <label for="name" class="form-label">Name</label>

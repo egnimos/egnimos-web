@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ViewAllType } from 'src/app/enum';
 import { CategoryModel } from 'src/app/models/category.model';
 import { UtilityService } from 'src/app/services/utility.service';
 
@@ -20,8 +21,8 @@ export class CategoryBoxComponent implements OnInit {
     this.initiationLetter = this.category.name.substring(0, 2)
   }
 
-  viewAllQuizOfSpecificCategory() {
-    this.router.navigate(["view_all_category_based_articles"], {
+  viewAllArticlesOfSpecificCategory() {
+    this.router.navigate(["view_all_category_based_articles", ViewAllType.categorybasedQuiz], {
       // replaceUrl: true,
       queryParams: {
         categoryInfo: JSON.stringify(this.category)

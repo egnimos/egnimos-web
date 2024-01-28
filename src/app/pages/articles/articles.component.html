@@ -6,8 +6,35 @@
     </div>
     <br><br><br>
     <div class="d-flex-flex-column">
-        <h2 class="section-heading">Most Recent</h2>
+        <h2 class="section-heading">Articles You Like</h2>
         <hr>
-        <div style="height: 50vh;"></div>
+        <div style="height: 20px;"></div>
+
+        <!-- ERROR STATMENT -->
+        <div class="alert alert-danger" *ngIf="errorMsg">
+            <p>{{errorMsg}}</p>
+        </div>
+
+        <!-- article list -->
+        <div *ngIf="articles.length==0 && !isLoading">
+            <app-nothing-found></app-nothing-found>
+        </div>
+        <div class="card-group" *ngIf="articles.length != 0">
+            <app-article-box *ngFor="let aInf of articles" [articleInf]="aInf"></app-article-box>
+        </div>
+        <br>
+        <app-loader *ngIf="isLoading"></app-loader>
+        <br>
+        <div class="d-flex justify-content-center align-items-center" style="width: 100%;"
+            *ngIf="articles.length != 0 || !isLoading">
+            <button type="submit" class="btn btn-outline-success" (click)="loadData()">
+                <fa-icon [icon]="addIcon"></fa-icon>
+                Load More</button>
+        </div>
+        <br>
     </div>
 </div>
+<!-- 
+<div class="container-fluid">
+
+</div> -->

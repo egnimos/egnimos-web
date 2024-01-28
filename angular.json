@@ -27,13 +27,11 @@
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
-              "src/styles.css",
-              "node_modules/prismjs/themes/prism-okaidia.css"
+              "src/styles.css"
             ],
             "scripts": [
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
-              "node_modules/marked/marked.min.js",
-              "node_modules/prismjs/prism.js"
+              "node_modules/marked/marked.min.js"
             ]
           },
           "configurations": {

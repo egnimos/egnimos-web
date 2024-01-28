@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ProviderType } from 'src/app/models/user.model';
+import { ProviderType } from 'src/app/enum';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({

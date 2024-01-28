@@ -1,5 +1,6 @@
 <div class=container-fluid style="margin-top: 20px; margin-bottom: 20px;">
-    <div class="container-fluid">
+    <!-- BUTTONS FOR ACTIOn -->
+    <div class="container-fluid" *ngIf="isEditorReady || !isSaving">
         <div class="d-flex flex-row align-items-end justify-content-end" style="height: 10vh;">
             <div class="form-check form-switch">
                 <input class="form-check-input" (click)="showPreview()" [ngModel]="previewOn" name="previewOn"
@@ -23,6 +24,43 @@
         <p>{{errorMsg}}</p>
     </div>
     <br>
-    <app-loader *ngIf="!isEditorReady"></app-loader>
-    <div id="editorjs"></div>
+    <app-loader *ngIf="!isEditorReady || isSaving"></app-loader>
+    <br>
+    <!-- QUIZ CATEGORY -->
+    <div class="container">
+        <div class="mb-3">
+            <label for="category" class="form-label">Select Category</label>
+            <div class="dropup-center">
+                <div class="input-group">
+                    <input type="text" class="form-control" readonly aria-label="select the dropdown category"
+                        [ngModel]="selectedCategory?.name" name="category" required>
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">choose</button>
+
+                    <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start container p-4" style="max-height: 250px;
+                overflow-y: auto;">
+                        <input type="text" class="form-control" id="search" placeholder="enter your category"
+                            [(ngModel)]="searchCategoryKeyword" name="searchCategory"
+                            (ngModelChange)="searchQuizCategory()">
+                        <!-- results -->
+                        <div *ngIf="searchCategoryKeyword.length > 0">
+                            <ul class="list-group" style="margin-top: 10px; margin-bottom: 10px;"
+                                *ngFor="let category of searchedCategories">
+                                <button type="button" class="list-group-item list-group-item-action"
+                                    (click)="setQuizCategory(category)">{{category.name}}</button>
+                            </ul>
+                        </div>
+                        <div *ngIf="searchCategoryKeyword.length <= 0">
+                            <ul class="list-group" style="margin-top: 10px; margin-bottom: 10px;"
+                                *ngFor="let category of categories">
+                                <button type="button" class="list-group-item list-group-item-action"
+                                    (click)="setQuizCategory(category)">{{category.name}}</button>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="editorjs" style="margin: 20px;"></div>
 </div>

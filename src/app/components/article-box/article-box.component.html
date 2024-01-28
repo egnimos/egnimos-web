@@ -1,0 +1,32 @@
+<div class="card h-100 w-100" style="margin: 10px; max-width: 280px;">
+    <!-- <img src="..." class="card-img-top" alt="..."> -->
+    <img [src]="articleInf.thumbnail" class="card-img-top" style="object-fit: cover;" alt="">
+    <div class="card-body">
+        <!-- TITLE -->
+        <h5 class="card-title title" (click)="navToViewArticle()">{{articleInf.title}}</h5>
+        <!-- CATEGORY INFO -->
+        <span class="badge text-bg-secondary" style="padding-left: 12px; padding-right: 12px; 
+            padding-top: 10px; padding-bottom: 10px; margin-bottom: 5px;">
+            {{articleInf?.category?.name}}</span>
+        <!-- DESCRIPTION -->
+        <p class="card-text truncate description">
+            {{articleInf.description}}</p>
+        <!-- AUTHOR INFO -->
+        <div class="d-flex flex-row align-items-start justify-content-start" style="margin-top: 20px;">
+            <!-- image -->
+            <img class="image-style" [src]="articleInf?.authorInfo?.imageUri">
+            <p><small class="text-body-secondary">{{articleInf?.authorInfo?.name}}</small></p>
+        </div>
+        <p class="card-text"><small class="text-body-secondary">Last updated {{joinedIn}}</small></p>
+    </div>
+    <div class="card-footer" *ngIf="authenticatedUser?.id == articleInf?.authorInfo?.id">
+        <div class="d-flex flex-row justify-content-around" style="margin-top: 6px; margin-bottom: 6px;">
+            <a (click)="deleteArticle()" style="color: red;">
+                <i class="fa-solid fa-trash" style="color: red; cursor: pointer;"></i>
+            </a>
+            <a (click)="editArticle()">
+                <i class="fa-solid fa-pencil" style="color: blue;cursor: pointer;"></i>
+            </a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,33 @@
+<div class="container-fluid text-center">
+    <app-loader *ngIf="isLoading"></app-loader>
+    <br><br>
+    <div class="col align-self-center">
+        <h1 style="font-family: 'Rubik', sans-serif;">Categories to Find</h1>
+        <h4 style="color: rgb(88, 88, 88); font-family: 'Rubik', sans-serif;
+        font-weight: 500;">
+            List of all the Categories
+        </h4>
+        <br><br>
+        <!-- search categories -->
+        <input class="form-control form-control-lg" type="text" placeholder="Search Your Categories"
+            aria-label="search categories" [(ngModel)]="searchKeyword" (ngModelChange)="searchQuizCategory()">
+    </div>
+
+    <!-- categories list -->
+    <div class="container text-center">
+        <div *ngIf="searchKeyword.length <= 0">
+            <div class="card-group" style="margin-top: 30px; margin-bottom: 30px;">
+                <app-category-box *ngFor="let category of categories; let i=index" [category]="category"
+                    style="margin: 19px;"></app-category-box>
+            </div>
+        </div>
+
+        <!-- SEARCH RESULT CATEGORIES -->
+        <div *ngIf="searchKeyword.length > 0">
+            <div class="card-group" style="margin-top: 30px; margin-bottom: 30px;">
+                <app-category-box *ngFor="let category of searchedCategories; let i=index" [category]="category"
+                    style="margin: 19px;"></app-category-box>
+            </div>
+        </div>
+    </div>
+</div>

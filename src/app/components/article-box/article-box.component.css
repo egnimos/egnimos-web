@@ -1,0 +1,37 @@
+.truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    /* number of lines to show */
+    line-clamp: 4;
+    -webkit-box-orient: vertical;
+}
+
+.title {
+    color: #002018;
+    font-family: 'Rubik', sans-serif;
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: 450;
+    font-size: 22px;
+}
+
+.description {
+    color: #002018;
+    font-family: 'Rubik', sans-serif;
+    /* font-weight: 450; */
+    font-size: 16px;
+}
+
+.image-style {
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    border-width: 2;
+    border-color: rgb(24, 24, 24);
+    background-color: grey;
+    margin-top: 0px;
+    margin-right: 5px;
+    padding: 0px;
+}

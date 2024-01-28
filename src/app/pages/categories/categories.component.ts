@@ -10,6 +10,8 @@ import { CategoryService } from 'src/app/services/category.service';
 export class CategoriesComponent implements OnInit {
   isLoading: boolean = true;
   categories: CategoryModel[] = [];
+  searchedCategories: CategoryModel[] = [];
+  searchKeyword : String = "";
   
   constructor(private cs: CategoryService) {}
   
@@ -18,6 +20,13 @@ export class CategoriesComponent implements OnInit {
       this.categories = data.categories as CategoryModel[];
       this.isLoading = false;
     })
+  }
+
+  searchQuizCategory(): void {
+    //search for quiz category
+    this.searchedCategories = this.categories.filter(item => {
+      return item.name.toLowerCase().includes(this.searchKeyword.toLowerCase());
+    });
   }
 
 }
