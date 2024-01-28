@@ -48,10 +48,12 @@ export class ArticleService {
     }
 
     //delete article
-    async deleteArticle(metaArticleId: string, publishType: PublishType): Promise<void> {
+    async deleteArticle(metaArticleId: String, publishType: PublishType, articleId: String): Promise<void> {
         try {
             const metaDocRef = doc(this.firestore, "meta_articles/" + metaArticleId);
+            const metaArctDocRef = doc(this.firestore, "meta_articles/" + metaArticleId + "/article_data/" + articleId);
             await deleteDoc(metaDocRef);
+            await deleteDoc(metaArctDocRef);
             if (publishType == PublishType.draft) {
                 this.draftMetaArticleList = this.draftMetaArticleList.filter(metaArt => metaArt.id != metaArticleId);
                 this.draftMetaArticlesSub.next(this.draftMetaArticleList.slice());
@@ -115,6 +117,16 @@ export class ArticleService {
             if (response.docs.length != 0) {
                 lastVisibleDoc = response.docs[response.docs.length - 1]
             }
+            // if (metaArticle.publishType == PublishType.draft) {
+            //     this.draftMetaArticleList.push(metaArticle);
+            //     this.draftMetaArticlesSub.next(this.draftMetaArticleList.slice());
+            // }
+
+            // if (metaArticle.publishType == PublishType.publish) {
+            // const values = [...this.publishMetaArticleList, ...result];
+            // this.publishMetaArticleList = values;
+            // this.publishMetaArticlesSub.next(this.publishMetaArticleList.slice());
+            // }
             return { data: result, lastDocData: lastVisibleDoc };
         } catch (error) {
             console.log(error);
@@ -161,6 +173,21 @@ export class ArticleService {
         } catch (error) {
             console.log(error);
             throw error;
+        }
+    }
+
+    updateListAndSub(values, publishType) {
+        // let values = []
+        if (publishType == "draft") {
+            // values = [...this.draftMetaArticleList, ...result];
+            this.draftMetaArticleList = values;
+            this.draftMetaArticlesSub.next(this.draftMetaArticleList.slice());
+        }
+
+        if (publishType == "publish") {
+            // values = [...this.publishMetaArticleList, ...result];
+            this.publishMetaArticleList = values;
+            this.publishMetaArticlesSub.next(this.publishMetaArticleList.slice());
         }
     }
 

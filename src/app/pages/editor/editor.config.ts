@@ -13,11 +13,11 @@ import Quote from '@editorjs/quote';
 import LinkTool from '@editorjs/link';
 import AlignmentTuneTool from 'editorjs-text-alignment-blocktune';
 
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "@angular/fire/storage";
 import { Ng2ImgMaxService } from 'ng2-img-max';
-import { firstValueFrom, lastValueFrom } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 export const defaultData = {
     time: 1552744582955,

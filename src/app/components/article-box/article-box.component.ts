@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MetaArticleModel } from 'src/app/models/article.model';
+import { ArticleService } from 'src/app/services/article.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { UtilityService } from 'src/app/services/utility.service';
 
@@ -12,18 +13,28 @@ import { UtilityService } from 'src/app/services/utility.service';
 export class ArticleBoxComponent implements OnInit {
   joinedIn = "";
   authenticatedUser = null;
+  thumbnail: String = "";
   @Input() articleInf: MetaArticleModel;
 
-  constructor(private us: UtilityService, private as: AuthService, private router: Router) { }
+  constructor(private us: UtilityService, private as: AuthService, private router: Router, private ars: ArticleService) { }
 
   ngOnInit(): void {
     this.authenticatedUser = this.as.userInfo;
     this.joinedIn =
       this.us.secondsToDateTime(this.articleInf.updatedAt?.seconds).toLocaleDateString();
+    this.thumbnail = this.articleInf?.thumbnail ?? "assets/images/no-image.jpg";
   }
 
-  deleteArticle() {
-
+  isDeleting = false;
+  async deleteArticle() {
+    try {
+      this.isDeleting = true;
+      await this.ars.deleteArticle(this.articleInf.id, this.articleInf.publishType, this.articleInf.articleDataId);
+    } catch (error) {
+      alert(error);
+    } finally {
+      this.isDeleting = false;
+    }
   }
 
   editArticle() {

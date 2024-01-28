@@ -23,6 +23,9 @@ export class ProfilearticlesComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
+    this.ars.publishMetaArticlesSub.subscribe((values) => {
+      this.articles = values;
+    });
   }
 
 
@@ -32,13 +35,14 @@ export class ProfilearticlesComponent implements OnInit {
     try {
       this.isLoading = true;
       const response = await this.ars.getListOfMetaArticleBasedOnCreatorId(this.as.userInfo.id,
-        PublishType.publish,
+        "publish",
         this.pageSize,
         this.lastDoc
       );
       this.lastDoc = response.lastDocData;
       const values = [...this.articles, ...response.data];
-      this.articles = values;
+      this.ars.updateListAndSub(values, "publish")
+      // this.articles = values;
     } catch (error) {
       this.errorMsg = error;
     } finally {

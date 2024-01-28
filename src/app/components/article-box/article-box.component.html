@@ -1,6 +1,6 @@
 <div class="card h-100 w-100" style="margin: 10px; max-width: 280px;">
     <!-- <img src="..." class="card-img-top" alt="..."> -->
-    <img [src]="articleInf.thumbnail" class="card-img-top" style="object-fit: cover;" alt="">
+    <img [src]="thumbnail" class="card-img-top" style="object-fit: cover;" alt="thumbnail">
     <div class="card-body">
         <!-- TITLE -->
         <h5 class="card-title title" (click)="navToViewArticle()">{{articleInf.title}}</h5>
@@ -21,9 +21,13 @@
     </div>
     <div class="card-footer" *ngIf="authenticatedUser?.id == articleInf?.authorInfo?.id">
         <div class="d-flex flex-row justify-content-around" style="margin-top: 6px; margin-bottom: 6px;">
-            <a (click)="deleteArticle()" style="color: red;">
+            <a (click)="deleteArticle()" style="color: red;" *ngIf="!isDeleting">
                 <i class="fa-solid fa-trash" style="color: red; cursor: pointer;"></i>
             </a>
+            <div class="spinner-border text-secondary" role="status" *ngIf="isDeleting">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+
             <a (click)="editArticle()">
                 <i class="fa-solid fa-pencil" style="color: blue;cursor: pointer;"></i>
             </a>

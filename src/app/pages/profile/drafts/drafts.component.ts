@@ -23,6 +23,9 @@ export class DraftsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
+    this.ars.draftMetaArticlesSub.subscribe((values) => {
+      this.articles = values;
+    });
   }
 
 
@@ -38,7 +41,8 @@ export class DraftsComponent implements OnInit {
       );
       this.lastDoc = response.lastDocData;
       const values = [...this.articles, ...response.data];
-      this.articles = values;
+      this.ars.updateListAndSub(values, "draft")
+      // this.articles = values;
     } catch (error) {
       this.errorMsg = error;
     } finally {

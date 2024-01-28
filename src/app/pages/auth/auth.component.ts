@@ -31,6 +31,7 @@ export class AuthComponent {
 
   async loginByGoogle() {
     try {
+      this.error = null;
       this.isAuthInProcess = true;
       this.selectedProvider = ProviderType.google;
       await this.as.authWithGoogle(this.isLogin);
@@ -44,6 +45,7 @@ export class AuthComponent {
 
   async loginByGithub() {
     try {
+      this.error = null;
       this.isAuthInProcess = true;
       this.selectedProvider = ProviderType.github;
       await this.as.authWithGithub(this.isLogin);

@@ -169,7 +169,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
       console.log(metaArticleInfo);
       await this.ars.saveArticle(metaArticleInfo, articleInf);
       if (pubType == "draft") {
-        this.router.navigate(["profile/draft"])
+        this.router.navigate(["profile","drafts"])
       } else {
         this.router.navigate(["profile"])
       }
