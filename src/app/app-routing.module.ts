@@ -14,6 +14,9 @@ import { ProfilearticlesComponent } from './pages/profile/profilearticles/profil
 import { EditorComponent } from './pages/editor/editor.component';
 import { EditorViewComponent } from './pages/editor/editor-view/editor-view.component';
 import { ViewallComponent } from './pages/viewall/viewall.component';
+import { CreateBookComponent } from './pages/profile/books/create-book/create-book.component';
+import { BooksComponent } from './pages/profile/books/books.component';
+import { CreateModuleComponent } from './pages/profile/books/create-book/create-module/create-module.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -22,13 +25,16 @@ const routes: Routes = [
     path: "profile", component: ProfileComponent, children: [
       { path: "", component: ProfilearticlesComponent },
       { path: "drafts", component: DraftsComponent },
-      // { path: "categories", component: CategoriesComponent },
+      { path: "books", component: BooksComponent },
       { path: "edit-profile", component: EditprofileComponent },
     ]
   },
   { path: "categories", component: CategoriesComponent },
   { path: "view_all_category_based_articles/:type", component: ViewallComponent },
   { path: "write-article", component: EditorComponent },
+
+  { path: "create-module", component: CreateModuleComponent },
+  { path: "create-book", component: CreateBookComponent },
   { path: "view-article", component: EditorViewComponent },
   { path: "articles", component: ArticlesComponent },
   { path: "contact", component: ContactComponent },

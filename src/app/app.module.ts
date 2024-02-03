@@ -41,6 +41,11 @@ import player from 'lottie-web';
 import { NothingFoundComponent } from './components/nothing-found/nothing-found.component';
 import { EditorViewComponent } from './pages/editor/editor-view/editor-view.component';
 import { ViewallComponent } from './pages/viewall/viewall.component';
+import { BooksComponent } from './pages/profile/books/books.component';
+import { CreateBookComponent } from './pages/profile/books/create-book/create-book.component';
+import { CreateModuleComponent } from './pages/profile/books/create-book/create-module/create-module.component';
+import { ModuleBoxComponent } from './components/module-box/module-box.component';
+import { DragulaModule } from 'ng2-dragula';
 
 @NgModule({
   declarations: [
@@ -65,6 +70,10 @@ import { ViewallComponent } from './pages/viewall/viewall.component';
     NothingFoundComponent,
     ViewallComponent,
     EditorViewComponent,
+    BooksComponent,
+    CreateBookComponent,
+    CreateModuleComponent,
+    ModuleBoxComponent,
   ],
   imports: [
     BrowserModule,
@@ -81,6 +90,7 @@ import { ViewallComponent } from './pages/viewall/viewall.component';
     providePerformance(() => getPerformance()),
     provideStorage(() => getStorage()),
     LottieModule.forRoot({ player: playerFactory }),
+    DragulaModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

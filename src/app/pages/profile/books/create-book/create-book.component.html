@@ -1,0 +1,113 @@
+<div class="container-fluid" style="padding: 20px;">
+
+    <!-- DETAILS OF BOOK -->
+    <div class="accordion" id="bookDetailPanel" style="margin: 20px;">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#bookDetailPanelOpen" aria-expanded="false" aria-controls="bookDetailPanelOpen">
+                    <span class="accordion-title">Enter the Details Of Your Book</span>
+                </button>
+            </h2>
+            <div id="bookDetailPanelOpen" class="accordion-collapse collapse">
+                <div class="accordion-body" style="color: rgb(26, 26, 26);">
+                    <!-- Thumbnail of Book -->
+                    <div class="">
+                        <!-- image  -->
+                        <div class="d-flex flex-row align-items-center justify-content-center">
+                            <circle-progress [percent]="progress" [radius]="50" [outerStrokeWidth]="10"
+                                [innerStrokeWidth]="5" [outerStrokeColor]="'#00C076'" [innerStrokeColor]="'#96E5D1'"
+                                [animationDuration]="300" [showSubtitle]="false" *ngIf="isUploading"></circle-progress>
+                            <img class="image-style" [src]="photoURL" *ngIf="!isUploading">
+                        </div>
+                        <br><br>
+                        <div class="input-group mb-3">
+                            <input type="file" class="form-control" id="profilePhoto" (change)="setFile($event)">
+                            <button class="btn btn-outline-secondary input-group-text" for="profilePhoto"
+                                (click)="uploadThumbnail()" type="button">Upload</button>
+                        </div>
+                    </div>
+                    <!-- FORM -->
+                    <form class="row g-3" (ngSubmit)="submit()" #ed="ngForm">
+                        <!-- Book NAME -->
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" placeholder="enter your name here" ngModel
+                                name="name" required>
+                        </div>
+
+                        <!-- Book Categories -->
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Select Category</label>
+                            <div class="dropup-center">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" readonly
+                                        aria-label="select the dropdown category" [ngModel]="selectedCategory?.name"
+                                        name="category" required>
+                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false">choose</button>
+
+                                    <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start container p-4"
+                                        style="max-height: 250px;
+                                overflow-y: auto;">
+                                        <input type="text" class="form-control" id="search"
+                                            placeholder="enter your category" [(ngModel)]="searchCategoryKeyword"
+                                            name="searchCategory" (ngModelChange)="searchQuizCategory()">
+                                        <!-- results -->
+                                        <div *ngIf="searchCategoryKeyword.length > 0">
+                                            <ul class="list-group" style="margin-top: 10px; margin-bottom: 10px;"
+                                                *ngFor="let category of searchedCategories">
+                                                <button type="button" class="list-group-item list-group-item-action"
+                                                    (click)="setQuizCategory(category)">{{category.name}}</button>
+                                            </ul>
+                                        </div>
+                                        <div *ngIf="searchCategoryKeyword.length <= 0">
+                                            <ul class="list-group" style="margin-top: 10px; margin-bottom: 10px;"
+                                                *ngFor="let category of categories">
+                                                <button type="button" class="list-group-item list-group-item-action"
+                                                    (click)="setQuizCategory(category)">{{category.name}}</button>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Book Description -->
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Description</label>
+                            <textarea type="text" class="form-control" id="name"
+                                placeholder="write something about your book" ngModel name="name" required
+                                rows="4"></textarea>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- CREATE MODULES -->
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#modulePanelOpen" aria-expanded="false" aria-controls="modulePanelOpen">
+                    <span class="accordion-title">Create a Module</span>
+                </button>
+            </h2>
+            <div id="modulePanelOpen" class="accordion-collapse collapse">
+                <div class="accordion-body" style="color: rgb(26, 26, 26);">
+                    <a (click)="navToCreateModule()" style="cursor: pointer; color: #198754;"><i
+                            class="fa-solid fa-plus"></i></a>
+                    <hr>
+                    <div class="card-group">
+                        <app-module-box *ngFor="let module of modules" [moduleInfo]="module"></app-module-box>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 
+    <div class="accordion" id="modulePanel">
+        
+    </div> -->
+</div>

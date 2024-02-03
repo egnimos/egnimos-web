@@ -20,11 +20,11 @@
                     Drafts
                 </a>
             </li>
-            <!-- <li class="nav-item" role="presentation">
-                <a class="nav-link" routerLinkActive="nav-tab-active" routerLink="/profile/categories">
-                    Categories
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" routerLinkActive="nav-tab-active" routerLink="/profile/books">
+                    Books
                 </a>
-            </li> -->
+            </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" routerLinkActive="nav-tab-active" routerLink="/profile/edit-profile">
                     Edit Profile
@@ -32,11 +32,14 @@
             </li>
         </ul>
         <div class="container-fluid">
-            <div class="d-flex flex-column align-items-end justify-content-end" 
-            style="height: 10vh;">
-                <button class="btn btn-success" (click)="navToWriteBlog()">
+            <div class="d-flex flex-row align-items-end justify-content-end" style="height: 10vh;">
+                <button class="btn btn-success" style="margin: 5px;" (click)="navToWriteBlog()">
                     <i class="fas fa-pen-fancy"></i>
                     Write Your Article
+                </button>
+                <button class="btn btn-success" style="margin: 5px;" (click)="navToCreateBook()">
+                    <i class="fa-solid fa-book"></i>
+                    Create a Book
                 </button>
             </div>
         </div>

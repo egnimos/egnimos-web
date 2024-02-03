@@ -1,0 +1,30 @@
+<div class="container-fluid">
+
+    <!-- NOTHING FOUND -->
+    <div *ngIf="books.length==0 && !isLoading">
+        <app-nothing-found></app-nothing-found>
+    </div>
+
+    <!-- ERROR STATMENT -->
+    <div class="alert alert-danger" *ngIf="errorMsg">
+        <p>{{errorMsg}}</p>
+    </div>
+
+    <!-- DATA TO DISPLAY -->
+    <div class="card-group" *ngIf="books.length != 0">
+        <app-article-box *ngFor="let aInf of articles" [articleInf]="aInf"></app-article-box>
+    </div>
+
+
+    <br>
+    <app-loader *ngIf="isLoading"></app-loader>
+    <br>
+    
+    
+    <div class="d-flex justify-content-center align-items-center" style="width: 100%;"
+        *ngIf="books.length != 0 && !isLoading">
+        <button type="submit" class="btn btn-outline-success" (click)="loadData()">
+            <fa-icon [icon]="addIcon"></fa-icon>
+            Load More</button>
+    </div>
+</div>

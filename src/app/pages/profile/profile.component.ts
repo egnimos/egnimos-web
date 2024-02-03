@@ -33,5 +33,7 @@ export class ProfileComponent implements OnInit {
     this.route.navigate(['write-article']);
   }
 
-
+  navToCreateBook() {
+    this.route.navigate(['create-book']);
+  }
 }
