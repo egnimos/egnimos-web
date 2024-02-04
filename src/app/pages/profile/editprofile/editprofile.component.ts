@@ -6,7 +6,7 @@ import { Subscription, takeUntil } from 'rxjs';
 import { AccountType, Gender, UploadStatus } from 'src/app/enum';
 import { UserModel } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
-import { UploadService} from 'src/app/services/upload.service';
+import { UploadService } from 'src/app/services/upload.service';
 import { UtilityService } from 'src/app/services/utility.service';
 
 @Component({
@@ -100,7 +100,7 @@ export class EditprofileComponent implements OnInit, AfterViewInit, OnDestroy {
         if (!compressedFile) {
           throw "Failed to compress the image";
         }
-        this.ups.uploadProfilePhoto(compressedFile, this.userData.id);
+        this.ups.uploadFile(compressedFile, "users/" + this.userData.id);
       });
       this.upSub = this.ups.uploadObs.subscribe((info) => {
         this.ngZone.run(async () => {
@@ -113,7 +113,7 @@ export class EditprofileComponent implements OnInit, AfterViewInit, OnDestroy {
           this.isUploading = this.uploadStatus == UploadStatus.uploading;
         });
         console.log("STATUS: ", this.uploadStatus, "PROGRESS: ", this.progress);
-      });;
+      });
       // .forEach((compressedImage) => {
       //   console.log("FILE:: ", compressedImage);
       //   compressedFile = compressedImage;

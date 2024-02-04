@@ -4,6 +4,7 @@ import { ArticleModel, MetaArticleModel } from "../models/article.model";
 import { Subject } from "rxjs";
 import { PublishType } from "../enum";
 import { CategoryModel } from "../models/category.model";
+import { UserActivityModel } from "../models/user.model";
 
 @Injectable({
     providedIn: 'root'
@@ -17,15 +18,15 @@ export class ArticleService {
 
 
     get draftMetaArticles(): MetaArticleModel[] {
-        return this.draftMetaArticleList;
+        return this.draftMetaArticleList.slice();
     }
 
     get publishMetaArticles(): MetaArticleModel[] {
-        return this.publishMetaArticleList;
+        return this.publishMetaArticleList.slice();
     }
 
     //save article (Draft, Publish)
-    async saveArticle(metaArticle: MetaArticleModel, article: ArticleModel): Promise<void> {
+    async saveArticle(metaArticle: MetaArticleModel, article: ArticleModel, userActivity: UserActivityModel): Promise<void> {
         try {
             const metaDocRef = doc(this.firestore, "meta_articles/" + metaArticle.id);
             const articleDocRef = doc(this.firestore, "meta_articles/" + metaArticle.id + "/article_data/" + article.id);
@@ -46,6 +47,14 @@ export class ArticleService {
             throw error;
         }
     }
+
+    // async saveUserActivity() : Promise<void> {
+    //     try {
+            
+    //     } catch (error) {
+    //         throw error;
+    //     }
+    // }
 
     //delete article
     async deleteArticle(metaArticleId: String, publishType: PublishType, articleId: String): Promise<void> {
@@ -69,9 +78,9 @@ export class ArticleService {
     }
 
     //update article
-    async updateArticle(metaArticle: MetaArticleModel, article: ArticleModel): Promise<void> {
+    async updateArticle(metaArticle: MetaArticleModel, article: ArticleModel, userActivity: UserActivityModel): Promise<void> {
         try {
-            await this.saveArticle(metaArticle, article);
+            await this.saveArticle(metaArticle, article, userActivity);
         } catch (error) {
             throw error;
         }

@@ -45,6 +45,36 @@ export class UploadService {
         }
     }
 
+    //upload the file with progress
+    uploadFile(file: File, url: string): void {
+        try {
+            if (!file) return;
+            //compress the image
+            const storageRef = ref(this.storage, url);
+            const response = uploadBytesResumable(storageRef, file);
+            response.on("state_changed", (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload is ' + progress + '% done');
+                this.uploadProcess.next({
+                    progress: progress,
+                    status: UploadStatus.uploading,
+                    uri: null,
+                });
+            }, (error) => {
+                throw error;
+            }, async () => {
+                const url = await getDownloadURL(storageRef);
+                this.uploadProcess.next({
+                    progress: 100,
+                    status: UploadStatus.complete,
+                    uri: url,
+                });
+            });
+        } catch (error) {
+            throw error;
+        }
+    }
+
     //upload article photo
     async uploadArticleImages(file: File, id: String): Promise<String> {
         try {

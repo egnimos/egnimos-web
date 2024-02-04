@@ -1,5 +1,10 @@
 <div class="container-fluid" style="padding: 20px;">
-
+    <br>
+    <!-- ERROR STATMENT -->
+    <div class="alert alert-danger" *ngIf="errorMsg">
+        <p>{{ errorMsg }}</p>
+    </div>
+    <br>
     <!-- DETAILS OF BOOK -->
     <div class="accordion" id="bookDetailPanel" style="margin: 20px;">
         <div class="accordion-item">
@@ -34,6 +39,26 @@
                             <label for="name" class="form-label">Name</label>
                             <input type="text" class="form-control" id="name" placeholder="enter your name here" ngModel
                                 name="name" required>
+                        </div>
+
+                        <!-- BOOK TAG -->
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Add Tags</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="name" placeholder="enter your name here"
+                                    ngModel name="tag" required>
+                                <button class="btn btn-outline-secondary" type="button" (click)="addTag()"><i
+                                        class="fa-solid fa-plus"
+                                        style="font-weight: 500px; font-size: 20px;"></i></button>
+                            </div>
+                            <div class="row">
+                                <div class="col" *ngFor="let tg of tags">
+                                    <span class="badge text-bg-secondary" style="padding-left: 12px; padding-right: 12px; 
+            padding-top: 10px; padding-bottom: 10px; margin-bottom: 5px;">{{tg}}<i
+                                            style="margin-left: 6px; font-weight: 400px; font-size: 18px; cursor: pointer;"
+                                            class="fa-solid fa-xmark" (click)="removeTag(tg)"></i></span>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Book Categories -->
@@ -77,9 +102,35 @@
                         <div class="mb-3">
                             <label for="name" class="form-label">Description</label>
                             <textarea type="text" class="form-control" id="name"
-                                placeholder="write something about your book" ngModel name="name" required
+                                placeholder="write something about your book" ngModel name="desc" required
                                 rows="4"></textarea>
                         </div>
+
+                        <!-- CHOOSE RELASE TYPE -->
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="publish"
+                                        [(ngModel)]="releaseType" id="publish" [value]="publish">
+                                    <label class="form-check-label" for="publish">
+                                        Publish
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="draft" [(ngModel)]="releaseType"
+                                        id="draft" [value]="draft">
+                                    <label class="form-check-label" for="draft">
+                                        Draft
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <app-loader *ngIf="isLoading"></app-loader>
+                        <button type="submit" class="btn btn-primary" *ngIf="!isLoading"
+                            [disabled]="!ed.valid">Submit</button>
                     </form>
                 </div>
             </div>

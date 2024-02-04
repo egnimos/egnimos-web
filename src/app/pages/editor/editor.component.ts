@@ -11,6 +11,8 @@ import { AuthService } from 'src/app/services/auth.service';
 import { CategoryModel } from 'src/app/models/category.model';
 import { Timestamp } from '@angular/fire/firestore';
 import { CategoryService } from 'src/app/services/category.service';
+import { ActivityService } from 'src/app/services/activity.service';
+import { CategoryBasedCounts, UserActivityModel } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-editor',
@@ -36,17 +38,23 @@ export class EditorComponent implements OnInit, AfterViewInit {
   metaArticle: MetaArticleModel = null;
   articleInfo: ArticleModel = null;
   private config: Config = inject(Config);
+  userActivity: UserActivityModel = {
+    id: this.as.userInfo.id,
+    totalNumberArticlesDraft: 0,
+    totalNumberArticlesPublished: 0,
+    categoryBasedArticleCounts: []
+  };
 
   constructor(private ars: ArticleService,
     private router: Router,
     private route: ActivatedRoute,
     private us: UtilityService,
-    private as: AuthService, private cs: CategoryService) { }
+    private as: AuthService, private cs: CategoryService, private acs: ActivityService) { }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((value) => {
       if (this.articleInfo) return;
-      if (!value) return;
+      if (!value?.data) return;
       this.metaArticle = JSON.parse(value?.data) as MetaArticleModel;
     });
     this.cs.getCategories().subscribe(data => {
@@ -55,6 +63,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    // const selection = window.getSelection();
     setTimeout(() => {
       this.initForm();
     }, 200);
@@ -69,6 +78,10 @@ export class EditorComponent implements OnInit, AfterViewInit {
         this.editorData = this.articleInfo.articleData;
         this.selectedCategory = this.metaArticle.category;
       };
+      const resp = await this.acs.getUserActivities(this.as.userInfo.id,);
+      if (resp) {
+        this.userActivity = resp;
+      }
       this.editor = new EditorJS({
         /**
          * Create a holder for the Editor and pass its ID
@@ -125,6 +138,28 @@ export class EditorComponent implements OnInit, AfterViewInit {
       this.errorMsg = null;
       this.isSaving = true;
       const pubType = this.us.enumToString(PublishType, publishType);
+      //if it is in createMode
+      if (!this.metaArticle) {
+        if (pubType == "published") {
+          this.userActivity.totalNumberArticlesPublished = this.userActivity.totalNumberArticlesPublished + 1;
+        }
+        if (pubType == "draft") {
+          this.userActivity.totalNumberArticlesDraft = this.userActivity.totalNumberArticlesDraft + 1;
+        }
+      } else { //if it is in edit mode
+        if (pubType != this.metaArticle?.publishType) {
+          if (pubType == "published") {
+            this.userActivity.totalNumberArticlesPublished = this.userActivity.totalNumberArticlesPublished + 1;
+            this.userActivity.totalNumberArticlesDraft = this.userActivity.totalNumberArticlesDraft > 0 ?
+              this.userActivity.totalNumberArticlesDraft - 1 : this.userActivity.totalNumberArticlesDraft;
+          }
+          if (pubType == "draft") {
+            this.userActivity.totalNumberArticlesDraft = this.userActivity.totalNumberArticlesDraft + 1;
+            this.userActivity.totalNumberArticlesPublished = this.userActivity.totalNumberArticlesPublished > 0 ?
+              this.userActivity.totalNumberArticlesPublished - 1 : this.userActivity.totalNumberArticlesPublished;
+          }
+        }
+      }
       const docData = await this.editor.save()
       console.log('Article data: ', docData);
       const resp = this.getData(docData);
@@ -162,14 +197,13 @@ export class EditorComponent implements OnInit, AfterViewInit {
         createdAt: this.metaArticle?.createdAt ?? Timestamp.now(),
         updatedAt: Timestamp.now(),
       };
-
       if (!categoryInfo) {
         throw "Provide Category For Article";
       }
       console.log(metaArticleInfo);
-      await this.ars.saveArticle(metaArticleInfo, articleInf);
+      await this.ars.saveArticle(metaArticleInfo, articleInf, this.userActivity);
       if (pubType == "draft") {
-        this.router.navigate(["profile","drafts"])
+        this.router.navigate(["profile", "drafts"])
       } else {
         this.router.navigate(["profile"])
       }
@@ -212,6 +246,10 @@ export class EditorComponent implements OnInit, AfterViewInit {
       }
     }
     return data;
+  }
+
+  updateCategoryCountList(data: CategoryBasedCounts[]) {
+
   }
 
   //update the article

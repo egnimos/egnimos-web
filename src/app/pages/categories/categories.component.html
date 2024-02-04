@@ -18,17 +18,19 @@
     <!-- categories list -->
     <div class="container text-center">
         <div *ngIf="searchKeyword.length <= 0">
-            <div class="card-group" style="margin-top: 30px; margin-bottom: 30px;">
-                <app-category-box *ngFor="let category of categories; let i=index" [category]="category"
-                    style="margin: 19px;"></app-category-box>
+            <div class="row" style="margin-top: 30px; margin-bottom: 30px;">
+                <div class="col" *ngFor="let category of categories; let i=index">
+                    <app-category-box [category]="category" style="margin: 19px;"></app-category-box>
+                </div>
             </div>
         </div>
 
         <!-- SEARCH RESULT CATEGORIES -->
         <div *ngIf="searchKeyword.length > 0">
-            <div class="card-group" style="margin-top: 30px; margin-bottom: 30px;">
-                <app-category-box *ngFor="let category of searchedCategories; let i=index" [category]="category"
-                    style="margin: 19px;"></app-category-box>
+            <div class="row" style="margin-top: 30px; margin-bottom: 30px;">
+                <div class="col" *ngFor="let category of searchedCategories; let i=index">
+                    <app-category-box [category]="category" style="margin: 19px;"></app-category-box>
+                </div>
             </div>
         </div>
     </div>
