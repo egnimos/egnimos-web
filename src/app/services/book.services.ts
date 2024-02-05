@@ -28,7 +28,7 @@ export class BookService {
     constructor() { }
 
     //save/update the book
-    async saveArticle(book: BookModel, userActivity: UserActivityModel): Promise<void> {
+    async saveBook(book: BookModel, userActivity: UserActivityModel): Promise<void> {
         try {
             const bookDoc = doc(this.firestore, "books/" + book.id);
             const resp = await setDoc(bookDoc, book, { merge: true });

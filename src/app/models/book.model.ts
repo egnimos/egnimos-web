@@ -13,7 +13,7 @@ export interface BookModel {
     category: CategoryModel;
     tags: String[];
     description: String;
-    descSearch: String[];
+    // descSearch: String[];
     numberOfModules: number;
     createdAt: Timestamp;
     updatedAt: Timestamp;

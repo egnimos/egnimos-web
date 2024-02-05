@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,12 +8,14 @@ import { PublishType, UploadStatus } from 'src/app/enum';
 import { AuthorInfo } from 'src/app/models/article.model';
 import { BookModule } from 'src/app/models/book-module.model';
 import { BookModel } from 'src/app/models/book.model';
+import {UserActivityModel} from 'src/app/models/user.model';
 import { CategoryModel } from 'src/app/models/category.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { BookService } from 'src/app/services/book.services';
 import { CategoryService } from 'src/app/services/category.service';
 import { UploadService } from 'src/app/services/upload.service';
 import { UtilityService } from 'src/app/services/utility.service';
+import {ActivityService} from 'src/app/services/activity.service';
 import { v4 as uuidv4 } from 'uuid';
 
 @Component({
@@ -39,6 +41,12 @@ export class CreateBookComponent implements OnInit, AfterViewInit, OnDestroy {
   bookId = uuidv4();
   errorMsg = null;
   userData = null;
+  userActivity: UserActivityModel = {
+    id: this.as.userInfo.id,
+    totalNumberArticlesDraft: 0,
+    totalNumberArticlesPublished: 0,
+    categoryBasedArticleCounts: []
+  };
 
   modules: BookModule[] = [
     {
@@ -61,7 +69,9 @@ export class CreateBookComponent implements OnInit, AfterViewInit, OnDestroy {
     private bs: BookService,
     private ng2ImgMaxService: Ng2ImgMaxService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private ngZone: NgZone,
+    private acs: ActivityService,
   ) { }
 
 
@@ -89,6 +99,10 @@ export class CreateBookComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private async initForm() {
+    const resp = await this.acs.getUserActivities(this.userData.id,);
+    if (resp) {
+      this.userActivity = resp;
+    }
     if (!this.bookInf) return;
     this.edForm.form.patchValue({
       name: this.bookInf.name || '',
@@ -149,8 +163,8 @@ export class CreateBookComponent implements OnInit, AfterViewInit, OnDestroy {
       const compressedFile = await firstValueFrom(this.ng2ImgMaxService.compress([this.thumbnail], 0.1))
       this.ups.uploadFile(compressedFile, "users/books-thumbnail/" + this.bookId);
 
-      this.upSub = this.ups.uploadObs.subscribe(async (info) => {
-        // this.ngZone.run(async () => {
+      this.upSub = this.ups.uploadObs.subscribe((info) => {
+        this.ngZone.run(async () => {
         this.progress = info.progress;
         this.uploadStatus = info.status;
         if (this.uploadStatus == UploadStatus.complete) {
@@ -162,6 +176,7 @@ export class CreateBookComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isUploading = this.uploadStatus == UploadStatus.uploading;
         console.log("STATUS: ", this.uploadStatus, "PROGRESS: ", this.progress);
       });
+    });
     } catch (e) {
       console.log(e);
       const err = e?.error || e;
@@ -172,7 +187,30 @@ export class CreateBookComponent implements OnInit, AfterViewInit, OnDestroy {
   async submit() {
     try {
       this.isLoading = true;
+      this.errorMsg = null;
       console.log("RELEASE TYPE: ", this.releaseType);
+      //if it is in createMode
+      if (!this.bookInf) {
+        if (this.releaseType == PublishType.publish) {
+          this.userActivity.totalNumberBooksPublished = this.userActivity.totalNumberBooksPublished + 1;
+        }
+        if (this.releaseType == PublishType.draft) {
+          this.userActivity.totalNumberBooksDraft = this.userActivity.totalNumberBooksDraft + 1;
+        }
+      } else { //if it is in edit mode
+        if (this.releaseType != this.bookInf?.releaseType) {
+          if (this.releaseType == PublishType.publish) {
+            this.userActivity.totalNumberBooksPublished = this.userActivity.totalNumberBooksPublished + 1;
+            this.userActivity.totalNumberBooksDraft = this.userActivity.totalNumberBooksDraft > 0 ?
+              this.userActivity.totalNumberBooksDraft - 1 : this.userActivity.totalNumberBooksDraft;
+          }
+          if (this.releaseType == PublishType.draft) {
+            this.userActivity.totalNumberBooksDraft = this.userActivity.totalNumberBooksDraft + 1;
+            this.userActivity.totalNumberBooksPublished = this.userActivity.totalNumberBooksPublished > 0 ?
+              this.userActivity.totalNumberBooksPublished - 1 : this.userActivity.totalNumberBooksPublished;
+          }
+        }
+      }
 
       const authorInfo: AuthorInfo = {
         id: this.userData.id,
@@ -189,13 +227,16 @@ export class CreateBookComponent implements OnInit, AfterViewInit, OnDestroy {
         name: this.edForm.value.name,
         nameSearch: this.us.createSearchList(this.edForm.value.name),
         description: this.edForm.value.desc,
-        descSearch: this.edForm.value.desc.split(" "),
-        numberOfModules: this.bookInf?.numberOfModules,
+        // descSearch: this.edForm.value.desc.split(" "),
+        numberOfModules: this.bookInf?.numberOfModules??0,
         createdAt: this.bookInf?.createdAt ?? Timestamp.now(),
         updatedAt: Timestamp.now(),
       };
+      console.log("BOOK DATA: ", bookData);
+      await this.bs.saveBook(bookData, this.userActivity);
     } catch (error) {
-      throw error;
+      console.log(error);
+      this.errorMsg = error;
     } finally {
       this.isLoading = false;
     }
