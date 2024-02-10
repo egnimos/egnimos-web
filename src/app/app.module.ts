@@ -47,6 +47,7 @@ import { CreateModuleComponent } from './pages/profile/books/create-book/create-
 import { ModuleBoxComponent } from './components/module-box/module-box.component';
 import { DragulaModule } from 'ng2-dragula';
 import { BookBoxComponent } from './components/book-box/book-box.component';
+import { ViewBookComponent } from './pages/view-book/view-book.component';
 
 @NgModule({
   declarations: [
@@ -76,6 +77,7 @@ import { BookBoxComponent } from './components/book-box/book-box.component';
     CreateModuleComponent,
     ModuleBoxComponent,
     BookBoxComponent,
+    ViewBookComponent,
   ],
   imports: [
     BrowserModule,

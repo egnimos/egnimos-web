@@ -1,0 +1,47 @@
+<div class="d-flex flex-column" style="margin-left: 6px; margin-right: 6px;">
+    <div class="book-layout" [ngStyle]="{
+    'background-image': 'url('+ thumbnail +')'
+    }" (click)="navToViewBook()" style="cursor: pointer;">
+        <div class="card-overlay d-flex flex-column align-items-start justify-content-end" style="padding: 10px;">
+
+
+            <!-- book content -->
+
+
+            <!-- NAME -->
+            <h5 class="title">{{bookInf.name}}</h5>
+            <!-- DESCRIPTION -->
+            <p class="card-text truncate description">
+                {{bookInf?.description}}</p>
+            <!-- AUTHOR INFO -->
+            <div class="d-flex flex-row align-items-start justify-content-start" style="margin-top: 2px;">
+                <!-- image -->
+                <img class="image-style" [src]="bookInf?.authorInfo?.imageUri">
+                <p><small style="color: #fafafa; font-size: 12px;">
+                        {{bookInf?.authorInfo?.name}}
+                    </small>
+                </p>
+            </div>
+
+            <!-- LAST JOINED -->
+            <small style="color: #fafafa; font-size: 12px;">
+                Last updated {{joinedIn}}
+            </small>
+        </div>
+    </div>
+
+    <!-- action button -->
+    <div class="d-flex flex-row align-items-center justify-content-around" style="background-color: rgb(217, 217, 217);margin-top: 8px; 
+        padding: 10px; border-radius: 2px;">
+        <a (click)="deleteBook()" style="color: red;" *ngIf="!isDeleting">
+            <i class="fa-solid fa-trash" style="color: red; cursor: pointer;"></i>
+        </a>
+        <div class="spinner-border text-secondary" role="status" *ngIf="isDeleting">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+
+        <a (click)="editBook()">
+            <i class="fa-solid fa-pencil" style="color: blue;cursor: pointer;"></i>
+        </a>
+    </div>
+</div>

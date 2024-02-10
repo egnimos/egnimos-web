@@ -35,7 +35,7 @@ export class ModuleBoxComponent {
   }
 
   editModule() {
-    this.router.navigate(["create-module"], {
+    this.router.navigate(["book", "create-module"], {
       queryParams: {
         data: JSON.stringify(this.moduleInfo),
       }

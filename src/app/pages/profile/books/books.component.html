@@ -1,9 +1,12 @@
 <div class="container-fluid">
 
     <!-- NOTHING FOUND -->
-    <div *ngIf="books.length==0 && !isLoading">
+    <div *ngIf="(booksPublished.length==0&&booksDraft.length==0) 
+    && !isPublishedLoading && !isDraftLoading">
         <app-nothing-found></app-nothing-found>
     </div>
+
+    <app-loader *ngIf="isPublishedLoading || isDraftLoading"></app-loader>
 
     <!-- ERROR STATMENT -->
     <div class="alert alert-danger" *ngIf="errorMsg">
@@ -11,20 +14,50 @@
     </div>
 
     <!-- DATA TO DISPLAY -->
-    <div class="card-group" *ngIf="books.length != 0">
-        <app-article-box *ngFor="let aInf of articles" [articleInf]="aInf"></app-article-box>
+    <div class="container-fluid" *ngIf="booksPublished.length != 0">
+        <!-- PUBLISHED BOOKS -->
+
+        <h3 class="section-heading">Published Books</h3>
+        <hr>
+        <!-- <div style="height: 20px;"></div> -->
+        <div class="card-group">
+            <app-book-box *ngFor="let bInf of booksPublished" [bookInf]="bInf"></app-book-box>
+        </div>
+
+        <!-- <br>
+        <app-loader *ngIf="isPublishedLoading"></app-loader>
+        <br> -->
+
+        <!-- LOAD REMANING PUBLISHED BOOKS -->
+        <div class="d-flex justify-content-center align-items-center" style="width: 100%;"
+            *ngIf="booksPublished.length != 0 && !isPublishedLoading">
+            <button type="submit" class="btn btn-outline-success" (click)="loadPublishedData()">
+                <fa-icon [icon]="addIcon"></fa-icon>
+                Load More</button>
+        </div>
     </div>
 
+    <br>
 
-    <br>
-    <app-loader *ngIf="isLoading"></app-loader>
-    <br>
-    
-    
-    <div class="d-flex justify-content-center align-items-center" style="width: 100%;"
-        *ngIf="books.length != 0 && !isLoading">
-        <button type="submit" class="btn btn-outline-success" (click)="loadData()">
-            <fa-icon [icon]="addIcon"></fa-icon>
-            Load More</button>
+    <!-- DRAFTED BOOKS -->
+    <div class="container-fluid" *ngIf="booksDraft.length != 0">
+        <h3 class="section-heading">Drafted Books</h3>
+        <hr>
+
+        <div class="card-group">
+            <app-book-box *ngFor="let bInf of booksDraft" [bookInf]="bInf"></app-book-box>
+        </div>
+
+        <!-- <br>
+        <app-loader *ngIf="isDraftLoading"></app-loader>
+        <br> -->
+
+        <!-- LOAD REMANING PUBLISHED BOOKS -->
+        <div class="d-flex justify-content-center align-items-center" style="width: 100%;"
+            *ngIf="booksDraft.length != 0 && !isDraftLoading">
+            <button type="submit" class="btn btn-outline-success" (click)="loadDraftData()">
+                <fa-icon [icon]="addIcon"></fa-icon>
+                Load More</button>
+        </div>
     </div>
 </div>

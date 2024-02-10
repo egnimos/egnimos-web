@@ -20,10 +20,37 @@
             </div>
 
             <!-- DIV target -->
+            <div style="height: 100%; width: 100%;" [dragula]="sessionGroup" [(dragulaModel)]="copyArticles">
+                <div class="card" *ngFor="let articleInf of articles">
+                    <div class="card-body">
+                        <h5 class="card-title title" (click)="navToViewArticle(articleInf)">{{articleInf.title}}</h5>
 
+                        <!-- AUTHOR INFO -->
+                        <div class="d-flex flex-row align-items-start justify-content-start" style="margin-top: 20px;">
+                            <!-- image -->
+                            <img class="image-style" [src]="articleInf?.authorInfo?.imageUri">
+                            <p><small class="text-body-secondary">{{articleInf?.authorInfo?.name}}</small></p>
+                        </div>
+                        <p class="card-text"><small class="text-body-secondary">Last updated
+                                {{getDate(articleInf)}}</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col"
-            style="height: 100vh; width: 50%; border: 1px solid #198754; margin-left: 10px; border-radius: 4%; padding: 16px;">
-            Column</div>
+            style="height: 100vh; width: 50%; border: 1px solid #198754; margin-left: 10px; border-radius: 4%; padding: 16px;"
+            [dragula]="sessionGroup" [(dragulaModel)]="selectedArticles"
+            (dragulaModelChange)="onSelectedArticle($event)">
+
+        </div>
+    </div>
+
+    <br>
+    <br>
+
+    <!-- SAVE THE MODULE -->
+    <div class="d-flex flex-row justify-content-center">
+        <button type="button" class="btn btn-primary" *ngIf="!isLoading" (click)="submit()">Submit</button>
     </div>
 </div>

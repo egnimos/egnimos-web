@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DocumentData } from '@angular/fire/firestore';
-import {BookService} from 'src/app/services/book.services';
-import {AuthService} from 'src/app/services/auth.service';
-import {BookModel} from 'src/app/models/book.model';
+import { BookService } from 'src/app/services/book.services';
+import { AuthService } from 'src/app/services/auth.service';
+import { BookModel } from 'src/app/models/book.model';
 
 @Component({
   selector: 'app-books',
@@ -10,8 +10,10 @@ import {BookModel} from 'src/app/models/book.model';
   styleUrls: ['./books.component.css']
 })
 export class BooksComponent implements OnInit {
-  isLoading = false;
-  books: BookModel[] = [];
+  isPublishedLoading = false;
+  isDraftLoading = false;
+  booksPublished: BookModel[] = [];
+  booksDraft: BookModel[] = [];
   errorMsg = null;
   lastDocData: DocumentData = null;
   pageLimit = 10;
@@ -19,26 +21,55 @@ export class BooksComponent implements OnInit {
   constructor(private bs: BookService, private as: AuthService) { }
 
   ngOnInit(): void {
-    this.loadData();
+    this.bs.publishBooksSub.subscribe((values) => {
+      this.booksPublished = values;
+    });
+    this.bs.draftBooksSub.subscribe((values) => {
+      this.booksDraft = values;
+    });
+    this.loadPublishedData();
+    this.loadDraftData();
   }
 
-  async loadData() {
+  async loadPublishedData() {
     try {
       this.errorMsg = null;
-      this.isLoading = true;
+      this.isPublishedLoading = true;
       const response = await this.bs.getListOfBookBasedOnCreatorId(this.as.userInfo.id,
         "publish",
         this.pageLimit,
         this.lastDocData
       );
       this.lastDocData = response.lastDocData;
-      const values = [...this.books, ...response.data];
-      this.bs.updateListAndSub(values, "publish")
+      this.booksPublished = [...this.booksPublished, ...response.data];
+
+      // this.bs.updateListAndSub(values, "publish")
     } catch (error) {
       console.log(error);
       this.errorMsg = error;
     } finally {
-      this.isLoading = false;
+      this.isPublishedLoading = false;
+    }
+  }
+
+  async loadDraftData() {
+    try {
+      this.errorMsg = null;
+      this.isDraftLoading = true;
+      const response = await this.bs.getListOfBookBasedOnCreatorId(this.as.userInfo.id,
+        "draft",
+        this.pageLimit,
+        this.lastDocData
+      );
+      this.lastDocData = response.lastDocData;
+      this.booksDraft = [...this.booksDraft, ...response.data];
+
+      // this.bs.updateListAndSub(values, "draft")
+    } catch (error) {
+      console.log(error);
+      this.errorMsg = error;
+    } finally {
+      this.isDraftLoading = false;
     }
   }
 }

@@ -8,14 +8,14 @@ import { PublishType, UploadStatus } from 'src/app/enum';
 import { AuthorInfo } from 'src/app/models/article.model';
 import { BookModule } from 'src/app/models/book-module.model';
 import { BookModel } from 'src/app/models/book.model';
-import {UserActivityModel} from 'src/app/models/user.model';
+import { UserActivityModel } from 'src/app/models/user.model';
 import { CategoryModel } from 'src/app/models/category.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { BookService } from 'src/app/services/book.services';
 import { CategoryService } from 'src/app/services/category.service';
 import { UploadService } from 'src/app/services/upload.service';
 import { UtilityService } from 'src/app/services/utility.service';
-import {ActivityService} from 'src/app/services/activity.service';
+import { ActivityService } from 'src/app/services/activity.service';
 import { v4 as uuidv4 } from 'uuid';
 
 @Component({
@@ -165,18 +165,18 @@ export class CreateBookComponent implements OnInit, AfterViewInit, OnDestroy {
 
       this.upSub = this.ups.uploadObs.subscribe((info) => {
         this.ngZone.run(async () => {
-        this.progress = info.progress;
-        this.uploadStatus = info.status;
-        if (this.uploadStatus == UploadStatus.complete) {
-          this.photoURL = info.uri;
-          if (this.bookInf) {
-            await this.bs.updateBookThumbnail(this.bookId, this.photoURL);
+          this.progress = info.progress;
+          this.uploadStatus = info.status;
+          if (this.uploadStatus == UploadStatus.complete) {
+            this.photoURL = info.uri;
+            if (this.bookInf) {
+              await this.bs.updateBookThumbnail(this.bookId, this.photoURL);
+            }
           }
-        }
-        this.isUploading = this.uploadStatus == UploadStatus.uploading;
-        console.log("STATUS: ", this.uploadStatus, "PROGRESS: ", this.progress);
+          this.isUploading = this.uploadStatus == UploadStatus.uploading;
+          console.log("STATUS: ", this.uploadStatus, "PROGRESS: ", this.progress);
+        });
       });
-    });
     } catch (e) {
       console.log(e);
       const err = e?.error || e;
@@ -228,12 +228,13 @@ export class CreateBookComponent implements OnInit, AfterViewInit, OnDestroy {
         nameSearch: this.us.createSearchList(this.edForm.value.name),
         description: this.edForm.value.desc,
         // descSearch: this.edForm.value.desc.split(" "),
-        numberOfModules: this.bookInf?.numberOfModules??0,
+        numberOfModules: this.bookInf?.numberOfModules ?? 0,
         createdAt: this.bookInf?.createdAt ?? Timestamp.now(),
         updatedAt: Timestamp.now(),
       };
       console.log("BOOK DATA: ", bookData);
       await this.bs.saveBook(bookData, this.userActivity);
+      this.router.navigate(["profile"]);
     } catch (error) {
       console.log(error);
       this.errorMsg = error;
@@ -243,6 +244,6 @@ export class CreateBookComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   navToCreateModule() {
-    this.router.navigate(["create-module"]);
+    this.router.navigate(["book", "create-module"]);
   }
 }

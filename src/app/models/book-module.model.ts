@@ -11,3 +11,10 @@ export interface BookModule {
     createdAt: Timestamp;
     updatedAt: Timestamp;
 }
+
+export interface ModuleSession {
+    id: String;
+    moduleId: String;
+    bookId: String;
+    name: String;
+}
