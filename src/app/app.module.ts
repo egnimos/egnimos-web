@@ -23,9 +23,9 @@ import { CategoriesComponent } from './pages/categories/categories.component';
 import { EditprofileComponent } from './pages/profile/editprofile/editprofile.component';
 import { ProfilearticlesComponent } from './pages/profile/profilearticles/profilearticles.component';
 import { EditorComponent } from './pages/editor/editor.component';
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { getApp, initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
-import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { enableIndexedDbPersistence, enableMultiTabIndexedDbPersistence, enablePersistentCacheIndexAutoCreation, getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getMessaging, provideMessaging } from '@angular/fire/messaging';
 import { getPerformance, providePerformance } from '@angular/fire/performance';
 import { getStorage, provideStorage } from '@angular/fire/storage';
@@ -48,6 +48,7 @@ import { ModuleBoxComponent } from './components/module-box/module-box.component
 import { DragulaModule } from 'ng2-dragula';
 import { BookBoxComponent } from './components/book-box/book-box.component';
 import { ViewBookComponent } from './pages/view-book/view-book.component';
+import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from '@firebase/firestore';
 
 @NgModule({
   declarations: [
@@ -89,7 +90,11 @@ import { ViewBookComponent } from './pages/view-book/view-book.component';
     Ng2ImgMaxModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
-    provideFirestore(() => getFirestore()),
+    provideFirestore(() => initializeFirestore(getApp(), {
+      localCache: persistentLocalCache({
+        tabManager: persistentMultipleTabManager()
+      })
+    })),
     provideMessaging(() => getMessaging()),
     providePerformance(() => getPerformance()),
     provideStorage(() => getStorage()),

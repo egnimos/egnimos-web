@@ -1,10 +1,11 @@
 import { Injectable, inject } from "@angular/core";
-import { DocumentData, Firestore, collection, deleteDoc, doc, getDoc, getDocs, limit, orderBy, query, setDoc, startAfter, where } from "@angular/fire/firestore";
+import { DocumentData, Firestore, collection, deleteDoc, disableNetwork, doc, enableNetwork, getDoc, getDocs, limit, orderBy, query, setDoc, startAfter, where } from "@angular/fire/firestore";
 import { ArticleModel, MetaArticleModel } from "../models/article.model";
 import { Subject } from "rxjs";
 import { PublishType } from "../enum";
 import { CategoryModel } from "../models/category.model";
 import { UserActivityModel } from "../models/user.model";
+import { ActivityService } from "./activity.service";
 
 @Injectable({
     providedIn: 'root'
@@ -16,6 +17,15 @@ export class ArticleService {
     draftMetaArticlesSub: Subject<MetaArticleModel[]> = new Subject<MetaArticleModel[]>();
     publishMetaArticlesSub: Subject<MetaArticleModel[]> = new Subject<MetaArticleModel[]>();
 
+    constructor(private actSer: ActivityService) { }
+
+    async switchToOffline() {
+        await disableNetwork(this.firestore);
+    }
+
+    async switchToOnline() {
+        await enableNetwork(this.firestore);
+    }
 
     get draftMetaArticles(): MetaArticleModel[] {
         return this.draftMetaArticleList.slice();
@@ -34,6 +44,8 @@ export class ArticleService {
             console.log(response);
             const resp = await setDoc(articleDocRef, article, { merge: true });
             console.log(resp);
+            //save user activity
+            await this.actSer.saveUserActivities(userActivity);
             if (metaArticle.publishType == PublishType.draft) {
                 this.draftMetaArticleList.push(metaArticle);
                 this.draftMetaArticlesSub.next(this.draftMetaArticleList.slice());
@@ -50,7 +62,7 @@ export class ArticleService {
 
     // async saveUserActivity() : Promise<void> {
     //     try {
-            
+
     //     } catch (error) {
     //         throw error;
     //     }

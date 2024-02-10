@@ -10,6 +10,7 @@ import { UtilityService } from 'src/app/services/utility.service';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
+  
   userInfo: UserModel = null;
   joinedIn = null
   constructor(private route: Router, private currentRoute: ActivatedRoute, private as: AuthService, private us: UtilityService) { }

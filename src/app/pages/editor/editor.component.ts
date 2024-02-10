@@ -193,10 +193,13 @@ export class EditorComponent implements OnInit, AfterViewInit {
         // length >= 30 ?
         //   desc.substring(0, 30)
         //   : desc.substring(0, desc.length),
-        descSearch: desc.split(" ", 20),
+        descSearch: desc.split(" ", 40),
         createdAt: this.metaArticle?.createdAt ?? Timestamp.now(),
         updatedAt: Timestamp.now(),
       };
+      //update category based counters
+      this.userActivity.categoryBasedArticleCounts =
+        this.updateCategoryCountList(this.userActivity?.categoryBasedArticleCounts);
       if (!categoryInfo) {
         throw "Provide Category For Article";
       }
@@ -248,8 +251,26 @@ export class EditorComponent implements OnInit, AfterViewInit {
     return data;
   }
 
-  updateCategoryCountList(data: CategoryBasedCounts[]) {
+  updateCategoryCountList(data: CategoryBasedCounts[]): CategoryBasedCounts[] {
+    const filterValues = data.filter(
+      (d) => d.category.id != this.selectedCategory.id
+    );
+    const catBasedCounts = data.filter(
+      (d) => d.category.id == this.selectedCategory.id
+    )[0] ?? null;
 
+    //if the catBasedCounts is not null then update the counts
+    if (catBasedCounts) {
+      catBasedCounts.count += 1;
+      filterValues.push(catBasedCounts);
+    } else {
+      filterValues.push({
+        category: this.selectedCategory,
+        count: 1,
+      });
+    }
+
+    return filterValues;
   }
 
   //update the article
