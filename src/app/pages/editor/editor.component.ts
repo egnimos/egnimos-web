@@ -37,7 +37,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
   selectedCategory: CategoryModel = null;
   metaArticle: MetaArticleModel = null;
   articleInfo: ArticleModel = null;
-  private config: Config = inject(Config);
+  // private config: Config = inject(Config);
   userActivity: UserActivityModel = {
     id: this.as.userInfo.id,
     totalNumberArticlesDraft: 0,
@@ -49,7 +49,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
     private router: Router,
     private route: ActivatedRoute,
     private us: UtilityService,
-    private as: AuthService, private cs: CategoryService, private acs: ActivityService) { }
+    private as: AuthService, private cs: CategoryService, private acs: ActivityService, private config: Config) { }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((value) => {
@@ -66,7 +66,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
     // const selection = window.getSelection();
     setTimeout(() => {
       this.initForm();
-    }, 200);
+    }, 1000);
   }
 
   private async initForm() {
@@ -82,6 +82,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
       if (resp) {
         this.userActivity = resp;
       }
+      const tools = this.config.editorTool;
       this.editor = new EditorJS({
         /**
          * Create a holder for the Editor and pass its ID
@@ -92,7 +93,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
         /**
          * Available Tools list.
          */
-        tools: this.config.editorTool,
+        tools: tools,
         data: this.editorData,
       });
       await this.checkIsEditorReady();
@@ -117,12 +118,12 @@ export class EditorComponent implements OnInit, AfterViewInit {
   async checkIsEditorReady() {
     try {
       await this.editor.isReady;
-      this.isEditorReady = true;
+      // this.isEditorReady = true;
       // const undo = new Undo({ editor: this.editor, });
       // undo.initialize(this.editorData);
     } catch (error) {
       this.errorMsg = error;
-      this.isEditorReady = false;
+      // this.isEditorReady = false;
     }
   }
 

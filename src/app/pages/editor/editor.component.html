@@ -1,6 +1,6 @@
 <div class=container-fluid style="margin-top: 20px; margin-bottom: 20px;">
     <!-- BUTTONS FOR ACTIOn -->
-    <div class="container-fluid" *ngIf="isEditorReady || !isSaving">
+    <div class="container-fluid" *ngIf="!isLoading || !isSaving">
         <div class="d-flex flex-row align-items-end justify-content-end" style="height: 10vh;">
             <div class="form-check form-switch">
                 <input class="form-check-input" (click)="showPreview()" [ngModel]="previewOn" name="previewOn"
@@ -24,7 +24,7 @@
         <p>{{errorMsg}}</p>
     </div>
     <br>
-    <app-loader *ngIf="!isEditorReady || isSaving"></app-loader>
+    <app-loader *ngIf="isLoading || isSaving"></app-loader>
     <br>
     <!-- QUIZ CATEGORY -->
     <div class="container">
