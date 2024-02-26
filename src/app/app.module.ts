@@ -49,6 +49,7 @@ import { DragulaModule } from 'ng2-dragula';
 import { BookBoxComponent } from './components/book-box/book-box.component';
 import { ViewBookComponent } from './pages/view-book/view-book.component';
 import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from '@firebase/firestore';
+import { ImagePopComponent } from './components/image-pop/image-pop.component';
 
 @NgModule({
   declarations: [
@@ -79,6 +80,7 @@ import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager
     ModuleBoxComponent,
     BookBoxComponent,
     ViewBookComponent,
+    ImagePopComponent,
   ],
   imports: [
     BrowserModule,

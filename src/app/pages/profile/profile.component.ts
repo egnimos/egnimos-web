@@ -10,7 +10,7 @@ import { UtilityService } from 'src/app/services/utility.service';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  
+  showImage: boolean = false;
   userInfo: UserModel = null;
   joinedIn = null
   constructor(private route: Router, private currentRoute: ActivatedRoute, private as: AuthService, private us: UtilityService) { }
@@ -36,5 +36,12 @@ export class ProfileComponent implements OnInit {
 
   navToCreateBook() {
     this.route.navigate(["book", "create-book"]);
+  }
+
+  showPop() {
+    this.showImage = true;
+  }
+  closePop(value: boolean) {
+    this.showImage = value;
   }
 }
