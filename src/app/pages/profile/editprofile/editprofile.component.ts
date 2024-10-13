@@ -58,7 +58,7 @@ export class EditprofileComponent implements OnInit, AfterViewInit, OnDestroy {
     this.photoURL = this.userData?.photoURL;
   }
 
-  setQuizCategory(gender: Gender) {
+  setgender(gender: Gender) {
     this.selectedGender = gender;
   }
 
